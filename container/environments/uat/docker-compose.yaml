@@ -1,0 +1,45 @@
+version: '3'
+services:
+  wisnufarma_uat:
+    container_name: wisnufarma_uat
+    build:
+      context: ./../../
+      dockerfile: webserv.dockerfile
+    environment:
+      - CI_ENV=testing
+    volumes:
+      - ./../../../:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "9081:80"
+    links:
+      - wisnufarma_uat_pos
+
+  wisnufarma_uat_pos:
+    container_name: wisnufarma_uat_pos
+    build:
+      context: ./../../
+      dockerfile: pos.dockerfile
+    environment:
+      - CI_ENV=testing
+    volumes:
+      - ./../../../:/var/www
+    links:
+      - wisnufarma_uat_db
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=wisnufarma_uat_db"
+
+  wisnufarma_uat_db:
+    container_name: wisnufarma_uat_db
+    image: mysql:5.6
+    environment:
+        MYSQL_ROOT_PASSWORD: r0074wf
+        MYSQL_DATABASE: pos
+    ports:
+        - "9316:3306"
+    volumes:
+      - mysql-wisnufarma-uat:/var/lib/mysql
+volumes:
+  mysql-wisnufarma-uat:
+    external: true

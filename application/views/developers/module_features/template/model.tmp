@@ -1,0 +1,9 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class {class} extends BaseModel {
+
+    protected $table = '{table}';
+    protected $primary_key = '{primary_key}';
+    protected $fillable = array({fillable});
+}

@@ -1,0 +1,46 @@
+version: '3'
+services:
+  wisnufarma:
+    container_name: wisnufarma
+    build:
+      context: ./../../
+      dockerfile: webserv.dockerfile
+    environment:
+      - CI_ENV=production
+    volumes:
+      - ./../../../:/var/www
+      - ./nginx/conf.d:/etc/nginx/conf.d
+    ports:
+      - "9080:80"
+    links:
+      - wisnufarma_pos
+
+  wisnufarma_pos:
+    container_name: wisnufarma_pos
+    build:
+      context: ./../../
+      dockerfile: pos.dockerfile
+    environment:
+      - CI_ENV=production
+    volumes:
+      - ./../../../:/var/www
+    links:
+      - wisnufarma_db
+    environment:
+      - "DB_PORT=3306"
+      - "DB_HOST=wisnufarma_db"
+
+  wisnufarma_db:
+    container_name: wisnufarma_db
+    image: mysql:5.6
+    restart: always
+    environment:
+        MYSQL_ROOT_PASSWORD: r0074wf
+        MYSQL_DATABASE: pos
+    ports:
+        - "9306:3306"
+    volumes:
+      - mysql-wisnufarma:/var/lib/mysql
+volumes:
+  mysql-wisnufarma:
+    external: true
