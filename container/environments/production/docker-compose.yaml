@@ -11,7 +11,7 @@ services:
       - ./../../../:/var/www
       - ./nginx/conf.d:/etc/nginx/conf.d
     ports:
-      - "9080:80"
+      - "80:80"
     links:
       - wisnufarma_pos
 
@@ -38,7 +38,7 @@ services:
         MYSQL_ROOT_PASSWORD: r0074wf
         MYSQL_DATABASE: pos
     ports:
-        - "9306:3306"
+        - "3306:3306"
     volumes:
       - mysql-wisnufarma:/var/lib/mysql
 volumes:
