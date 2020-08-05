@@ -777,6 +777,9 @@ class Obat extends BaseController {
     }
 
     public function export() {
+        ini_set("pcre.backtrack_limit", "100000000");
+        ini_set("pcre.recursion_limit", "100000000");
+        
 	    $cabang = $this->cabang_gudang_m->view('cabang_gudang')->scope('aktif_cabang')->first_or_fail();
         $spreadsheet = IOFactory::load('public/master/obat/import_obat.xlsx');
         $worksheet = $spreadsheet->getActiveSheet();
@@ -800,17 +803,38 @@ class Obat extends BaseController {
 	    $konversi_satuan = array('J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
 	    $produk_harga = array('J' => array('AK', 'AL'), 'M' => array('AM', 'AN'), 'P' => array('AO', 'AP'), 'S' => array('AQ', 'AR'));
 
-        $rs_barang = $this->barang_obat_m->view('obat_export')->get();
+        $rs_barang = $this->barang_obat_m->view('obat_export')->get();        
+        $arr_id_satuan = array();
+        $arr_id_produk = array();
+        foreach ($rs_barang as $barang) {            
+            $arr_id_satuan[] = $barang->id_satuan;
+            if ($barang->produk) {
+                $arr_id_produk[] = $barang->id_produk;
+            }
+        }        
+        $rs_konversi_satuan = $this->konversi_satuan_m->view('konversi_satuan')
+		        ->where('id_satuan_tujuan IN (\''.implode('\',\'',$arr_id_satuan).'\')', null, false)
+                ->get();            
+        $arr_konversi_satuan = array();
+        foreach ($rs_konversi_satuan as $r_konversi_satuan) {
+            $arr_konversi_satuan[$r_konversi_satuan->id_satuan_tujuan][$r_konversi_satuan->id] = $r_konversi_satuan;
+        }                
+        $rs_produk_harga = $this->produk_harga_m->where('id_produk IN (\''.implode('\',\'',$arr_id_produk).'\')', null, false)
+            ->where('jumlah', 1)
+            ->where('urutan', 1)
+            ->get();
+        $arr_produk_harga = array();
+        foreach ($rs_produk_harga as $r_produk_harga) {
+            $arr_produk_harga[$r_produk_harga->id_produk][$r_produk_harga->id_satuan] = $r_produk_harga;
+        }
         $row = 7;
-        $no = 1;
+        $no = 1;        
         $worksheet->getCell('A1')->setValue('Data Obat');
         $worksheet->getCell('A2')->setValue($cabang->nama);
         $worksheet->getCell('A3')->setValue(date('d-m-Y'));
         foreach ($rs_barang as $key => $barang) {
-	        $rs_konversi_satuan = $this->konversi_satuan_m->view('konversi_satuan')
-		        ->where('id_satuan_tujuan', $barang->id_satuan)
-		        ->get();
-
+            $rs_konversi_satuan = isset($arr_konversi_satuan[$barang->id_satuan]) ? $arr_konversi_satuan[$barang->id_satuan] : null;          
+              
             $worksheet->getCell('A'.$row)->setValue($no);
             $worksheet->getCell('B'.$row)->setValue($barang->kode);
             $worksheet->getCell('C'.$row)->setValue($barang->barcode);
@@ -834,11 +858,7 @@ class Obat extends BaseController {
 			        $worksheet->getCell($konversi_satuan[$j+2].$row)->setValue($r_konversi_satuan->konversi);
 
 			        if ($barang->produk) {
-				        $r_produk_harga = $this->produk_harga_m->where('id_produk', $barang->id_produk)
-					        ->where('id_satuan', $r_konversi_satuan->id_satuan_asal)
-					        ->where('jumlah', 1)
-					        ->where('urutan', 1)
-					        ->first();
+                        $r_produk_harga = isset($arr_produk_harga[$barang->id_produk][$r_konversi_satuan->id_satuan_asal]) ? $arr_produk_harga[$barang->id_produk][$r_konversi_satuan->id_satuan_asal] : null;                      
 				        if ($r_produk_harga) {
 					        $worksheet->getCell($produk_harga[$konversi_satuan[$j]][0].$row)->setValue($r_produk_harga->margin_persen);
 					        $worksheet->getCell($produk_harga[$konversi_satuan[$j]][1].$row)->setValue($r_produk_harga->harga);
@@ -865,13 +885,14 @@ class Obat extends BaseController {
 		        $worksheet->getCell('AH'.$row)->setValue(1);
 	        } else {
 		        $worksheet->getCell('AH'.$row)->setValue(0);
-	        }
-            for($i=0;$i<44;$i++){
-                $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
-            }
+            }                                
+            
             $no++;
             $row++;
         }
+        
+        $spreadsheet->getActiveSheet()->getStyle($cols[0].'7:'.$cols[43].$row)->applyFromArray($style);
+        
 
 	    foreach ($worksheet->getColumnDimensions() as $colDim) {
 		    $colDim->setAutoSize(true);
