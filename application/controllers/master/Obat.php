@@ -777,8 +777,7 @@ class Obat extends BaseController {
     }
 
     public function export() {
-        ini_set("pcre.backtrack_limit", "100000000");
-        ini_set("pcre.recursion_limit", "100000000");
+        ini_set('memory_limit', '512M');
         
 	    $cabang = $this->cabang_gudang_m->view('cabang_gudang')->scope('aktif_cabang')->first_or_fail();
         $spreadsheet = IOFactory::load('public/master/obat/import_obat.xlsx');
