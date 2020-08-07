@@ -1,4 +1,5 @@
 .env.development
+composer.lock
 vendor/
 .idea/
 public/public/img/
