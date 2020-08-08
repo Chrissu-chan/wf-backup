@@ -8,22 +8,24 @@ services:
     environment:
       - CI_ENV=production
     volumes:
-      - ./../../../:/var/www
+      - ./../../../:/var/www/pos
+      - ./../../../../akuntansi:/var/www/akuntansi
       - ./nginx/conf.d:/etc/nginx/conf.d
     ports:
       - "80:80"
     links:
-      - wisnufarma_pos
+      - wisnufarma_php
 
-  wisnufarma_pos:
-    container_name: wisnufarma_pos
+  wisnufarma_php:
+    container_name: wisnufarma_php
     build:
       context: ./../../
-      dockerfile: pos.dockerfile
+      dockerfile: php.dockerfile
     environment:
       - CI_ENV=production
     volumes:
-      - ./../../../:/var/www
+      - ./../../../:/var/www/pos
+      - ./../../../../akuntansi:/var/www/akuntansi
     links:
       - wisnufarma_db
     environment:
