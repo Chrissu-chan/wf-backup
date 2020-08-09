@@ -1,7 +1,7 @@
 version: '3'
 services:
-  wisnufarma:
-    container_name: wisnufarma
+  wisnufarma_uat:
+    container_name: wisnufarma_uat
     build:
       context: ./../../
       dockerfile: webserv.dockerfile
@@ -14,26 +14,26 @@ services:
     ports:
       - "81:80"
     links:
-      - wisnufarma_php
+      - wisnufarma_uat_php
 
-  wisnufarma_php:
-    container_name: wisnufarma_php
+  wisnufarma_uat_php:
+    container_name: wisnufarma_uat_php
     build:
       context: ./../../
-      dockerfile: pos.dockerfile
+      dockerfile: php.dockerfile
     environment:
       - CI_ENV=testing
     volumes:
       - ./../../../:/var/www/pos
       - ./../../../../akuntansi:/var/www/akuntansi
     links:
-      - wisnufarma_db
+      - wisnufarma_uat_db
     environment:
       - "DB_PORT=3306"
-      - "DB_HOST=wisnufarma_db"
+      - "DB_HOST=wisnufarma_uat_db"
 
-  wisnufarma_db:
-    container_name: wisnufarma_db
+  wisnufarma_uat_db:
+    container_name: wisnufarma_uat_db
     image: mysql:5.6
     environment:
         MYSQL_ROOT_PASSWORD: r0074wf
@@ -41,7 +41,7 @@ services:
     ports:
         - "3316:3306"
     volumes:
-      - mysql-wisnufarma:/var/lib/mysql
+      - mysql-wisnufarma-uat:/var/lib/mysql
 volumes:
   mysql-wisnufarma-uat:
     external: true
