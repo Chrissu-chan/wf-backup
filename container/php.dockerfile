@@ -9,6 +9,6 @@ RUN apt-get update && apt-get install -y libmcrypt-dev libfreetype6-dev libpng-d
 RUN apt-get install -y git
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer config --global github-oauth.github.com 5b2d0a11dec5173fded41f915937a35d2697079a
+RUN composer config --global github-oauth.github.com e925dd5cdb347f6f2bf631b0be1f55372580ddd4
 
 WORKDIR /var/www
