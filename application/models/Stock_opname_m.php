@@ -23,4 +23,12 @@ class Stock_opname_m extends BaseModel {
     public function scope_active() {
         $this->db->where('waktu_selesai', NULL);
     }
+
+	public function enum_status() {
+		return array(
+			'all' => 'Semua',
+			'waiting' => 'Belum SO',
+			'done' => 'Sudah SO'
+		);
+	}
 }
