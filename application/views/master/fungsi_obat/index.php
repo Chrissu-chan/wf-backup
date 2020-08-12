@@ -33,6 +33,7 @@
         dataTable = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>',
             columns: [
                 {data: 'fungsi_obat', name: 'fungsi_obat.fungsi_obat'},

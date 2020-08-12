@@ -55,6 +55,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>',
             columns: [
                 {data: 'nama', name: 'pelanggan.nama'},

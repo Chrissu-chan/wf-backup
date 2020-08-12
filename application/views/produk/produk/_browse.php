@@ -35,6 +35,7 @@
                     bootbox.hideAll();
                 });
             }
+        sleep: (4);
         });
     });
 </script>

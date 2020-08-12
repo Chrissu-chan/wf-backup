@@ -50,6 +50,7 @@
             serverSide: true,
             autoWidth: false,
             scrollX: true,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>?gudang='+$('#filter-gudang').val()+'&range='+$('#filter-range').val(),
             columns: [
                 {data: 'gudang', name: 'gudang.gudang'},

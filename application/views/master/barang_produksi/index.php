@@ -35,6 +35,7 @@
         dataTable = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>',
             columns: [
                 {data: 'kode_barang', name: 'barang.kode', render: function(data, type, row) {

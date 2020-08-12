@@ -64,6 +64,7 @@
         dataTable = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay:1000,
             ajax: '<?= $this->route->name('transaksi.mutasi_kasir') ?>?tanggal_awal='+$('#filter-tanggal_awal').val()+'&tanggal_akhir='+$('#filter-tanggal_akhir').val(),
             columns: [
                 {data: 'tanggal_mutasi', name: 'mutasi_kasir.tanggal_mutasi'},

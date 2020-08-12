@@ -28,6 +28,7 @@
         $('#data-table').dataTable({
             processing : true,
             serverSide : true,
+            searchDelay:1000,
             ajax : '<?= $this->route->name('master.shift') ?>',
             columns : [
                 {data : 'shift'},

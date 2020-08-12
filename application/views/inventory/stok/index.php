@@ -54,6 +54,7 @@
         dataTable = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>?gudang='+$('#filter-gudang').val()+'&tanggal_awal='+$('#filter-tanggal_awal').val()+'&tanggal_akhir='+$('#filter-tanggal_akhir').val(),
             columns: [
                 {data: 'gudang', name: 'gudang.gudang'},

@@ -46,6 +46,7 @@
         dataTable = $('#data-table').DataTable({
             processing: true,
             serverSide: true,
+            searchDelay:1000,
             ajax: '<?= $this->url_generator->current_url() ?>?jenis_penjualan=<?= $jenis_penjualan ?>',
             columns: [
                 {data: 'tanggal', name: 'penjualan.tanggal'},

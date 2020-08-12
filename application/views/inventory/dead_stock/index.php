@@ -48,6 +48,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
+            searchDelay:1000,
             scrollX: true,
             ajax: '<?= $this->url_generator->current_url() ?>?gudang='+$('#filter-gudang').val()+'&range='+$('#filter-range').val(),
             columns: [
