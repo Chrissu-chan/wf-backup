@@ -1,5 +1,6 @@
 <script>
     $(function() {
+        $('#tanggal_mutasi').inputmask('99-99-9999');       
         $('#tipe').change(function() {
             var html = '';
             if ($(this).val() == 'pemasukan') {

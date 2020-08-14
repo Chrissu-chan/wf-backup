@@ -71,7 +71,7 @@
 				        <div class="form-group">
 				            <label>{{tanggal_piutang}}</label>
 				            <div class="input-group">
-				                <?= $this->form->text('tanggal_piutang', null, 'id="tanggal_piutang" class="form-control" data-input-type="datepicker" disabled') ?>
+				                <?= $this->form->text('tanggal_piutang', null, 'id="tanggal_piutang" class="form-control"') ?>
 				                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				            </div>
 				        </div>
@@ -80,7 +80,7 @@
 				        <div class="form-group">
 				            <label>{{tanggal_jatuh_tempo}}</label>
 				            <div class="input-group">
-				                <?= $this->form->text('tanggal_jatuh_tempo', null, 'id="tanggal_jatuh_tempo" class="form-control" data-input-type="datepicker" disabled') ?>
+				                <?= $this->form->text('tanggal_jatuh_tempo', null, 'id="tanggal_jatuh_tempo" class="form-control"') ?>
 				                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				            </div>
 				        </div>
@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label>{{tanggal_bayar}}</label>
                             <div class="input-group">
-                                <?= $this->form->date('tanggal_bayar', date('d-m-Y'), 'id="tanggal_bayar" class="form-control" data-input-type="datepicker"') ?>
+                                <?= $this->form->date('tanggal_bayar', date('d-m-Y'), 'id="tanggal_bayar" class="form-control"') ?>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
@@ -163,8 +163,11 @@
 <?php $this->template->section('page_script') ?>
 <script>
     $(function() {
-        $('#frm-create').buildForm();
-        find_piutang();
+		$('#tanggal_piutang').inputmask('99-99-9999');
+		$('#tanggal_jatuh_tempo').inputmask('99-99-9999');
+		$('#tanggal_bayar').inputmask('99-99-9999');
+		$('#frm-create').buildForm();
+		find_piutang();
     });
 
     $('#frm-create').buildForm();

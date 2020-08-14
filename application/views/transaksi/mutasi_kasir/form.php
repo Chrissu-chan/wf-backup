@@ -15,7 +15,7 @@
     <label>{{tanggal_mutasi}}</label>
     <div class="input-group input-group-sm">
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-        <?= $this->form->date('tanggal_mutasi', date('d-m-Y'), 'id="tanggal_mutasi" class="form-control" data-input-type="datepicker"') ?>
+        <?= $this->form->date('tanggal_mutasi', date('d-m-Y'), 'id="tanggal_mutasi" class="form-control"') ?>
     </div>
 </div>
 <div id="form-group-jenis_transaksi" class="form-group">

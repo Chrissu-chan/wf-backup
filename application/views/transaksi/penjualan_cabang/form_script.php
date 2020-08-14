@@ -7,6 +7,7 @@
 	<?php } ?>
 
     $(function () {
+        $('#tanggal').inputmask('99-99-9999');
         $(window).keydown(function(event){
             if(event.keyCode == 13) {
                 event.preventDefault();

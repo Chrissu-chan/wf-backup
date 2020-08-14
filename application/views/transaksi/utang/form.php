@@ -54,6 +54,11 @@
 </div>
 
 <script>
+    $(function () {
+        $('#tanggal_utang').inputmask('99-99-9999');
+        $('#tanggal_jatuh_tempo').inputmask('99-99-9999');
+    });
+    
     function choose_file() {
         $('#file_path').click();
     }

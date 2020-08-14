@@ -17,7 +17,7 @@
                     <label>{{tanggal}}</label>
                     <div class="input-group input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <?= $this->form->date('tanggal', date('d-m-Y'), 'id="tanggal" class="form-control" data-input-type="datepicker"') ?>
+                        <?= $this->form->date('tanggal', date('d-m-Y'), 'id="tanggal" class="form-control"') ?>
                     </div>
                 </div>
             </div>

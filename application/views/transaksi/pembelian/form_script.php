@@ -1,7 +1,8 @@
 <script>
     $(function () {
+        $('#tanggal').inputmask('99-99-9999');
 	    document.title = 'Pembelian Total : 0';
-
+        
         $(window).keydown(function(event){
             if(event.keyCode == 13) {
                 event.preventDefault();
