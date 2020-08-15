@@ -66,7 +66,7 @@ $CI->load->model('shift_aktif_m');
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown navbar-user">
                         <?php if ($shift_aktif = $CI->shift_aktif_m->view('shift_aktif')->scope('cabang')->scope('aktif')->first()) { ?>
-                            <a href="<?= $this->route->name('transaksi.shift_aktif.close') ?>"><i class="fa fa-clock-o"></i> {{shift_aktif}} : <?= $shift_aktif->shift_waktu ?></a>
+                            <a href="<?= $this->route->name('transaksi.shift_aktif.close') ?>"><i class="fa fa-clock-o"></i> {{shift_aktif}} : <?= $shift_aktif->shift_waktu ?> (<?= $shift_aktif->name ?>)</a>
                         <?php } else { ?>
                             <a href="<?= $this->route->name('transaksi.shift_aktif.open') ?>"><i class="fa fa-clock-o"></i> {{open_shift}}</a>
                         <?php } ?>
