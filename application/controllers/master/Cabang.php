@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Cabang extends BaseController {
+class Cabang extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('cabang_m');
         $this->load->model('kota_m');
@@ -12,27 +14,32 @@ class Cabang extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Cabang";
         if ($this->input->is_ajax_request()) {
             $model = tree($this->cabang_m->get(), 'id', 'parent_id', 0);
             return $this->load->view('master/cabang/treetable', array('model' => $model));
         }
-        $this->load->view('master/cabang/index');
+        $this->load->view('master/cabang/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->cabang_m->find_or_fail($id);
         $this->load->view('master/cabang/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $parent_id = $this->input->get('parent_id');
         $this->load->view('master/cabang/create', array('parent_id' => $parent_id));
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'nama' => 'required|is_unique[cabang.nama]',
@@ -61,17 +68,19 @@ class Cabang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->cabang_m->find_or_fail($id);
         $this->load->view('master/cabang/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'nama' => 'required|is_unique[cabang.nama.'.$id.']',
+            'nama' => 'required|is_unique[cabang.nama.' . $id . ']',
             'telepon' => 'required',
             'id_kota' => 'required',
             'alamat' => 'required'
@@ -95,7 +104,8 @@ class Cabang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $cabang_gudang = $this->cabang_gudang_m->where('id_cabang', $id)->first();
         $this->cabang_gudang_m->delete($cabang_gudang->id);
         $result = $this->cabang_m->delete($id);

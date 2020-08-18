@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Roles extends BaseController {
+class Roles extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('roles_m');
         $this->load->model('role_permissions_m');
@@ -12,32 +14,37 @@ class Roles extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "User Roles";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->roles_m)
-            ->add_action('{permissions} {view} {edit} {delete}', array(
-                'permissions' => function($model) {
-                    return $this->action->link('permissions', $this->url_generator->current_url().'/permissions/'.$model->id, 'class="btn btn-primary btn-sm"');
-                }
-            ))
-            ->generate();
+                ->add_action('{permissions} {view} {edit} {delete}', array(
+                    'permissions' => function ($model) {
+                        return $this->action->link('permissions', $this->url_generator->current_url() . '/permissions/' . $model->id, 'class="btn btn-primary btn-sm"');
+                    }
+                ))
+                ->generate();
         }
-        $this->load->view('users/roles/index');
+        $this->load->view('users/roles/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->roles_m->find_or_fail($id);
         $this->load->view('users/roles/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('users/roles/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'role' => 'required|is_unique[roles.role]'
@@ -57,17 +64,19 @@ class Roles extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->roles_m->find_or_fail($id);
         $this->load->view('users/roles/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'role' => 'required|is_unique[roles.role.'.$id.']'
+            'role' => 'required|is_unique[roles.role.' . $id . ']'
         ));
         $result = $this->roles_m->update($id, $post);
         if ($result) {
@@ -84,11 +93,13 @@ class Roles extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function permissions($id) {
+    public function permissions($id)
+    {
+        $title = "Roles";
         $role = $this->roles_m->find_or_fail($id);
         $permissions = array();
         $rs_application_actions = $this->application_modules_m->view('application_actions')
-        ->get();
+            ->get();
         foreach ($rs_application_actions as $r_application_action) {
             $permissions[$r_application_action->application_id]['application_id'] = $r_application_action->application_id;
             $permissions[$r_application_action->application_id]['application'] = $r_application_action->application;
@@ -108,14 +119,15 @@ class Roles extends BaseController {
         $this->load->view('users/roles/permissions', array(
             'role' => $role,
             'permissions' => $permissions,
-            'model' => $model
+            'model' => $model, 'title' => $title
         ));
     }
 
-    public function permissions_save($id) {
+    public function permissions_save($id)
+    {
         $post = $this->input->post();
         $this->role_permissions_m->where('role_id', $id)
-        ->delete();
+            ->delete();
         $records = array();
         if (isset($post['permissions'])) {
             foreach ($post['permissions'] as $application_id => $application) {
@@ -129,13 +141,14 @@ class Roles extends BaseController {
                 }
             }
         }
-        if (count($records) <> 0)  {
+        if (count($records) <> 0) {
             $this->role_permissions_m->insert_batch($records);;
         }
         $this->redirect->with('success_message', $this->localization->lang('success_save_message', array('name' => $this->localization->lang('permissions'))))->back();
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->roles_m->delete($id);
         if ($result) {
             $response = array(

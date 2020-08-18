@@ -1,34 +1,39 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Pembelian extends BaseController {
+class Pembelian extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('supplier_cabang_m');
         $this->load->model('user_cabang_m');
         $this->load->model('pembelian_barang_m');
     }
 
-    public function index() {
+    public function index()
+    {
+        $title = "Report Pembelian";
         $rekap = array(
             'nota' => $this->localization->lang('nota'),
             'harian' => $this->localization->lang('harian'),
             'bulanan' => $this->localization->lang('bulanan')
         );
         $this->load->view('reports/pembelian', array(
-            'rekap' => $rekap
+            'rekap' => $rekap, 'title' => $title
         ));
     }
 
-    public function excel() {
+    public function excel()
+    {
         $post = $this->input->post();
 
-        $cols = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        $cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
-        $style=array(
+        $style = array(
             'borders' => array(
                 'bottom' => array(
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -48,7 +53,7 @@ class Pembelian extends BaseController {
         if ($post['periode_akhir']) {
             $this->pembelian_barang_m->where('pembelian.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
         }
-         if ($post['supplier']) {
+        if ($post['supplier']) {
             $this->pembelian_barang_m->where('pembelian.id_supplier', $post['supplier']);
         }
         if ($post['user']) {
@@ -77,25 +82,25 @@ class Pembelian extends BaseController {
                 }
                 $row = 2;
                 foreach ($pembelian_barang as $key => $data) {
-                    $worksheet->getCell('A'.$row)->setValue($data['no_pembelian']);
-                    $worksheet->getCell('B'.$row)->setValue($data['tanggal']);
-                    $worksheet->getCell('C'.$row)->setValue($data['user']);
-                    $worksheet->getCell('D'.$row)->setValue($data['supplier']);
-                    $worksheet->getCell('P'.$row)->setValue($data['pembelian_total']);
+                    $worksheet->getCell('A' . $row)->setValue($data['no_pembelian']);
+                    $worksheet->getCell('B' . $row)->setValue($data['tanggal']);
+                    $worksheet->getCell('C' . $row)->setValue($data['user']);
+                    $worksheet->getCell('D' . $row)->setValue($data['supplier']);
+                    $worksheet->getCell('P' . $row)->setValue($data['pembelian_total']);
                     foreach ($data['barang'] as $barang) {
-                        $worksheet->getCell('E'.$row)->setValue($barang->kode);
-                        $worksheet->getCell('F'.$row)->setValue($barang->barang);
-                        $worksheet->getCell('G'.$row)->setValue($barang->expired);
-                        $worksheet->getCell('H'.$row)->setValue($barang->satuan_beli);
-                        $worksheet->getCell('I'.$row)->setValue($barang->jumlah);
-                        $worksheet->getCell('J'.$row)->setValue($barang->harga);
-                        $worksheet->getCell('K'.$row)->setValue($barang->diskon);
-                        $worksheet->getCell('L'.$row)->setValue($barang->potongan);
-                        $worksheet->getCell('M'.$row)->setValue($barang->subtotal);
-                        $worksheet->getCell('N'.$row)->setValue($barang->ppn);
-                        $worksheet->getCell('O'.$row)->setValue($barang->total);
-                        for($i=0;$i<16;$i++){
-                            $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+                        $worksheet->getCell('E' . $row)->setValue($barang->kode);
+                        $worksheet->getCell('F' . $row)->setValue($barang->barang);
+                        $worksheet->getCell('G' . $row)->setValue($barang->expired);
+                        $worksheet->getCell('H' . $row)->setValue($barang->satuan_beli);
+                        $worksheet->getCell('I' . $row)->setValue($barang->jumlah);
+                        $worksheet->getCell('J' . $row)->setValue($barang->harga);
+                        $worksheet->getCell('K' . $row)->setValue($barang->diskon);
+                        $worksheet->getCell('L' . $row)->setValue($barang->potongan);
+                        $worksheet->getCell('M' . $row)->setValue($barang->subtotal);
+                        $worksheet->getCell('N' . $row)->setValue($barang->ppn);
+                        $worksheet->getCell('O' . $row)->setValue($barang->total);
+                        for ($i = 0; $i < 16; $i++) {
+                            $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
                         }
                         $row++;
                     }
@@ -125,27 +130,27 @@ class Pembelian extends BaseController {
                     ->get();
                 $row = 2;
                 foreach ($rs_pembelian_barang as $r_pembelian_barang) {
-                    $worksheet->getCell('A'.$row)->setValue($r_pembelian_barang->tanggal);
-                    $worksheet->getCell('B'.$row)->setValue($r_pembelian_barang->kode);
-                    $worksheet->getCell('C'.$row)->setValue($r_pembelian_barang->barang);
-                    $worksheet->getCell('D'.$row)->setValue($r_pembelian_barang->satuan_beli);
-                    $worksheet->getCell('E'.$row)->setValue($r_pembelian_barang->jumlah);
+                    $worksheet->getCell('A' . $row)->setValue($r_pembelian_barang->tanggal);
+                    $worksheet->getCell('B' . $row)->setValue($r_pembelian_barang->kode);
+                    $worksheet->getCell('C' . $row)->setValue($r_pembelian_barang->barang);
+                    $worksheet->getCell('D' . $row)->setValue($r_pembelian_barang->satuan_beli);
+                    $worksheet->getCell('E' . $row)->setValue($r_pembelian_barang->jumlah);
                     if ($r_pembelian_barang->id_satuan_barang) {
                         if ($r_pembelian_barang->id_satuan <> $r_pembelian_barang->id_satuan_barang) {
-                            $worksheet->getCell('D'.$row)->setValue($r_pembelian_barang->satuan_barang);
-                            $worksheet->getCell('E'.$row)->setValue($r_pembelian_barang->jumlah * $r_pembelian_barang->konversi);
+                            $worksheet->getCell('D' . $row)->setValue($r_pembelian_barang->satuan_barang);
+                            $worksheet->getCell('E' . $row)->setValue($r_pembelian_barang->jumlah * $r_pembelian_barang->konversi);
                         }
                     }
-                    $worksheet->getCell('F'.$row)->setValue($r_pembelian_barang->satuan_beli);
-                    $worksheet->getCell('G'.$row)->setValue($r_pembelian_barang->jumlah);
-                    $worksheet->getCell('H'.$row)->setValue($r_pembelian_barang->subtotal / $r_pembelian_barang->jumlah);
-                    $worksheet->getCell('I'.$row)->setValue($r_pembelian_barang->subtotal);
-                    $worksheet->getCell('J'.$row)->setValue($r_pembelian_barang->diskon);
-                    $worksheet->getCell('K'.$row)->setValue($r_pembelian_barang->potongan);
-                    $worksheet->getCell('L'.$row)->setValue($r_pembelian_barang->ppn);
-                    $worksheet->getCell('M'.$row)->setValue($r_pembelian_barang->total);
-                    for($i=0;$i<13;$i++){
-                        $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+                    $worksheet->getCell('F' . $row)->setValue($r_pembelian_barang->satuan_beli);
+                    $worksheet->getCell('G' . $row)->setValue($r_pembelian_barang->jumlah);
+                    $worksheet->getCell('H' . $row)->setValue($r_pembelian_barang->subtotal / $r_pembelian_barang->jumlah);
+                    $worksheet->getCell('I' . $row)->setValue($r_pembelian_barang->subtotal);
+                    $worksheet->getCell('J' . $row)->setValue($r_pembelian_barang->diskon);
+                    $worksheet->getCell('K' . $row)->setValue($r_pembelian_barang->potongan);
+                    $worksheet->getCell('L' . $row)->setValue($r_pembelian_barang->ppn);
+                    $worksheet->getCell('M' . $row)->setValue($r_pembelian_barang->total);
+                    for ($i = 0; $i < 13; $i++) {
+                        $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
                     }
                     $row++;
                 }
@@ -174,27 +179,27 @@ class Pembelian extends BaseController {
                     ->get();
                 $row = 2;
                 foreach ($rs_pembelian_barang as $r_pembelian_barang) {
-                    $worksheet->getCell('A'.$row)->setValue($r_pembelian_barang->bulan);
-                    $worksheet->getCell('B'.$row)->setValue($r_pembelian_barang->kode);
-                    $worksheet->getCell('C'.$row)->setValue($r_pembelian_barang->barang);
-                    $worksheet->getCell('D'.$row)->setValue($r_pembelian_barang->satuan_beli);
-                    $worksheet->getCell('E'.$row)->setValue($r_pembelian_barang->jumlah);
+                    $worksheet->getCell('A' . $row)->setValue($r_pembelian_barang->bulan);
+                    $worksheet->getCell('B' . $row)->setValue($r_pembelian_barang->kode);
+                    $worksheet->getCell('C' . $row)->setValue($r_pembelian_barang->barang);
+                    $worksheet->getCell('D' . $row)->setValue($r_pembelian_barang->satuan_beli);
+                    $worksheet->getCell('E' . $row)->setValue($r_pembelian_barang->jumlah);
                     if ($r_pembelian_barang->id_satuan_barang) {
                         if ($r_pembelian_barang->id_satuan <> $r_pembelian_barang->id_satuan_barang) {
-                            $worksheet->getCell('D'.$row)->setValue($r_pembelian_barang->satuan_barang);
-                            $worksheet->getCell('E'.$row)->setValue($r_pembelian_barang->jumlah * $r_pembelian_barang->konversi);
+                            $worksheet->getCell('D' . $row)->setValue($r_pembelian_barang->satuan_barang);
+                            $worksheet->getCell('E' . $row)->setValue($r_pembelian_barang->jumlah * $r_pembelian_barang->konversi);
                         }
                     }
-                    $worksheet->getCell('F'.$row)->setValue($r_pembelian_barang->satuan_beli);
-                    $worksheet->getCell('G'.$row)->setValue($r_pembelian_barang->jumlah);
-                    $worksheet->getCell('H'.$row)->setValue($r_pembelian_barang->subtotal / $r_pembelian_barang->jumlah);
-                    $worksheet->getCell('I'.$row)->setValue($r_pembelian_barang->subtotal);
-                    $worksheet->getCell('J'.$row)->setValue($r_pembelian_barang->diskon);
-                    $worksheet->getCell('K'.$row)->setValue($r_pembelian_barang->potongan);
-                    $worksheet->getCell('L'.$row)->setValue($r_pembelian_barang->ppn);
-                    $worksheet->getCell('M'.$row)->setValue($r_pembelian_barang->total);
-                    for($i=0;$i<13;$i++){
-                        $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+                    $worksheet->getCell('F' . $row)->setValue($r_pembelian_barang->satuan_beli);
+                    $worksheet->getCell('G' . $row)->setValue($r_pembelian_barang->jumlah);
+                    $worksheet->getCell('H' . $row)->setValue($r_pembelian_barang->subtotal / $r_pembelian_barang->jumlah);
+                    $worksheet->getCell('I' . $row)->setValue($r_pembelian_barang->subtotal);
+                    $worksheet->getCell('J' . $row)->setValue($r_pembelian_barang->diskon);
+                    $worksheet->getCell('K' . $row)->setValue($r_pembelian_barang->potongan);
+                    $worksheet->getCell('L' . $row)->setValue($r_pembelian_barang->ppn);
+                    $worksheet->getCell('M' . $row)->setValue($r_pembelian_barang->total);
+                    for ($i = 0; $i < 13; $i++) {
+                        $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
                     }
                     $row++;
                 }
@@ -209,7 +214,7 @@ class Pembelian extends BaseController {
         }
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        header('Content-Disposition: attachment; filename="pembelian-'.date('Ymdhis').'.xlsx"');
+        header('Content-Disposition: attachment; filename="pembelian-' . date('Ymdhis') . '.xlsx"');
         $writer->save("php://output");
     }
 }

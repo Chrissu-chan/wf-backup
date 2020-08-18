@@ -1,11 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Barang extends BaseController {
+class Barang extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('barang_m');
         $this->load->model('kategori_barang_m');
@@ -16,33 +18,38 @@ class Barang extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Barang";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->barang_m)
-            ->view('barang')
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->view('barang')
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('master/barang/index');
+        $this->load->view('master/barang/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->barang_m->view('barang')->find_or_fail($id);
         $this->load->view('master/barang/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('master/barang/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'kode' => 'required|is_unique[barang.kode]',
-	        'barcode' => 'callback_validate_barcode',
+            'barcode' => 'callback_validate_barcode',
             'nama' => 'required',
             'id_kategori_barang' => 'required',
             'id_jenis_barang' => 'required',
@@ -64,7 +71,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->barang_m->find_or_fail($id);
         $rs_kategori_obat = $this->barang_kategori_obat_m->where('id_barang', $id)->get();
         $rs_fungsi_obat = $this->barang_fungsi_obat_m->where('id_barang', $id)->get();
@@ -79,11 +87,12 @@ class Barang extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'kode' => 'required|is_unique[barang.kode.'.$id.']',
-	        'barcode' => 'callback_validate_barcode['.$id.']',
+            'kode' => 'required|is_unique[barang.kode.' . $id . ']',
+            'barcode' => 'callback_validate_barcode[' . $id . ']',
             'nama' => 'required',
             'id_kategori_barang' => 'required',
             'id_jenis_barang' => 'required',
@@ -125,7 +134,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->barang_m->delete($id);
         if ($result) {
             $response = array(
@@ -141,7 +151,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function get_json() {
+    public function get_json()
+    {
         if ($id_rak_gudang = $this->input->get('id_rak_gudang')) {
             $this->barang_m->where('id_rak_gudang', $id_rak_gudang);
         } else {
@@ -150,9 +161,9 @@ class Barang extends BaseController {
         $key = $this->input->get('key');
         if ($key) {
             $this->db->group_start()
-                    ->like('kode', $key)
-                    ->or_like('barcode', $key)
-                    ->or_like('nama', $key)
+                ->like('kode', $key)
+                ->or_like('barcode', $key)
+                ->or_like('nama', $key)
                 ->group_end();
         }
         $result = $this->barang_m->view('barang')->get();
@@ -163,7 +174,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function find_json() {
+    public function find_json()
+    {
         $id = $this->input->get('id');
         $result = $this->barang_m->view('barang')->find_or_fail($id);
         $response = array(
@@ -173,14 +185,15 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function find_by_barcode_json() {
+    public function find_by_barcode_json()
+    {
         $post = $this->input->post();
         $key = explode(' - ', $post['key']);
         $result = $this->barang_m->view('barang')
             ->group_start()
-                ->like('barcode', $key[0])
-                ->or_like('kode', $key[0])
-                ->or_like('nama', end($key))
+            ->like('barcode', $key[0])
+            ->or_like('kode', $key[0])
+            ->or_like('nama', end($key))
             ->group_end()
             ->first();
         if ($result) {
@@ -197,7 +210,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function find_hpp_json($id_barang) {
+    public function find_hpp_json($id_barang)
+    {
         if ($id_gudang = $this->input->get('id_gudang')) {
             $this->db->where('id_gudang', $id_gudang);
         }
@@ -234,7 +248,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function hpp_json() {
+    public function hpp_json()
+    {
         $id = $this->input->get('id');
         $result = $this->view_hpp_m->find_or_fail($id);
         $response = array(
@@ -244,7 +259,8 @@ class Barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function browse() {
+    public function browse()
+    {
         if ($this->input->get('load')) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->barang_m)
@@ -254,28 +270,30 @@ class Barang extends BaseController {
         $this->load->view('master/barang/browse');
     }
 
-    public function import() {
+    public function import()
+    {
         $this->load->view('master/barang/import');
     }
 
-    public function import_store() {
+    public function import_store()
+    {
         $errors = array();
         $success_count = 0;
-        $config['upload_path'] = './'.$this->config->item('import_upload_path');
+        $config['upload_path'] = './' . $this->config->item('import_upload_path');
         $config['allowed_types'] = $this->config->item('import_allowed_file_types');
         $config['max_size'] = $this->config->item('document_max_size');
         $this->load->library('upload', $config);
         if (!$this->upload->has('file')) {
             $this->redirect->with('error_message', $this->localization->lang('upload_required'))->back();
         }
-        if(!$this->upload->do_upload('file')) {
+        if (!$this->upload->do_upload('file')) {
             $this->redirect->with('error_message', $this->upload->display_errors())->back();
         }
         $file_name = $this->upload->data('file_name');
         try {
-            $inputFileName = $config['upload_path'].'/'.$file_name;
+            $inputFileName = $config['upload_path'] . '/' . $file_name;
             $spreadsheet = IOFactory::load($inputFileName);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->redirect->with('error_message', $e->getMessage())->back();
         }
 
@@ -301,7 +319,7 @@ class Barang extends BaseController {
             }
         }
 
-        for($i = 6; $i<=count($worksheet); $i++) {
+        for ($i = 6; $i <= count($worksheet); $i++) {
             $no = $worksheet[$i]['A'];
             $kode = trim($worksheet[$i]['B']);
             $barcode = trim($worksheet[$i]['C']);
@@ -328,7 +346,7 @@ class Barang extends BaseController {
             $this->form_validation->set_data($data);
             if (!$this->form_validation->validate(array(
                 'kode' => 'required|is_unique[barang.kode]',
-	            'barcode' => 'callback_validate_barcode',
+                'barcode' => 'callback_validate_barcode',
                 'nama' => 'required',
                 'kategori_barang' => 'required',
                 'jenis_barang' => 'required',
@@ -340,7 +358,7 @@ class Barang extends BaseController {
             }
 
             $r_kategori_barang = $this->kategori_barang_m->where('LOWER(kategori_barang)', strtolower($kategori_barang))->first();
-            if(!$r_kategori_barang) {
+            if (!$r_kategori_barang) {
                 $r_kategori_barang = $this->kategori_barang_m->insert(array(
                     'kategori_barang' => $kategori_barang,
                     'parent_id' => 0
@@ -349,7 +367,7 @@ class Barang extends BaseController {
             $data['id_kategori_barang'] = $r_kategori_barang->id;
 
             $r_jenis_barang = $this->jenis_barang_m->where('LOWER(jenis_barang)', strtolower($jenis_barang))->first();
-            if(!$r_jenis_barang) {
+            if (!$r_jenis_barang) {
                 $r_jenis_barang = $this->jenis_barang_m->insert(array(
                     'jenis_barang' => $jenis_barang
                 ));
@@ -357,14 +375,14 @@ class Barang extends BaseController {
             $data['id_jenis_barang'] = $r_jenis_barang->id;
 
             $r_satuan_barang = $this->satuan_m->where('LOWER(satuan)', strtolower($satuan_barang))->first();
-            if(!$r_satuan_barang) {
+            if (!$r_satuan_barang) {
                 $errors[] = $this->localization->lang('import_error_message', array('no' => $no, 'errors' => $this->localization->lang('satuan_barang_tidak_terdaftar')));
                 continue;
             }
             $data['id_satuan_barang'] = $r_satuan_barang->id;
 
             $r_jenis_obat = $this->jenis_obat_m->where('LOWER(jenis_obat)', strtolower($jenis_obat))->first();
-            if(!$r_jenis_obat) {
+            if (!$r_jenis_obat) {
                 $r_jenis_obat = $this->jenis_obat_m->insert(array(
                     'jenis_obat' => $jenis_obat
                 ));
@@ -386,7 +404,7 @@ class Barang extends BaseController {
                     'id_kategori_obat' => $r_kategori_obat->id
                 );
             }
-            if($rs_kategori_obat) {
+            if ($rs_kategori_obat) {
                 $this->barang_kategori_obat_m->insert_batch($rs_kategori_obat);
             }
 
@@ -403,7 +421,7 @@ class Barang extends BaseController {
                     'id_fungsi_obat' => $r_fungsi_obat->id
                 );
             }
-            if($rs_fungsi_obat) {
+            if ($rs_fungsi_obat) {
                 $this->barang_fungsi_obat_m->insert_batch($rs_fungsi_obat);
             }
 
@@ -418,7 +436,8 @@ class Barang extends BaseController {
             ->back();
     }
 
-    public function download_format() {
+    public function download_format()
+    {
         $this->load->helper('download');
         $path = base_url('public/master/barang/import_barang.xlsx');
         $data = file_get_contents($path);
@@ -426,13 +445,14 @@ class Barang extends BaseController {
         return force_download($name, $data);
     }
 
-    public function export() {
+    public function export()
+    {
         $spreadsheet = IOFactory::load('public/master/barang/import_barang.xlsx');
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $cols = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        $cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
-        $style=array(
+        $style = array(
             'borders' => array(
                 'bottom' => array(
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -453,19 +473,19 @@ class Barang extends BaseController {
         $worksheet->getCell('A1')->setValue('Data Barang');
         $worksheet->getCell('A3')->setValue(date('d-m-Y'));
         foreach ($rs_barang as $key => $barang) {
-            $worksheet->getCell('A'.$row)->setValue($no);
-            $worksheet->getCell('B'.$row)->setValue($barang->kode);
-            $worksheet->getCell('C'.$row)->setValue($barang->barcode);
-            $worksheet->getCell('D'.$row)->setValue($barang->nama);
-            $worksheet->getCell('E'.$row)->setValue($barang->kategori_barang);
-            $worksheet->getCell('F'.$row)->setValue($barang->jenis_barang);
-            $worksheet->getCell('G'.$row)->setValue($barang->kode_satuan_barang);
-            $worksheet->getCell('H'.$row)->setValue($barang->jenis_obat);
-            $worksheet->getCell('I'.$row)->setValue(str_replace(', ', ';', $barang->kategori_obat));
-            $worksheet->getCell('J'.$row)->setValue(str_replace(', ', ';', $barang->fungsi_obat));
-            $worksheet->getCell('K'.$row)->setValue($barang->kandungan_obat);
-            for($i=0;$i<1;$i++){
-                $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+            $worksheet->getCell('A' . $row)->setValue($no);
+            $worksheet->getCell('B' . $row)->setValue($barang->kode);
+            $worksheet->getCell('C' . $row)->setValue($barang->barcode);
+            $worksheet->getCell('D' . $row)->setValue($barang->nama);
+            $worksheet->getCell('E' . $row)->setValue($barang->kategori_barang);
+            $worksheet->getCell('F' . $row)->setValue($barang->jenis_barang);
+            $worksheet->getCell('G' . $row)->setValue($barang->kode_satuan_barang);
+            $worksheet->getCell('H' . $row)->setValue($barang->jenis_obat);
+            $worksheet->getCell('I' . $row)->setValue(str_replace(', ', ';', $barang->kategori_obat));
+            $worksheet->getCell('J' . $row)->setValue(str_replace(', ', ';', $barang->fungsi_obat));
+            $worksheet->getCell('K' . $row)->setValue($barang->kandungan_obat);
+            for ($i = 0; $i < 1; $i++) {
+                $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
             }
             $no++;
             $row++;
@@ -477,16 +497,17 @@ class Barang extends BaseController {
         $writer->save("php://output");
     }
 
-	public function validate_barcode($str, $attr) {
-		if ($this->input->post('barcode')) {
-			if ($attr) {
-				$this->barang_m->where('id != ', $attr);
-			}
-			$r_barang = $this->barang_m->where('barcode', $str)->first();
-			if ($r_barang) {
-				$this->form_validation->set_message('validate_barcode', 'The {field} field must contain a unique value.');
-				return FALSE;
-			}
-		}
-	}
+    public function validate_barcode($str, $attr)
+    {
+        if ($this->input->post('barcode')) {
+            if ($attr) {
+                $this->barang_m->where('id != ', $attr);
+            }
+            $r_barang = $this->barang_m->where('barcode', $str)->first();
+            if ($r_barang) {
+                $this->form_validation->set_message('validate_barcode', 'The {field} field must contain a unique value.');
+                return FALSE;
+            }
+        }
+    }
 }

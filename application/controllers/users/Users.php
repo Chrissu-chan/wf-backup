@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Users extends BaseController {
+class Users extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('users_m');
         $this->load->model('roles_m');
@@ -13,45 +15,50 @@ class Users extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "User";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->users_m)
-            ->add_column('roles', function($model) {
-                $roles = array();
-                $rs_user_roles = $this->user_roles_m->view('roles')
-                ->where('user_id', $model->id)
-                ->get();
-                foreach ($rs_user_roles as $r_user_role) {
-                    $roles[] = '<label class="label label-primary">'.$r_user_role->role.'</label>';
-                }
-                return implode(' ', $roles);
-            })
-            ->edit_column('active', function($model) {
-                return $this->users_m->enum('active', $model->active);
-            })
-            ->add_action('{reset_password} {view} {edit} {delete}', array(
-                'reset_password' => function($model) {
-                    return $this->action->button('reset_password', 'class="btn btn-primary btn-sm" onclick="resetPassword(\''.$model->id.'\')"');
-                }
-            ))
-            ->generate();
+                ->add_column('roles', function ($model) {
+                    $roles = array();
+                    $rs_user_roles = $this->user_roles_m->view('roles')
+                        ->where('user_id', $model->id)
+                        ->get();
+                    foreach ($rs_user_roles as $r_user_role) {
+                        $roles[] = '<label class="label label-primary">' . $r_user_role->role . '</label>';
+                    }
+                    return implode(' ', $roles);
+                })
+                ->edit_column('active', function ($model) {
+                    return $this->users_m->enum('active', $model->active);
+                })
+                ->add_action('{reset_password} {view} {edit} {delete}', array(
+                    'reset_password' => function ($model) {
+                        return $this->action->button('reset_password', 'class="btn btn-primary btn-sm" onclick="resetPassword(\'' . $model->id . '\')"');
+                    }
+                ))
+                ->generate();
         }
-        $this->load->view('users/users/index');
+        $this->load->view('users/users/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->users_m->find_or_fail($id);
         $this->load->view('users/users/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('users/users/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'username' => 'required|is_unique[users.username]',
@@ -95,10 +102,11 @@ class Users extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->users_m->find_or_fail($id);
         $rs_user_roles = $this->user_roles_m->where('user_id', $model->id)
-        ->get();
+            ->get();
         $rs_user_cabang = $this->user_cabang_m->where('id_user', $model->id)->get();
         foreach ($rs_user_roles as $r_user_role) {
             $model->roles[] = $r_user_role->role_id;
@@ -111,10 +119,11 @@ class Users extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'username' => 'required|is_unique[users.username.'.$id.']',
+            'username' => 'required|is_unique[users.username.' . $id . ']',
             'name' => 'required',
             'roles[]' => 'required'
         ));
@@ -154,14 +163,16 @@ class Users extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function reset_password($id) {
+    public function reset_password($id)
+    {
         $model = $this->users_m->find_or_fail($id);
         $this->load->view('users/users/reset_password', array(
             'model' => $model
         ));
     }
 
-    public function reset_password_store($id) {
+    public function reset_password_store($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'password' => 'required',
@@ -182,7 +193,8 @@ class Users extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->users_m->delete($id);
         if ($result) {
             $response = array(

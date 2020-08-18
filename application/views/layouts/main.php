@@ -7,9 +7,15 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?= $CI->config->item('application_name') ?></title>
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <link rel="icon" href="<?= $this->config->item('logo') ?>" type="image/x-icon"/>
+<?php if (isset($judul)) { ?>
+        <title><?= $judul; ?></title>
+    <?php } else if (!isset($title)) { ?>
+        <title><?= $this->config->item('application_name'); ?></title>
+    <?php } else { ?>
+        <title><?= $title; ?></title>
+    <?php } ?>
+    <link rel="icon" href="<?= base_url('public/images/config/logo.png'); ?>" type="image/x-icon" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />-->
     <link href="<?= base_url('public/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css') ?>" rel="stylesheet"/>
     <link href="<?= base_url('public/plugins/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet"/>

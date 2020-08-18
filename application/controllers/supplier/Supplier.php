@@ -1,11 +1,13 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-class Supplier extends BaseController {
+class Supplier extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('supplier_m');
         $this->load->model('supplier_cabang_m');
@@ -16,29 +18,32 @@ class Supplier extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Supplier";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->supplier_m)
-            ->view('supplier')
-            ->edit_column('jenis_kelamin', function($model) {
-                return $this->supplier_m->enum('jenis_kelamin', $model->jenis_kelamin);
-            })
-            ->filter(function($model) {
-                if($kategori = $this->input->get('kategori')) {
-                    $model->where('supplier.id_kategori_supplier', $kategori);
-                }
-                if($jenis = $this->input->get('jenis')) {
-                    $model->where('supplier.id_jenis_supplier', $jenis);
-                }
-            })
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->view('supplier')
+                ->edit_column('jenis_kelamin', function ($model) {
+                    return $this->supplier_m->enum('jenis_kelamin', $model->jenis_kelamin);
+                })
+                ->filter(function ($model) {
+                    if ($kategori = $this->input->get('kategori')) {
+                        $model->where('supplier.id_kategori_supplier', $kategori);
+                    }
+                    if ($jenis = $this->input->get('jenis')) {
+                        $model->where('supplier.id_jenis_supplier', $jenis);
+                    }
+                })
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('supplier/supplier/index');
+        $this->load->view('supplier/supplier/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->supplier_m->select('supplier.*')
             ->view('supplier')
             ->view('bank')
@@ -49,37 +54,39 @@ class Supplier extends BaseController {
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('supplier/supplier/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $this->transaction->start();
-            $this->form_validation->validate(array(
-                'id_kategori_supplier' => 'required',
-                'id_jenis_supplier' => 'required',
-                'supplier' => 'required',
-                'nama' => 'required'
-            ));
-            $post = $this->input->post();
-            $result = $this->supplier_m->insert($post);
-            $record_supplier_cabang = array();
-	        if (isset($post['supplier_cabang'])) {
-		        foreach ($post['supplier_cabang'] as $id_cabang) {
-			        $record_supplier_cabang[] = array(
-				        'id_supplier' => $result->id,
-				        'id_cabang' => $id_cabang
-			        );
-		        }
-	        } else {
-		        $record_supplier_cabang[] = array(
-			        'id_supplier' => $result->id,
-			        'id_cabang' => 0
-		        );
-	        }
-            if ($record_supplier_cabang) {
-                $this->supplier_cabang_m->insert_batch($record_supplier_cabang);
+        $this->form_validation->validate(array(
+            'id_kategori_supplier' => 'required',
+            'id_jenis_supplier' => 'required',
+            'supplier' => 'required',
+            'nama' => 'required'
+        ));
+        $post = $this->input->post();
+        $result = $this->supplier_m->insert($post);
+        $record_supplier_cabang = array();
+        if (isset($post['supplier_cabang'])) {
+            foreach ($post['supplier_cabang'] as $id_cabang) {
+                $record_supplier_cabang[] = array(
+                    'id_supplier' => $result->id,
+                    'id_cabang' => $id_cabang
+                );
             }
+        } else {
+            $record_supplier_cabang[] = array(
+                'id_supplier' => $result->id,
+                'id_cabang' => 0
+            );
+        }
+        if ($record_supplier_cabang) {
+            $this->supplier_cabang_m->insert_batch($record_supplier_cabang);
+        }
         if ($this->transaction->complete()) {
             $response = array(
                 'success' => true,
@@ -94,7 +101,8 @@ class Supplier extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->supplier_m->find_or_fail($id);
         foreach ($this->supplier_cabang_m->where('id_supplier', $id)->get() as $supplier_cabang) {
             $model->supplier_cabang[] = $supplier_cabang->id_cabang;
@@ -105,7 +113,8 @@ class Supplier extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $this->form_validation->validate(array(
             'id_kategori_supplier' => 'required',
             'id_jenis_supplier' => 'required',
@@ -113,26 +122,26 @@ class Supplier extends BaseController {
             'nama' => 'required'
         ));
         $this->transaction->start();
-            $post = $this->input->post();
-            $this->supplier_m->update($id, $post);
-            $this->supplier_cabang_m->where('id_supplier', $id)->delete();
-            $record_supplier_cabang = array();
-		    if (isset($post['supplier_cabang'])) {
-			    foreach ($post['supplier_cabang'] as $id_cabang) {
-				    $record_supplier_cabang[] = array(
-					    'id_supplier' => $id,
-					    'id_cabang' => $id_cabang
-				    );
-			    }
-		    } else {
-			    $record_supplier_cabang[] = array(
-				    'id_supplier' => $id,
-				    'id_cabang' => 0
-			    );
-		    }
-            if ($record_supplier_cabang) {
-                $this->supplier_cabang_m->insert_batch($record_supplier_cabang);
+        $post = $this->input->post();
+        $this->supplier_m->update($id, $post);
+        $this->supplier_cabang_m->where('id_supplier', $id)->delete();
+        $record_supplier_cabang = array();
+        if (isset($post['supplier_cabang'])) {
+            foreach ($post['supplier_cabang'] as $id_cabang) {
+                $record_supplier_cabang[] = array(
+                    'id_supplier' => $id,
+                    'id_cabang' => $id_cabang
+                );
             }
+        } else {
+            $record_supplier_cabang[] = array(
+                'id_supplier' => $id,
+                'id_cabang' => 0
+            );
+        }
+        if ($record_supplier_cabang) {
+            $this->supplier_cabang_m->insert_batch($record_supplier_cabang);
+        }
         if ($this->transaction->complete()) {
             $response = array(
                 'success' => true,
@@ -147,7 +156,8 @@ class Supplier extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->supplier_m->delete($id);
         if ($result) {
             $response = array(
@@ -163,24 +173,27 @@ class Supplier extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-	public function get_json() {
-		$key = $this->input->get('q');
-		$result = $this->supplier_m->view('supplier')
-			->like('supplier', $key)
-			->scope('auth')
-			->get();
-		$response = array(
-			'success' => true,
-			'data' => $result
-		);
-		$this->output->set_content_type('application/json')->set_output(json_encode($response));
-	}
+    public function get_json()
+    {
+        $key = $this->input->get('q');
+        $result = $this->supplier_m->view('supplier')
+            ->like('supplier', $key)
+            ->scope('auth')
+            ->get();
+        $response = array(
+            'success' => true,
+            'data' => $result
+        );
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+    }
 
-    public function import() {
+    public function import()
+    {
         $this->load->view('supplier/supplier/import');
     }
 
-    public function import_store() {
+    public function import_store()
+    {
         $errors = array();
         $success_count = 0;
         $config['upload_path'] = './public/supplier/supplier/';
@@ -189,14 +202,14 @@ class Supplier extends BaseController {
         if (!$this->upload->has('file')) {
             $this->redirect->with('error_message', $this->localization->lang('upload_required'))->back();
         }
-        if(!$this->upload->do_upload('file')) {
+        if (!$this->upload->do_upload('file')) {
             $this->redirect->with('error_message', $this->upload->display_errors())->back();
         }
         $file_name = $this->upload->data('file_name');
         try {
-            $inputFileName = $config['upload_path'].'/'.$file_name;
+            $inputFileName = $config['upload_path'] . '/' . $file_name;
             $spreadsheet = IOFactory::load($inputFileName);
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             $this->redirect->with('error_message', $e->getMessage())->back();
         }
 
@@ -223,7 +236,7 @@ class Supplier extends BaseController {
             }
         }
 
-        for($i = 6; $i<=count($worksheet); $i++) {
+        for ($i = 6; $i <= count($worksheet); $i++) {
             $no = $worksheet[$i]['A'];
             $kategori_supplier = trim($worksheet[$i]['B']);
             $jenis_supplier = trim($worksheet[$i]['C']);
@@ -270,7 +283,7 @@ class Supplier extends BaseController {
             $r_supplier_cabang = array();
             foreach ($supplier_cabang as $cabang) {
                 $r_cabang = $this->cabang_m->scope('auth')->where('LOWER(nama)', strtolower(trim($cabang)))->first();
-                if(!$r_cabang) {
+                if (!$r_cabang) {
                     $errors[] = $this->localization->lang('import_error_message', array('no' => $no, 'errors' => $this->localization->lang('cabang_tidak_terdaftar')));
                     continue;
                 }
@@ -278,15 +291,15 @@ class Supplier extends BaseController {
             }
 
             $r_jenis_kelamin = in_array($jenis_kelamin, $this->supplier_m->enum('jenis_kelamin'));
-            if(!$r_jenis_kelamin) {
+            if (!$r_jenis_kelamin) {
                 $errors[] = $this->localization->lang('import_error_message', array('no' => $no, 'errors' => $this->localization->lang('jenis_kelamin_tidak_terdaftar')));
                 continue;
             }
             $data['jenis_kelamin'] = array_search($jenis_kelamin, $this->supplier_m->enum('jenis_kelamin'));
 
-            if($kota) {
+            if ($kota) {
                 $r_kota = $this->kota_m->where('LOWER(kota)', strtolower($kota))->first();
-                if(!$r_kota) {
+                if (!$r_kota) {
                     $errors[] = $this->localization->lang('import_error_message', array('no' => $no, 'errors' => $this->localization->lang('kota_tidak_terdaftar')));
                     continue;
                 }
@@ -294,7 +307,7 @@ class Supplier extends BaseController {
             }
 
             $r_kategori_supplier = $this->kategori_supplier_m->where('LOWER(kategori_supplier)', strtolower($kategori_supplier))->first();
-            if(!$r_kategori_supplier) {
+            if (!$r_kategori_supplier) {
                 $r_kategori_supplier = $this->kategori_supplier_m->insert(array(
                     'kategori_supplier' => $kategori_supplier,
                     'parent_id' => 0
@@ -303,14 +316,14 @@ class Supplier extends BaseController {
             $data['id_kategori_supplier'] = $r_kategori_supplier->id;
 
             $r_jenis_supplier = $this->jenis_supplier_m->where('LOWER(jenis_supplier)', strtolower($jenis_supplier))->first();
-            if(!$r_jenis_supplier) {
+            if (!$r_jenis_supplier) {
                 $r_jenis_supplier = $this->jenis_supplier_m->insert($data);
             }
             $data['id_jenis_supplier'] = $r_jenis_supplier->id;
 
-            if($bank) {
+            if ($bank) {
                 $r_bank = $this->bank_m->where('LOWER(bank)', strtolower($bank))->first();
-                if(!$r_bank) {
+                if (!$r_bank) {
                     $r_bank = $this->bank_m->insert($data);
                 }
                 $data['id_bank'] = $r_bank->id;
@@ -334,11 +347,12 @@ class Supplier extends BaseController {
             }
         }
         $this->redirect->with('import_error_message', $errors)
-        ->with('import_success_message', $success_count)
-        ->back();
+            ->with('import_success_message', $success_count)
+            ->back();
     }
 
-    public function download_format() {
+    public function download_format()
+    {
         $this->load->helper('download');
         $path = base_url('public/supplier/supplier/import_supplier.xlsx');
         $data = file_get_contents($path);
@@ -346,13 +360,14 @@ class Supplier extends BaseController {
         return force_download($name, $data);
     }
 
-    public function export() {
+    public function export()
+    {
         $spreadsheet = IOFactory::load('public/supplier/supplier/import_supplier.xlsx');
         $worksheet = $spreadsheet->getActiveSheet();
 
-        $cols = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+        $cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
-        $style=array(
+        $style = array(
             'borders' => array(
                 'bottom' => array(
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -380,23 +395,24 @@ class Supplier extends BaseController {
                     $supplier_cabang[] = $r_supplier_cabang->nama;
                 }
             }
-            $worksheet->getCell('A'.$row)->setValue($no);
-            $worksheet->getCell('B'.$row)->setValue($supplier->kategori_supplier);
-            $worksheet->getCell('C'.$row)->setValue($supplier->jenis_supplier);
-            $worksheet->getCell('D'.$row)->setValue($supplier->supplier);
-            $worksheet->getCell('E'.$row)->setValue(implode(', ', $supplier_cabang));
-            $worksheet->getCell('F'.$row)->setValue($supplier->nama);
-            $worksheet->getCell('G'.$row)->setValue($this->supplier_m->enum('jenis_kelamin', $supplier->jenis_kelamin));
-            $worksheet->getCell('H'.$row)->setValue($supplier->telepon);
-            $worksheet->getCell('I'.$row)->setValue($supplier->kota);
-            $worksheet->getCell('J'.$row)->setValue($supplier->alamat);
-            $worksheet->getCell('K'.$row)->setValue($supplier->bank);
-            $worksheet->getCell('L'.$row)->setValue($supplier->no_rekening);
-            $worksheet->getCell('M'.$row)->setValue($supplier->nama_rekening);
-            for($i=0;$i<13;$i++){
-                $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+            $worksheet->getCell('A' . $row)->setValue($no);
+            $worksheet->getCell('B' . $row)->setValue($supplier->kategori_supplier);
+            $worksheet->getCell('C' . $row)->setValue($supplier->jenis_supplier);
+            $worksheet->getCell('D' . $row)->setValue($supplier->supplier);
+            $worksheet->getCell('E' . $row)->setValue(implode(', ', $supplier_cabang));
+            $worksheet->getCell('F' . $row)->setValue($supplier->nama);
+            $worksheet->getCell('G' . $row)->setValue($this->supplier_m->enum('jenis_kelamin', $supplier->jenis_kelamin));
+            $worksheet->getCell('H' . $row)->setValue($supplier->telepon);
+            $worksheet->getCell('I' . $row)->setValue($supplier->kota);
+            $worksheet->getCell('J' . $row)->setValue($supplier->alamat);
+            $worksheet->getCell('K' . $row)->setValue($supplier->bank);
+            $worksheet->getCell('L' . $row)->setValue($supplier->no_rekening);
+            $worksheet->getCell('M' . $row)->setValue($supplier->nama_rekening);
+            for ($i = 0; $i < 13; $i++) {
+                $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
             }
-            $no++; $row++;
+            $no++;
+            $row++;
         }
 
 

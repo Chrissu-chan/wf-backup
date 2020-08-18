@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Barang_produksi extends BaseController {
+class Barang_produksi extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('barang_m');
         $this->load->model('barang_produksi_m');
@@ -12,22 +14,25 @@ class Barang_produksi extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Barang Produksi";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->barang_produksi_m)
                 ->view('barang_produksi')
                 ->add_action('{view} {edit} {delete}', array(
-                    'edit' => function($model) {
+                    'edit' => function ($model) {
                         return $this->action->link('edit', $this->route->name('master.barang_produksi.edit', array('id' => $model->id)), 'class="btn btn-warning btn-sm"');
                     }
                 ))
                 ->generate();
         }
-        $this->load->view('master/barang_produksi/index');
+        $this->load->view('master/barang_produksi/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->barang_produksi_m->view('barang_produksi')->find_or_fail($id);
         $model->bahan_baku = $this->barang_produksi_bahan_baku_m->view('bahan_baku')->where('id_barang_produksi', $id)->get();
         $this->load->view('master/barang_produksi/view', array(
@@ -35,11 +40,14 @@ class Barang_produksi extends BaseController {
         ));
     }
 
-    public function create() {
-        $this->load->view('master/barang_produksi/create');
+    public function create()
+    {
+        $data["title"] = "Master Barang Produksi";
+        $this->load->view('master/barang_produksi/create', $data);
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $validate = array(
             'id_barang' => 'required',
@@ -49,11 +57,11 @@ class Barang_produksi extends BaseController {
         );
 
         foreach ($post['bahan_baku'] as $key => $val) {
-            $validate['bahan_baku['.$key.'][id_satuan]'] = array(
+            $validate['bahan_baku[' . $key . '][id_satuan]'] = array(
                 'field' => $this->localization->lang('bahan_baku_satuan', array('name' => $post['bahan_baku'][$key]['nama_barang'])),
                 'rules' => 'required'
             );
-            $validate['bahan_baku['.$key.'][jumlah]'] = array(
+            $validate['bahan_baku[' . $key . '][jumlah]'] = array(
                 'field' => $this->localization->lang('bahan_baku_jumlah', array('name' => $post['bahan_baku'][$key]['nama_barang'])),
                 'rules' => 'required|numeric|greater_than[0]'
             );
@@ -74,7 +82,8 @@ class Barang_produksi extends BaseController {
         }
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->barang_produksi_m->view('barang_produksi')->find_or_fail($id);
         $rs_bahan_baku = $this->barang_produksi_bahan_baku_m->view('bahan_baku')->where('id_barang_produksi', $id)->get();
         foreach ($rs_bahan_baku as $bahan_baku) {
@@ -85,7 +94,8 @@ class Barang_produksi extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $validate = array(
             'id_barang' => 'required',
@@ -95,11 +105,11 @@ class Barang_produksi extends BaseController {
         );
 
         foreach ($post['bahan_baku'] as $key => $val) {
-            $validate['bahan_baku['.$key.'][id_satuan]'] = array(
+            $validate['bahan_baku[' . $key . '][id_satuan]'] = array(
                 'field' => $this->localization->lang('bahan_baku_satuan', array('name' => $post['bahan_baku'][$key]['nama_barang'])),
                 'rules' => 'required'
             );
-            $validate['bahan_baku['.$key.'][jumlah]'] = array(
+            $validate['bahan_baku[' . $key . '][jumlah]'] = array(
                 'field' => $this->localization->lang('bahan_baku_jumlah', array('name' => $post['bahan_baku'][$key]['nama_barang'])),
                 'rules' => 'required|numeric|greater_than[0]'
             );
@@ -121,7 +131,8 @@ class Barang_produksi extends BaseController {
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->barang_produksi_m->delete($id);
         if ($result) {
             $this->barang_produksi_bahan_baku_m->where('id_barang_produksi', $id)->delete();
@@ -138,7 +149,8 @@ class Barang_produksi extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function browse() {
+    public function browse()
+    {
         if ($this->input->get('load')) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->barang_produksi_m)
@@ -148,7 +160,8 @@ class Barang_produksi extends BaseController {
         $this->load->view('master/barang_produksi/browse');
     }
 
-    public function get_bahan_baku_json($id) {
+    public function get_bahan_baku_json($id)
+    {
         $result = $this->barang_produksi_bahan_baku_m->view('bahan_baku')->where('id_barang_produksi', $id)->get();
         $response = array(
             'success' => true,

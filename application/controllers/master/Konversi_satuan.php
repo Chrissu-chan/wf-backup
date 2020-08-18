@@ -1,16 +1,21 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Konversi_satuan extends BaseController {
+class Konversi_satuan extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('satuan_m');
         $this->load->model('konversi_satuan_m');
         $this->load->library('form_validation');
     }
 
-    public function index($id_satuan) {
+    public function index($id_satuan)
+    {
+        $data["title"] = "Master Konversi Satuan";
+        $title = "Master Satuan";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->konversi_satuan_m)
@@ -21,25 +26,29 @@ class Konversi_satuan extends BaseController {
         }
         $satuan = $this->satuan_m->find_or_fail($id_satuan);
         $this->load->view('master/konversi_satuan/index', array(
-            'satuan' => $satuan
+            'satuan' => $satuan, 'title' => $title
         ));
+        $this->load->view('master/konversi_satuan/index', $data);
     }
 
-    public function view($id_satuan, $id) {
+    public function view($id_satuan, $id)
+    {
         $model = $this->konversi_satuan_m->view('konversi_satuan')->find_or_fail($id);
         $this->load->view('master/konversi_satuan/view', array(
             'model' => $model
         ));
     }
 
-    public function create($id_satuan) {
+    public function create($id_satuan)
+    {
         $satuan_asal = $this->satuan_m->find_or_fail($id_satuan);
         $this->load->view('master/konversi_satuan/create', array(
             'satuan_asal' => $satuan_asal
         ));
     }
 
-    public function store($id_satuan) {
+    public function store($id_satuan)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'id_satuan_asal' => 'required',
@@ -83,7 +92,8 @@ class Konversi_satuan extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id_satuan, $id) {
+    public function edit($id_satuan, $id)
+    {
         $model = $this->konversi_satuan_m->find_or_fail($id);
         $satuan_asal = $this->satuan_m->find_or_fail($id_satuan);
 
@@ -93,7 +103,8 @@ class Konversi_satuan extends BaseController {
         ));
     }
 
-    public function delete($id_satuan, $id) {
+    public function delete($id_satuan, $id)
+    {
         $result = $this->konversi_satuan_m->delete($id);
         if ($result) {
             $response = array(

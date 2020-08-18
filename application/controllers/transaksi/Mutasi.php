@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mutasi extends BaseController {
+class Mutasi extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('mutasi_kasir_m');
         $this->load->model('jenis_transaksi_m');
@@ -12,7 +14,9 @@ class Mutasi extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Mutasi";
         if ($this->input->is_ajax_request()) {
             $status = $this->input->get('status');
             $tanggal_awal = date('Y-m-d', strtotime($this->input->get('tanggal_awal')));
@@ -24,22 +28,22 @@ class Mutasi extends BaseController {
                 ->where('status', $status)
                 ->where('tanggal_mutasi >= ', $tanggal_awal)
                 ->where('tanggal_mutasi <= ', $tanggal_akhir)
-                ->edit_column('nominal', function($model) {
+                ->edit_column('nominal', function ($model) {
                     return $this->localization->number($model->nominal);
                 })
-                ->edit_column('tanggal_mutasi', function($model) {
+                ->edit_column('tanggal_mutasi', function ($model) {
                     return $this->localization->human_date($model->tanggal_mutasi);
                 })
-                ->edit_column('status', function($model) {
-                    if($model->status == 'approved') {
-                        return '<span class="label label-success">'.$this->localization->lang('approved').'</span>';
+                ->edit_column('status', function ($model) {
+                    if ($model->status == 'approved') {
+                        return '<span class="label label-success">' . $this->localization->lang('approved') . '</span>';
                     } else {
-                        return '<span class="label label-warning">'. $this->localization->lang('waiting_approval').'</span>';
+                        return '<span class="label label-warning">' . $this->localization->lang('waiting_approval') . '</span>';
                     }
                 })
                 ->add_action('<div class="btn-group">
                     <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    '.$this->localization->lang('action').' <span class="caret"></span>
+                    ' . $this->localization->lang('action') . ' <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-right">
                         {upload_file}
@@ -48,44 +52,47 @@ class Mutasi extends BaseController {
                         {delete}
                     </ul>
                 </div>', array(
-                    'upload_file' => function($model) {
-                        return '<li>'.$this->action->link('upload_file', 'javascript:void(0)', 'onclick="upload('.$model->id.')"').'</li>';
+                    'upload_file' => function ($model) {
+                        return '<li>' . $this->action->link('upload_file', 'javascript:void(0)', 'onclick="upload(' . $model->id . ')"') . '</li>';
                     },
-                    'view' => function($model) {
-                        return '<li>'.$this->action->link('view', 'javascript:void(0)', 'onclick="view('.$model->id.')"').'</li>';
+                    'view' => function ($model) {
+                        return '<li>' . $this->action->link('view', 'javascript:void(0)', 'onclick="view(' . $model->id . ')"') . '</li>';
                     },
-                    'edit' => function($model) {
-                        if($model->status == 'approved') {
+                    'edit' => function ($model) {
+                        if ($model->status == 'approved') {
                             return '';
                         } else {
-                            return '<li>'.$this->action->link('edit', 'javascript:void(0)', 'onclick="edit('.$model->id.')"').'</li>';
+                            return '<li>' . $this->action->link('edit', 'javascript:void(0)', 'onclick="edit(' . $model->id . ')"') . '</li>';
                         }
                     },
-                    'delete' => function($model) {
-                        if($model->status == 'approved') {
+                    'delete' => function ($model) {
+                        if ($model->status == 'approved') {
                             return '';
                         } else {
-                            return '<li>'.$this->action->link('delete', 'javascript:void(0)', 'onclick="remove('.$model->id.')"').'</li>';
+                            return '<li>' . $this->action->link('delete', 'javascript:void(0)', 'onclick="remove(' . $model->id . ')"') . '</li>';
                         }
                     }
                 ))
                 ->generate();
         }
-        $this->load->view('transaksi/mutasi/index');
+        $this->load->view('transaksi/mutasi/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->mutasi_kasir_m->view('mutasi_kasir')->find_or_fail($id);
         $this->load->view('transaksi/mutasi/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('transaksi/mutasi/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'no_mutasi' => 'required|is_unique[mutasi_kasir.no_mutasi]',
@@ -95,7 +102,7 @@ class Mutasi extends BaseController {
             'ke' => 'required',
             'nominal' => 'required'
         ));
-        if(file_exists($_FILES['file_path']['tmp_name'])) {
+        if (file_exists($_FILES['file_path']['tmp_name'])) {
             $upload = $this->upload_file();
             $post['file'] = $upload['file_name'];
         }
@@ -117,24 +124,26 @@ class Mutasi extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->mutasi_kasir_m->find_or_fail($id);
         $this->load->view('transaksi/mutasi/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'no_mutasi' => 'required|is_unique[mutasi_kasir.no_mutasi.'.$id.']',
+            'no_mutasi' => 'required|is_unique[mutasi_kasir.no_mutasi.' . $id . ']',
             'no_referensi' => 'required',
             'tanggal_mutasi' => 'required|date',
             'dari' => 'required',
             'ke' => 'required',
             'nominal' => 'required'
         ));
-        if(file_exists($_FILES['file_path']['tmp_name'])) {
+        if (file_exists($_FILES['file_path']['tmp_name'])) {
             $upload = $this->upload_file();
             $post['file'] = $upload['file_name'];
         }
@@ -153,7 +162,8 @@ class Mutasi extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->mutasi_kasir_m->delete($id);
         if ($result) {
             $response = array(
@@ -169,7 +179,8 @@ class Mutasi extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function appr() {
+    public function appr()
+    {
         $post = $this->input->post('id');
         foreach ($post as $id) {
             $result = $this->mutasi_kasir_m->appr($id);
@@ -181,7 +192,8 @@ class Mutasi extends BaseController {
         }
     }
 
-    public function cancel_appr() {
+    public function cancel_appr()
+    {
         $post = $this->input->post('id');
         foreach ($post as $id) {
             $result = $this->mutasi_kasir_m->cancel_appr($id);
@@ -193,32 +205,35 @@ class Mutasi extends BaseController {
         }
     }
 
-    public function upload($id) {
+    public function upload($id)
+    {
         $this->load->view('transaksi/mutasi/upload', array(
             'id' => $id
         ));
     }
 
-    public function upload_store() {
+    public function upload_store()
+    {
         $post = $this->input->post();
-        if(file_exists($_FILES['file_path']['tmp_name'])) {
+        if (file_exists($_FILES['file_path']['tmp_name'])) {
             $upload = $this->upload_file();
             $post['file'] = $upload['file_name'];
             $result = $this->mutasi_kasir_m->update($post['id'], $post);
-            if($result) {
+            if ($result) {
                 $this->redirect->with('success_message', $this->localization->lang('upload_success'))->back();
             }
         }
     }
 
-    private function upload_file() {
-        $config['upload_path'] = './'.$this->config->item('document_upload_path');
+    private function upload_file()
+    {
+        $config['upload_path'] = './' . $this->config->item('document_upload_path');
         $config['allowed_types'] = $this->config->item('document_allowed_file_types');
         $config['encrypt_name'] = true;
         $config['max_size'] = $this->config->item('document_max_size');
         $this->load->library('upload', $config);
 
-        if(!$this->upload->do_upload('file_path')) {
+        if (!$this->upload->do_upload('file_path')) {
             $response = array(
                 'success' => false,
                 'message' => $this->upload->display_errors()
@@ -230,12 +245,13 @@ class Mutasi extends BaseController {
         }
     }
 
-    public function download_file($id) {
+    public function download_file($id)
+    {
         $this->load->helper('download');
         $result = $this->mutasi_kasir_m->find_or_fail($id);
-        $path = './'.$this->config->item('document_upload_path').'/'.$result->file;
+        $path = './' . $this->config->item('document_upload_path') . '/' . $result->file;
         $data = file_get_contents($path);
-        $name = 'document-'. $result->no_mutasi . '.'.end(explode('.', $result->file));
+        $name = 'document-' . $result->no_mutasi . '.' . end(explode('.', $result->file));
         return force_download($name, $data);
     }
 }

@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Mapping_rak extends BaseController {
+class Mapping_rak extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('barang_m');
         $this->load->model('cabang_gudang_m');
@@ -11,20 +13,23 @@ class Mapping_rak extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
-        $this->load->view('inventory/mapping_rak/index');
+    public function index()
+    {
+        $data["title"] = "Pengaturan Rak";
+        $this->load->view('inventory/mapping_rak/index', $data);
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'id_rak_gudang' => 'required',
             'id_barang[]' => 'required'
         ));
         $this->transaction->start();
-            foreach ($post['id_barang'] as $id_barang) {
-                $this->barang_m->update($id_barang, array('id_rak_gudang' => $post['id_rak_gudang']));
-            }
+        foreach ($post['id_barang'] as $id_barang) {
+            $this->barang_m->update($id_barang, array('id_rak_gudang' => $post['id_rak_gudang']));
+        }
         if ($this->transaction->complete()) {
             $response = array(
                 'success' => true,

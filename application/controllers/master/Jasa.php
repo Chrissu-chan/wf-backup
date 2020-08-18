@@ -1,184 +1,199 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
-	class Jasa extends BaseController {
+class Jasa extends BaseController
+{
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('barang_m');
-        $this->load->model('konversi_satuan_m');
-        $this->load->model('jasa_m');
-        $this->load->model('jasa_pemakaian_barang_m');
-        $this->load->model('kategori_jasa_m');
-        $this->load->model('satuan_m');
-	    $this->load->model('produk_m');
-	    $this->load->model('produk_cabang_m');
-	    $this->load->model('produk_harga_m');
-	    $this->load->model('produk_jasa_komisi_m');
-	    $this->load->model('broadcast_harga_produk_m');
-        $this->load->library('form_validation');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('barang_m');
+		$this->load->model('konversi_satuan_m');
+		$this->load->model('jasa_m');
+		$this->load->model('jasa_pemakaian_barang_m');
+		$this->load->model('kategori_jasa_m');
+		$this->load->model('satuan_m');
+		$this->load->model('produk_m');
+		$this->load->model('produk_cabang_m');
+		$this->load->model('produk_harga_m');
+		$this->load->model('produk_jasa_komisi_m');
+		$this->load->model('broadcast_harga_produk_m');
+		$this->load->library('form_validation');
+	}
 
-    public function index() {
-        if ($this->input->is_ajax_request()) {
-            $this->load->library('datatable');
-            return $this->datatable->resource($this->jasa_m)
-                ->view('jasa')
-                ->add_action('{view} {edit} {delete}', array(
-                    'edit' => function($model) {
-                        return $this->action->link('edit', $this->route->name('master.jasa.edit', array('id' => $model->id)), 'class="btn btn-warning btn-sm"');
-                    }
-                ))
-                ->generate();
-        }
-        $this->load->view('master/jasa/index');
-    }
+	public function index()
+	{
+		$data["title"] = "Master Jasa";
 
-    public function view($id) {
-        $model = $this->jasa_m->view('jasa')->find_or_fail($id);
-        $model->pemakaian_barang = $this->jasa_pemakaian_barang_m->view('pemakaian_barang')->where('id_jasa', $id)->get();
-        $this->load->view('master/jasa/view', array(
-            'model' => $model
-        ));
-    }
+		if ($this->input->is_ajax_request()) {
+			$this->load->library('datatable');
+			return $this->datatable->resource($this->jasa_m)
+				->view('jasa')
+				->add_action('{view} {edit} {delete}', array(
+					'edit' => function ($model) {
+						return $this->action->link('edit', $this->route->name('master.jasa.edit', array('id' => $model->id)), 'class="btn btn-warning btn-sm"');
+					}
+				))
+				->generate();
+		}
+		$this->load->view('master/jasa/index', $data);
+	}
 
-    public function create() {
-        $this->load->view('master/jasa/create');
-    }
+	public function view($id)
+	{
+		$model = $this->jasa_m->view('jasa')->find_or_fail($id);
+		$model->pemakaian_barang = $this->jasa_pemakaian_barang_m->view('pemakaian_barang')->where('id_jasa', $id)->get();
+		$this->load->view('master/jasa/view', array(
+			'model' => $model
+		));
+	}
 
-    public function store() {
-        $post = $this->input->post();
-        $validate = array(
-            'jasa' => 'required',
-            'id_kategori_jasa' => 'required'
-        );
+	public function create()
+	{
+		$data["title"] = "Master Jasa";
+		$this->load->view('master/jasa/create', $data);
+	}
 
-        if (isset($post['pemakaian_barang'])) {
-            foreach ($post['pemakaian_barang'] as $key => $val) {
-                $validate['pemakaian_barang[' . $key . '][id_barang]'] = array(
-                    'field' => $this->localization->lang('pemakaian_barang_barang'),
-                    'rules' => 'required'
-                );
-                $validate['pemakaian_barang[' . $key . '][id_satuan]'] = array(
-                    'field' => $this->localization->lang('pemakaian_barang_satuan', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
-                    'rules' => 'required'
-                );
-                $validate['pemakaian_barang[' . $key . '][jumlah]'] = array(
-                    'field' => $this->localization->lang('pemakaian_barang_jumlah', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
-                    'rules' => 'required|numeric|greater_than[0]'
-                );
-            }
-        }
-        $this->form_validation->validate($validate);
+	public function store()
+	{
+		$post = $this->input->post();
+		$validate = array(
+			'jasa' => 'required',
+			'id_kategori_jasa' => 'required'
+		);
 
-        $result = $this->jasa_m->insert($post);
-        if ($result) {
-            if (isset($post['pemakaian_barang'])) {
-                $rs_pemakaian_barang = array();
-                foreach ($post['pemakaian_barang'] as $pemakaian_barang) {
-                    $pemakaian_barang['id_jasa'] = $result->id;
-                    $rs_pemakaian_barang[] = $pemakaian_barang;
-                }
+		if (isset($post['pemakaian_barang'])) {
+			foreach ($post['pemakaian_barang'] as $key => $val) {
+				$validate['pemakaian_barang[' . $key . '][id_barang]'] = array(
+					'field' => $this->localization->lang('pemakaian_barang_barang'),
+					'rules' => 'required'
+				);
+				$validate['pemakaian_barang[' . $key . '][id_satuan]'] = array(
+					'field' => $this->localization->lang('pemakaian_barang_satuan', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
+					'rules' => 'required'
+				);
+				$validate['pemakaian_barang[' . $key . '][jumlah]'] = array(
+					'field' => $this->localization->lang('pemakaian_barang_jumlah', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
+					'rules' => 'required|numeric|greater_than[0]'
+				);
+			}
+		}
+		$this->form_validation->validate($validate);
 
-                $this->jasa_pemakaian_barang_m->insert_batch($rs_pemakaian_barang);
-            }
-            $this->redirect->with('success_message', $this->localization->lang('success_store_message', array('name' => $this->localization->lang('jasa'))))->route('master.jasa');
-        } else {
-            $this->redirect->with('error_message', $this->localization->lang('error_store_message', array('name' => $this->localization->lang('jasa'))))->back();
-        }
-    }
+		$result = $this->jasa_m->insert($post);
+		if ($result) {
+			if (isset($post['pemakaian_barang'])) {
+				$rs_pemakaian_barang = array();
+				foreach ($post['pemakaian_barang'] as $pemakaian_barang) {
+					$pemakaian_barang['id_jasa'] = $result->id;
+					$rs_pemakaian_barang[] = $pemakaian_barang;
+				}
 
-    public function edit($id) {
-        $model = $this->jasa_m->find_or_fail($id);
-        $rs_pemakaian_barang = $this->jasa_pemakaian_barang_m->view('pemakaian_barang')->where('id_jasa', $id)->get();
-        foreach ($rs_pemakaian_barang as $pemakaian_barang) {
-            $model->pemakaian_barang[$pemakaian_barang->id_barang] = $pemakaian_barang;
-        }
-        $this->load->view('master/jasa/edit', array(
-            'model' => $model
-        ));
-    }
+				$this->jasa_pemakaian_barang_m->insert_batch($rs_pemakaian_barang);
+			}
+			$this->redirect->with('success_message', $this->localization->lang('success_store_message', array('name' => $this->localization->lang('jasa'))))->route('master.jasa');
+		} else {
+			$this->redirect->with('error_message', $this->localization->lang('error_store_message', array('name' => $this->localization->lang('jasa'))))->back();
+		}
+	}
 
-    public function update($id) {
-        $post = $this->input->post();
-        $validate = array(
-            'jasa' => 'required',
-            'id_kategori_jasa' => 'required'
-        );
+	public function edit($id)
+	{
+		$title = "Master Jasa";
+		$model = $this->jasa_m->find_or_fail($id);
+		$rs_pemakaian_barang = $this->jasa_pemakaian_barang_m->view('pemakaian_barang')->where('id_jasa', $id)->get();
+		foreach ($rs_pemakaian_barang as $pemakaian_barang) {
+			$model->pemakaian_barang[$pemakaian_barang->id_barang] = $pemakaian_barang;
+		}
+		$this->load->view('master/jasa/edit', array(
+			'model' => $model, 'title' => $title
+		));
+	}
 
-        if (isset($post['pemakaian_barang'])) {
-            foreach ($post['pemakaian_barang'] as $key => $val) {
-                $validate['pemakaian_barang[' . $key . '][id_satuan]'] = array(
-                    'field' => $this->localization->lang('pemakaian_barang_satuan', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
-                    'rules' => 'required'
-                );
-                $validate['pemakaian_barang[' . $key . '][jumlah]'] = array(
-                    'field' => $this->localization->lang('pemakaian_barang_jumlah', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
-                    'rules' => 'required|numeric|greater_than[0]'
-                );
-            }
-        }
-        $this->form_validation->validate($validate);
+	public function update($id)
+	{
+		$post = $this->input->post();
+		$validate = array(
+			'jasa' => 'required',
+			'id_kategori_jasa' => 'required'
+		);
 
-        $result = $this->jasa_m->update($id, $post);
-        if ($result) {
-            $this->jasa_pemakaian_barang_m->where('id_jasa', $id)->delete();
-            if (isset($post['pemakaian_barang'])) {
-                $rs_pemakaian_barang = array();
-                foreach ($post['pemakaian_barang'] as $pemakaian_barang) {
-                    $pemakaian_barang['id_jasa'] = $id;
-                    $rs_pemakaian_barang[] = $pemakaian_barang;
-                }
-                $this->jasa_pemakaian_barang_m->insert_batch($rs_pemakaian_barang);
-            }
-            $this->redirect->with('success_message', $this->localization->lang('success_update_message', array('name' => $this->localization->lang('jasa'))))->route('master.jasa');
-        } else {
-            $this->redirect->with('error_message', $this->localization->lang('error_update_message', array('name' => $this->localization->lang('jasa'))))->back();
-        }
-    }
+		if (isset($post['pemakaian_barang'])) {
+			foreach ($post['pemakaian_barang'] as $key => $val) {
+				$validate['pemakaian_barang[' . $key . '][id_satuan]'] = array(
+					'field' => $this->localization->lang('pemakaian_barang_satuan', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
+					'rules' => 'required'
+				);
+				$validate['pemakaian_barang[' . $key . '][jumlah]'] = array(
+					'field' => $this->localization->lang('pemakaian_barang_jumlah', array('name' => $post['pemakaian_barang'][$key]['nama_barang'])),
+					'rules' => 'required|numeric|greater_than[0]'
+				);
+			}
+		}
+		$this->form_validation->validate($validate);
 
-    public function delete($id) {
-        $this->transaction->start();
-            $this->jasa_m->delete($id);
-            $this->jasa_pemakaian_barang_m->where('id_jasa', $id)->delete();
-        if ($this->transaction->complete()) {
-            $response = array(
-                'success' => true,
-                'message' => $this->localization->lang('success_delete_message', array('name' => $this->localization->lang('jasa')))
-            );
-        } else {
-            $response = array(
-                'success' => false,
-                'message' => $this->localization->lang('error_delete_message', array('name' => $this->localization->lang('jasa')))
-            );
-        }
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
+		$result = $this->jasa_m->update($id, $post);
+		if ($result) {
+			$this->jasa_pemakaian_barang_m->where('id_jasa', $id)->delete();
+			if (isset($post['pemakaian_barang'])) {
+				$rs_pemakaian_barang = array();
+				foreach ($post['pemakaian_barang'] as $pemakaian_barang) {
+					$pemakaian_barang['id_jasa'] = $id;
+					$rs_pemakaian_barang[] = $pemakaian_barang;
+				}
+				$this->jasa_pemakaian_barang_m->insert_batch($rs_pemakaian_barang);
+			}
+			$this->redirect->with('success_message', $this->localization->lang('success_update_message', array('name' => $this->localization->lang('jasa'))))->route('master.jasa');
+		} else {
+			$this->redirect->with('error_message', $this->localization->lang('error_update_message', array('name' => $this->localization->lang('jasa'))))->back();
+		}
+	}
 
-	public function import() {
+	public function delete($id)
+	{
+		$this->transaction->start();
+		$this->jasa_m->delete($id);
+		$this->jasa_pemakaian_barang_m->where('id_jasa', $id)->delete();
+		if ($this->transaction->complete()) {
+			$response = array(
+				'success' => true,
+				'message' => $this->localization->lang('success_delete_message', array('name' => $this->localization->lang('jasa')))
+			);
+		} else {
+			$response = array(
+				'success' => false,
+				'message' => $this->localization->lang('error_delete_message', array('name' => $this->localization->lang('jasa')))
+			);
+		}
+		$this->output->set_content_type('application/json')->set_output(json_encode($response));
+	}
+
+	public function import()
+	{
 		$this->load->view('master/jasa/import');
 	}
 
-	public function import_store() {
+	public function import_store()
+	{
 		$errors = array();
 		$success_count = 0;
-		$config['upload_path'] = './'.$this->config->item('import_upload_path');
+		$config['upload_path'] = './' . $this->config->item('import_upload_path');
 		$config['allowed_types'] = $this->config->item('import_allowed_file_types');
 		$config['max_size'] = $this->config->item('document_max_size');
 		$this->load->library('upload', $config);
 		if (!$this->upload->has('file')) {
 			$this->redirect->with('error_message', $this->localization->lang('upload_required'))->back();
 		}
-		if(!$this->upload->do_upload('file')) {
+		if (!$this->upload->do_upload('file')) {
 			$this->redirect->with('error_message', $this->upload->display_errors())->back();
 		}
 		$file_name = $this->upload->data('file_name');
 		try {
-			$inputFileName = $config['upload_path'].'/'.$file_name;
+			$inputFileName = $config['upload_path'] . '/' . $file_name;
 			$spreadsheet = IOFactory::load($inputFileName);
-		} catch(Exception $e) {
+		} catch (Exception $e) {
 			$this->redirect->with('error_message', $e->getMessage())->back();
 		}
 
@@ -202,7 +217,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 		}
 
 		$record_broadcast_harga_produk = array();
-		for($i = 7; $i<=count($worksheet); $i++) {
+		for ($i = 7; $i <= count($worksheet); $i++) {
 			$this->transaction->start();
 
 			$no = $worksheet[$i]['A'];
@@ -233,7 +248,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 			$jasa = $this->jasa_m->where('LOWER(jasa)', strtolower($nama))->first();
 
 			$r_kategori_jasa = $this->kategori_jasa_m->where('LOWER(kategori_jasa)', strtolower($kategori_jasa))->first();
-			if(!$r_kategori_jasa) {
+			if (!$r_kategori_jasa) {
 				$r_kategori_jasa = $this->kategori_jasa_m->insert(array(
 					'kategori_jasa' => $kategori_jasa,
 					'parent_id' => 0
@@ -331,10 +346,10 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 			$this->db->where('id_jasa', $jasa->id)->delete('jasa_pemakaian_barang');
 			$bahan_baku = array('E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S');
 
-			for ($j=0; $j<12; $j++) {
+			for ($j = 0; $j < 12; $j++) {
 				$kode = trim($worksheet[$i][$bahan_baku[$j]]);
-				$satuan = trim($worksheet[$i][$bahan_baku[$j+1]]);
-				$jumlah = trim($worksheet[$i][$bahan_baku[$j+2]]);
+				$satuan = trim($worksheet[$i][$bahan_baku[$j + 1]]);
+				$jumlah = trim($worksheet[$i][$bahan_baku[$j + 2]]);
 				if ($kode && $satuan && $jumlah > 0) {
 					$id_satuan = NULL;
 					$barang = $this->barang_m->view('barang')
@@ -383,7 +398,8 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 			->back();
 	}
 
-	public function download_format() {
+	public function download_format()
+	{
 		$this->load->helper('download');
 		$path = base_url('public/master/jasa/import_jasa.xlsx');
 		$data = file_get_contents($path);
@@ -391,14 +407,15 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 		return force_download($name, $data);
 	}
 
-	public function export() {
+	public function export()
+	{
 		$cabang = $this->cabang_gudang_m->view('cabang_gudang')->scope('aktif_cabang')->first_or_fail();
 		$spreadsheet = IOFactory::load('public/master/jasa/import_jasa.xlsx');
 		$worksheet = $spreadsheet->getActiveSheet();
 
-		$cols = array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z');
+		$cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
-		$style=array(
+		$style = array(
 			'borders' => array(
 				'bottom' => array(
 					'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
@@ -426,29 +443,29 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 				->limit(5)
 				->get();
 
-			$worksheet->getCell('A'.$row)->setValue($no);
+			$worksheet->getCell('A' . $row)->setValue($no);
 			if ($jasa->produk) {
-				$worksheet->getCell('B'.$row)->setValue($jasa->kode);
-				$worksheet->getCell('T'.$row)->setValue(1);
-				$worksheet->getCell('U'.$row)->setValue($jasa->produk_ppn_persen);
-				$worksheet->getCell('V'.$row)->setValue($jasa->harga);
-				$worksheet->getCell('W'.$row)->setValue($jasa->komisi);
+				$worksheet->getCell('B' . $row)->setValue($jasa->kode);
+				$worksheet->getCell('T' . $row)->setValue(1);
+				$worksheet->getCell('U' . $row)->setValue($jasa->produk_ppn_persen);
+				$worksheet->getCell('V' . $row)->setValue($jasa->harga);
+				$worksheet->getCell('W' . $row)->setValue($jasa->komisi);
 			}
-			$worksheet->getCell('C'.$row)->setValue($jasa->jasa);
-			$worksheet->getCell('D'.$row)->setValue($jasa->kategori_jasa);
+			$worksheet->getCell('C' . $row)->setValue($jasa->jasa);
+			$worksheet->getCell('D' . $row)->setValue($jasa->kategori_jasa);
 
-			$j=0;
+			$j = 0;
 			if ($rs_jasa_pemakaian_barang) {
 				foreach ($rs_jasa_pemakaian_barang as $r_jasa_pemakaian_barang) {
-					$worksheet->getCell($jasa_pemakaian_barang[$j].$row)->setValue($r_jasa_pemakaian_barang->kode_barang);
-					$worksheet->getCell($jasa_pemakaian_barang[$j+1].$row)->setValue($r_jasa_pemakaian_barang->satuan);
-					$worksheet->getCell($jasa_pemakaian_barang[$j+2].$row)->setValue($r_jasa_pemakaian_barang->jumlah);
-					$j+=3;
+					$worksheet->getCell($jasa_pemakaian_barang[$j] . $row)->setValue($r_jasa_pemakaian_barang->kode_barang);
+					$worksheet->getCell($jasa_pemakaian_barang[$j + 1] . $row)->setValue($r_jasa_pemakaian_barang->satuan);
+					$worksheet->getCell($jasa_pemakaian_barang[$j + 2] . $row)->setValue($r_jasa_pemakaian_barang->jumlah);
+					$j += 3;
 				}
 			}
 
-			for($i=0;$i<23;$i++){
-				$spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
+			for ($i = 0; $i < 23; $i++) {
+				$spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
 			}
 			$no++;
 			$row++;
