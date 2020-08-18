@@ -9,7 +9,7 @@
             <div class="form-inline">
                 <div class="form-group">
                     <label>{{gudang}}</label>
-                    <?= $this->form->select('filter_gudang', lists($this->cabang_gudang_m->scope('aktif_cabang')->scope('utama')->view('cabang_gudang')->get(), 'id', 'gudang'), null, 'id="filter-gudang" class="form-control"') ?>
+                    <?= $this->form->select('filter_gudang', lists($this->cabang_gudang_m->scope('utama')->view('cabang_gudang')->get(), 'id', 'gudang'), null, 'id="filter-gudang" class="form-control"') ?>
                 </div>
                 <div class="form-group">
                     <label>{{periode}}</label>
