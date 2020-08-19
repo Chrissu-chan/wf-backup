@@ -36,51 +36,17 @@
             processing: true,
             serverSide: true,
             ajax: '<?= $this->url_generator->current_url() ?>',
-            columns: [{
-                    data: 'no_piutang',
-                    name: 'piutang.no_piutang'
-                },
-                {
-                    data: 'jenis_piutang',
-                    name: 'piutang.jenis_piutang'
-                },
-                {
-                    data: 'no_ref',
-                    name: 'piutang.no_ref'
-                },
-                {
-                    data: 'nama',
-                    name: 'piutang.nama'
-                },
-                {
-                    data: 'tanggal_piutang',
-                    name: 'piutang.tanggal_piutang'
-                },
-                {
-                    data: 'tanggal_jatuh_tempo',
-                    name: 'piutang.tanggal_jatuh_tempo'
-                },
-                {
-                    data: 'jumlah_piutang',
-                    name: 'piutang.jumlah_piutang',
-                    class: 'text-right'
-                },
-                {
-                    data: 'sisa_piutang',
-                    name: 'piutang.sisa_piutang',
-                    class: 'text-right'
-                },
-                {
-                    data: 'lunas',
-                    name: 'piutang.lunas',
-                    class: 'text-center'
-                },
-                {
-                    data: '_action',
-                    searchable: false,
-                    orderable: false,
-                    class: 'text-right'
-                }
+            columns: [
+                {data: 'no_piutang', name: 'piutang.no_piutang'},
+                {data: 'jenis_piutang', name: 'piutang.jenis_piutang'},
+                {data: 'no_ref', name: 'piutang.no_ref'},
+                {data: 'nama', name: 'piutang.nama'},
+                {data: 'tanggal_piutang', name: 'piutang.tanggal_piutang'},
+                {data: 'tanggal_jatuh_tempo', name: 'piutang.tanggal_jatuh_tempo'},
+                {data: 'jumlah_piutang', name: 'piutang.jumlah_piutang', class: 'text-right'},
+                {data: 'sisa_piutang', name: 'piutang.sisa_piutang', class: 'text-right'},
+                {data: 'lunas', name: 'piutang.lunas', class: 'text-center'},
+                {data: '_action', searchable: false, orderable: false, class: 'text-right'}
             ]
         });
     });
