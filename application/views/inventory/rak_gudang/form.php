@@ -6,4 +6,5 @@
 <div class="form-group">
     <label>{{rak}}</label>
     <?= $this->form->text('rak', null, 'id="rak" class="form-control"') ?>
+    <input type="text" style="display: none;">
 </div>
