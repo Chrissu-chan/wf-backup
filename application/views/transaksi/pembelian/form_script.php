@@ -419,7 +419,7 @@
     function set_metode_pembayaran() {
         if ($('#metode_pembayaran').val() == 'utang') {
             $('#utang').show();
-            $('#jatuh_tempo').val('<?= date('d-m-Y') ?>');
+            $('#jatuh_tempo').val('<?= date('d-m-Y', strtotime('+1 month')) ?>');
         } else {
             $('#utang').hide();
             $('#jatuh_tempo').val('');

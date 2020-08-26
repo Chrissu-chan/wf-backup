@@ -401,7 +401,7 @@
             $('#uang_muka').prop('disabled', false);
             $('#bayar').prop('disabled', true);
             $('#bayar').val('');
-            $('#jatuh_tempo').val('<?= date('d-m-Y') ?>');
+            $('#jatuh_tempo').val('<?= date('d-m-Y', strtotime('+1 month')) ?>');
             $('#utang').show();
             $('#tunai').hide();
         } else {
