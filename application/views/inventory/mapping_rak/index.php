@@ -1,7 +1,7 @@
 <?php $this->template->section('content') ?>
     <div class="row">
         <div class="col-md-6">
-            <h1 class="page-header">{{mapping_rak}}</h1>
+            <h1 class="page-header">{{pengaturan_rak}}</h1>
         </div>
         <div class="col-md-6 text-right">
 	        <div class="form-group">

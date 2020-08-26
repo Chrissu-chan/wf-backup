@@ -1,6 +1,6 @@
 <?php $this->template->section('content') ?>
     <h1 class="page-header">
-        {{shift}} <small><i class="fa fa-angle-right"></i> {{create}}</small>
+        {{shift}} <small><i class="fa fa-angle-right"></i> {{edit}}</small>
     </h1>
     <?php $this->template->view('layouts/partials/message') ?>
     <div class="panel panel-default">

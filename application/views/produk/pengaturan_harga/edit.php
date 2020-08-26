@@ -1,6 +1,6 @@
 <?php $this->template->section('content') ?>
     <h1 class="page-header">
-        {{update_pengaturan_harga_produk}} <?= $this->localization->lang($model->jenis) ?>
+        {{edit_pengaturan_harga_produk}} <?= $this->localization->lang($model->jenis) ?>
     </h1>
     <div class="panel panel-default">
         <div class="panel-body">

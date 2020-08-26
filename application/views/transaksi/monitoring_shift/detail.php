@@ -1,6 +1,6 @@
 <?php $this->template->section('content') ?>
     <h1 class="page-header">
-        {{monitoring_shift}}
+        {{detail_monitoring_shift}}
     </h1>
     <?php $this->template->view('layouts/partials/message') ?>
     <div class="panel panel-default">

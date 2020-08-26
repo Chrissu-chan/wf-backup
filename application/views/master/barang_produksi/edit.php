@@ -1,6 +1,6 @@
 <?php $this->template->section('content') ?>
     <h1 class="page-header">
-        {{update_barang_produksi}}
+        {{edit_barang_produksi}}
     </h1>
     <div class="panel panel-default">
         <div class="panel-body">
