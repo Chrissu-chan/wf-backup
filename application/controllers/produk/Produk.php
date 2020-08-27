@@ -699,6 +699,31 @@ class Produk extends BaseController
                 $jenis = explode('|', $jenis);
                 $this->db->where_in('jenis_produk', $jenis);
             }
+            if ($keyword = $this->input->get('keyword')) {
+                echo $keyword;
+            }
+            
+            if ($kode = $this->input->get('kode')) {
+                
+            }
+            if ($barcode = $this->input->get('barcode')) {
+
+            }
+            if ($produk = $this->input->get('produk')) {
+
+            }
+            if ($rak = $this->input->get('rak')) {
+
+            }
+            if ($jenis = $this->input->get('jenis')) {
+
+            }
+            if ($kategori = $this->input->get('kategori')) {
+
+            }
+            if ($kandungan = $this->input->get('kandungan')) {
+
+            }
             $this->load->library('datatable');
             return $this->datatable->resource($this->produk_harga_m)
                 ->view('produk_harga_browse')
@@ -710,6 +735,7 @@ class Produk extends BaseController
                 })
                 ->generate();
         }
+
         $tanggal_mutasi = date('Y-m-d');
         if ($this->input->get('tanggal_mutasi')) {
             $tanggal_mutasi = $this->input->get('tanggal_mutasi');

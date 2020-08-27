@@ -49,10 +49,10 @@
                     <td>
                         <?= $this->form->hidden('form_add_produk_id_produk', null, 'id="produk-id_produk-0"') ?>
                         <?= $this->form->hidden('form_add_produk_kode_produk', null, 'id="produk-kode_produk-0"') ?>
-                        <?= $this->form->hidden('form_add_produk_nama_produk', null, 'id="produk-nama_produk-0"') ?>
+						<?= $this->form->hidden('form_add_produk_produk', null, 'id="produk-produk-0"') ?>
                         <?= $this->form->hidden('form_add_produk_jenis_produk', null, 'id="produk-jenis_produk-0"') ?>
                         <div class="input-group">
-                            <?= $this->form->text('form_add_produk_produk', null, 'id="produk-produk-0" class="form-control input-sm"') ?>
+							<?= $this->form->text('form_add_produk_nama_produk', null, 'id="produk-nama_produk-0" style="padding-bottom:8px"') ?>
                             <div class="input-group-btn">
                                 <button type="button" class="btn btn-primary input-sm" onclick="browse_produk()">...</button>
                             </div>
