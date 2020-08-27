@@ -699,31 +699,46 @@ class Produk extends BaseController
                 $jenis = explode('|', $jenis);
                 $this->db->where_in('jenis_produk', $jenis);
             }
-            if ($keyword = $this->input->get('keyword')) {
-                echo $keyword;
+            $keyword = $this->input->get('keyword');
+            $kode = $this->input->get('kode');
+            $barcode = $this->input->get('barcode');
+            $produk = $this->input->get('produk');
+            $rak = $this->input->get('rak');
+            $jenis = $this->input->get('jenis');
+            $kategori = $this->input->get('kategori');
+            $kandungan = $this->input->get('kandungan');
+
+            $filter = array($kode, $barcode, $produk, $rak, $jenis, $kategori, $kandungan);
+                // echo implode(",", $filter);
+            if (count(array_unique($filter)) === 1){
+                return current($filter);
+                echo implode(",", $filter);
             }
+            // if ($keyword = $this->input->get('keyword')) {
+
+            // }
             
-            if ($kode = $this->input->get('kode')) {
+            // if ($kode = $this->input->get('kode')) {
                 
-            }
-            if ($barcode = $this->input->get('barcode')) {
+            // }
+            // if ($barcode = $this->input->get('barcode')) {
 
-            }
-            if ($produk = $this->input->get('produk')) {
+            // }
+            // if ($produk = $this->input->get('produk')) {
 
-            }
-            if ($rak = $this->input->get('rak')) {
+            // }
+            // if ($rak = $this->input->get('rak')) {
 
-            }
-            if ($jenis = $this->input->get('jenis')) {
+            // }
+            // if ($jenis = $this->input->get('jenis')) {
 
-            }
-            if ($kategori = $this->input->get('kategori')) {
+            // }
+            // if ($kategori = $this->input->get('kategori')) {
 
-            }
-            if ($kandungan = $this->input->get('kandungan')) {
+            // }
+            // if ($kandungan = $this->input->get('kandungan')) {
 
-            }
+            // }
             $this->load->library('datatable');
             return $this->datatable->resource($this->produk_harga_m)
                 ->view('produk_harga_browse')
