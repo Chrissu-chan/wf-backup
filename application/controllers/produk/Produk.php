@@ -699,28 +699,50 @@ class Produk extends BaseController
                 $jenis = explode('|', $jenis);
                 $this->db->where_in('jenis_produk', $jenis);
             }
-            $keyword = $this->input->get('keyword');
-            $kode = $this->input->get('kode');
-            $barcode = $this->input->get('barcode');
-            $produk = $this->input->get('produk');
-            $rak = $this->input->get('rak');
-            $jenis = $this->input->get('jenis');
-            $kategori = $this->input->get('kategori');
-            $kandungan = $this->input->get('kandungan');
 
-            $filter = array($kode, $barcode, $produk, $rak, $jenis, $kategori, $kandungan);
-                // echo implode(",", $filter);
-            if (count(array_unique($filter)) === 1){
-                return current($filter);
-                echo implode(",", $filter);
-            }
+            if ($filter = $this->input->get('filter'))
+
+            // $keyword = $this->input->get('keyword');
+            // $kode = $this->input->get('kode');
+            // $barcode = $this->input->get('barcode');
+            // $produk = $this->input->get('produk');
+            // $rak = $this->input->get('rak');
+            // $jenis = $this->input->get('jenis');
+            // $kategori = $this->input->get('kategori');
+            // $kandungan = $this->input->get('kandungan');
+
+            // $filter = array($kode, $barcode, $produk, $rak, $jenis, $kategori, $kandungan);
+            // echo implode(",",array_filter($filter));
+
+            // echo implode(",", $filter);
+            // if (count(array_unique($filter)) === 1){
+            //     return current($filter);
+            //     echo implode(",", $filter);
+            // }
+
+
+            // if (array_filter($filter) == 1){
+            //     echo 'anjay';
+            // }
+
+                // if ($filter == 1){
+                //     echo 'anjay';
+                // }
+
+            //     $filter = array();
+
             // if ($keyword = $this->input->get('keyword')) {
 
             // }
             
             // if ($kode = $this->input->get('kode')) {
-                
+            //     if ($kode == 1) {
+            //         $filter[] = 'kode';
+            //     }
             // }
+            // print_r($filter);
+     
+     
             // if ($barcode = $this->input->get('barcode')) {
 
             // }

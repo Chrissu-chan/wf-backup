@@ -94,29 +94,34 @@
         });
 
         $('#btn-filter').click(function() {
-            var kode = 0, barcode = 0, produk = 0, rak = 0, jenis = 0, kategori = 0, kandungan = 0;
+            var kode, barcode, produk, rak, jenis, kategori, kandungan,filter;
             if ($('#filter-kode').is(':checked')) {
-                kode = 1;
+                kode = 'kode|';
             }
             if ($('#filter-barcode').is(':checked')) {
-                barcode = 1;
+                barcode = 'barcode|';
             }
             if ($('#filter-produk').is(':checked')) {
-                produk = 1;
+                produk = 'produk|';
             }
             if ($('#filter-rak').is(':checked')) {
-                rak = 1;
+                rak = 'rak|';
             }
             if ($('#filter-jenis').is(':checked')) {
-                jenis = 1;
+                jenis = 'jenis|';
             }
             if ($('#filter-kategori').is(':checked')) {
-                kategori = 1;
+                kategori = 'kategori|';
             }
             if ($('#filter-kandungan').is(':checked')) {
-                kandungan = 1;
+                kandungan = 'kandungan|';
             }
-            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#filter-search').val()+'&kode='+kode+'&barcode='+barcode+'&produk='+produk+'&rak='+rak+'&jenis='+jenis+'&kategori='+kategori+'&kandungan'+kandungan).load();
+            
+            filter = kode.barcode.produk.rak.jenis.kategori.kandungan;
+
+            console.log($filter);
+
+            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#filter-search').val()+'&kode|='+kode+'&barcode|='+barcode+'&produk='+produk+'&rak='+rak+'&jenis='+jenis+'&kategori='+kategori+'&kandungan'+kandungan).load();
         });
     });
 </script>
