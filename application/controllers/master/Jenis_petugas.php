@@ -1,36 +1,43 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jenis_petugas extends BaseController {
+class Jenis_petugas extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('jenis_petugas_m');
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Jenis Petugas";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->jenis_petugas_m)
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('master/jenis_petugas/index');
+        $this->load->view('master/jenis_petugas/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->jenis_petugas_m->find_or_fail($id);
         $this->load->view('master/jenis_petugas/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('master/jenis_petugas/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'jenis_petugas' => 'required|is_unique[jenis_petugas.jenis_petugas]'
@@ -50,17 +57,19 @@ class Jenis_petugas extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->jenis_petugas_m->find_or_fail($id);
         $this->load->view('master/jenis_petugas/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'jenis_petugas' => 'required|is_unique[jenis_petugas.jenis_petugas.'.$id.']'
+            'jenis_petugas' => 'required|is_unique[jenis_petugas.jenis_petugas.' . $id . ']'
         ));
         $result = $this->jenis_petugas_m->update($id, $post);
         if ($result) {
@@ -77,7 +86,8 @@ class Jenis_petugas extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->jenis_petugas_m->delete($id);
         if ($result) {
             $response = array(

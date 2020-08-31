@@ -1,42 +1,49 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jenis_penyakit extends BaseController {
+class Jenis_penyakit extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('jenis_penyakit_m');
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Jenis Penyakit";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->jenis_penyakit_m)
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('master/jenis_penyakit/index');
+        $this->load->view('master/jenis_penyakit/index', $data);
     }
-    
-    public function view($id) {
+
+    public function view($id)
+    {
         $model = $this->jenis_penyakit_m->find_or_fail($id);
         $this->load->view('master/jenis_penyakit/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('master/jenis_penyakit/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'kode_jenis_penyakit' => 'required|is_unique[jenis_penyakit.kode_jenis_penyakit]',
             'jenis_penyakit' => 'required'
         ));
-        $result = $this->jenis_penyakit_m->insert($post);        
+        $result = $this->jenis_penyakit_m->insert($post);
         if ($result) {
             $response = array(
                 'success' => true,
@@ -51,17 +58,19 @@ class Jenis_penyakit extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->jenis_penyakit_m->find_or_fail($id);
         $this->load->view('master/jenis_penyakit/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
-            'kode_jenis_penyakit' => 'required|is_unique[jenis_penyakit.kode_jenis_penyakit.'.$id.']',
+            'kode_jenis_penyakit' => 'required|is_unique[jenis_penyakit.kode_jenis_penyakit.' . $id . ']',
             'jenis_penyakit' => 'required'
         ));
         $result = $this->jenis_penyakit_m->update($id, $post);
@@ -79,7 +88,8 @@ class Jenis_penyakit extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->jenis_penyakit_m->delete($id);
         if ($result) {
             $response = array(

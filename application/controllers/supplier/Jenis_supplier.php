@@ -1,36 +1,43 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jenis_supplier extends BaseController {
+class Jenis_supplier extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('jenis_supplier_m');
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Jenis Supplier";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->jenis_supplier_m)
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('supplier/jenis_supplier/index');
+        $this->load->view('supplier/jenis_supplier/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->jenis_supplier_m->find_or_fail($id);
         $this->load->view('supplier/jenis_supplier/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('supplier/jenis_supplier/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'jenis_supplier' => 'required'
@@ -50,14 +57,16 @@ class Jenis_supplier extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->jenis_supplier_m->find_or_fail($id);
         $this->load->view('supplier/jenis_supplier/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'jenis_supplier' => 'required'
@@ -77,7 +86,8 @@ class Jenis_supplier extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->jenis_supplier_m->delete($id);
         if ($result) {
             $response = array(

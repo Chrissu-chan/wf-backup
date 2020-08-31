@@ -1,38 +1,45 @@
 <?php
-    $CI->load->model('cabang_m');
-    $CI->load->model('shift_aktif_m');
+$CI->load->model('cabang_m');
+$CI->load->model('shift_aktif_m');
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title><?= $CI->config->item('application_name') ?></title>
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
-    <link rel="icon" href="<?= $this->config->item('logo') ?>" type="image/x-icon"/>
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <?php if (isset($judul)) { ?>
+        <title><?= $judul; ?></title>
+    <?php } else if (!isset($title)) { ?>
+        <title><?= $this->config->item('application_name'); ?></title>
+    <?php } else { ?>
+        <title><?= $title; ?></title>
+    <?php } ?>
+    <link rel="icon" href="<?= base_url('public/images/config/logo.png'); ?>" type="image/x-icon" />
     <!--<link href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />-->
-    <link href="<?= base_url('public/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/animate.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/style.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/style-responsive.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/invoice-print.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/theme/default.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/css/admin.style.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/sweetalert/dist/sweetalert.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/sweetalert/themes/google/google.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/DataTables/media/css/dataTables.bootstrap.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/treetable/css/jquery.treetable.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/treetable/css/jquery.treetable.theme.default.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/select2/dist/css/select2.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/bootstrap-datepicker/css/datepicker.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/bootstrap-datepicker/css/datepicker3.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/bootstrap-datetimepicker/css/datetimepicker.css') ?>" rel="stylesheet"/>
-    <link href="<?= base_url('public/plugins/jquery.growl/css/jquery.growl.css') ?>" rel="stylesheet"/>
+    <link href="<?= base_url('public/plugins/jquery-ui/themes/base/minified/jquery-ui.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/font-awesome/css/font-awesome.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/animate.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/style.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/style-responsive.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/invoice-print.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/theme/default.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/css/admin.style.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/sweetalert/dist/sweetalert.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/sweetalert/themes/google/google.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/DataTables/media/css/dataTables.bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/DataTables/extensions/Responsive/css/responsive.bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/DataTables/extensions/Select/css/select.bootstrap.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/treetable/css/jquery.treetable.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/treetable/css/jquery.treetable.theme.default.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/select2/dist/css/select2.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/bootstrap-datepicker/css/datepicker.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/bootstrap-datepicker/css/datepicker3.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/bootstrap-datetimepicker/css/datetimepicker.css') ?>" rel="stylesheet" />
+    <link href="<?= base_url('public/plugins/jquery.growl/css/jquery.growl.css') ?>" rel="stylesheet" />
     <?php $CI->template->render('css') ?>
     <script src="<?= base_url('public/plugins/pace/pace.min.js') ?>"></script>
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -42,6 +49,7 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body>
     <div id="page-loader" class="fade in"><span class="spinner"></span></div>
     <div id="page-container" class="fade page-sidebar-fixed page-header-fixed">
@@ -58,7 +66,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown navbar-user">
                         <?php if ($shift_aktif = $CI->shift_aktif_m->view('shift_aktif')->scope('cabang')->scope('aktif')->first()) { ?>
-                            <a href="<?= $this->route->name('transaksi.shift_aktif.close') ?>"><i class="fa fa-clock-o"></i> {{shift_aktif}} : <?= $shift_aktif->shift_waktu ?> (<?= $shift_aktif->name ?>)</a>
+                            <a href="<?= $this->route->name('transaksi.shift_aktif.close') ?>"><i class="fa fa-clock-o"></i> {{shift_aktif}} : <?= $shift_aktif->shift_waktu ?></a>
                         <?php } else { ?>
                             <a href="<?= $this->route->name('transaksi.shift_aktif.open') ?>"><i class="fa fa-clock-o"></i> {{open_shift}}</a>
                         <?php } ?>
@@ -70,15 +78,15 @@
                         <ul class="dropdown-menu animated fadeInLeft">
                             <li class="arrow"></li>
                             <?php
-                                foreach($CI->cabang_m->scope('auth')->get() as $cabang) {
+                            foreach ($CI->cabang_m->scope('auth')->get() as $cabang) {
                             ?>
-                            <li><a href="<?= $this->route->name('aktif_cabang.set', array('id' => $cabang->id)) ?>"><?= $cabang->nama ?></a></li>
+                                <li><a href="<?= $this->route->name('aktif_cabang.set', array('id' => $cabang->id)) ?>"><?= $cabang->nama ?></a></li>
                             <?php } ?>
                         </ul>
                     </li>
                     <li class="dropdown navbar-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
-                            <img src="<?= ($CI->auth->photo) ? base_url($this->config->item('photo_upload_path').'/'.$CI->auth->photo) : base_url('public/images/default-user-photo.jpg') ?>" alt="">
+                            <img src="<?= ($CI->auth->photo) ? base_url($this->config->item('photo_upload_path') . '/' . $CI->auth->photo) : base_url('public/images/default-user-photo.jpg') ?>" alt="">
                             <span class="hidden-xs"><?= $CI->auth->name ?></span> <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu animated fadeInLeft">
@@ -150,9 +158,10 @@
     <?php $CI->template->render('page_script') ?>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             App.init();
         });
     </script>
 </body>
+
 </html>

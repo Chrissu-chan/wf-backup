@@ -1,36 +1,41 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Satuan_barang extends BaseController {
+class Satuan_barang extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('satuan_barang_m');
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Satuan Barang";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->satuan_barang_m)
-            ->scope('parent')
-            ->add_action('{konversi} {view} {edit} {delete}', array(
-                'konversi' => function($model) {
-                    return $this->action->link('view.konversi', $this->route->name('master.satuan_barang.konversi', array('id' => $model->id)), 'class="btn btn-primary btn-sm"');
-                }
-            ))
-            ->generate();
+                ->scope('parent')
+                ->add_action('{konversi} {view} {edit} {delete}', array(
+                    'konversi' => function ($model) {
+                        return $this->action->link('view.konversi', $this->route->name('master.satuan_barang.konversi', array('id' => $model->id)), 'class="btn btn-primary btn-sm"');
+                    }
+                ))
+                ->generate();
         }
-        $this->load->view('master/satuan_barang/index');
+        $this->load->view('master/satuan_barang/index', $data);
     }
 
-    public function konversi($id) {
-         if ($this->input->is_ajax_request()) {
+    public function konversi($id)
+    {
+        if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->satuan_barang_m)
-            ->where('parent_id', $id)
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->where('parent_id', $id)
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
         $parent = $this->satuan_barang_m->find_or_fail($id);
         $this->load->view('master/satuan_barang/konversi', array(
@@ -39,7 +44,8 @@ class Satuan_barang extends BaseController {
         ));
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->satuan_barang_m->find_or_fail($id);
         $parent = $this->satuan_barang_m->find($model->parent_id);
         $this->load->view('master/satuan_barang/view', array(
@@ -48,7 +54,8 @@ class Satuan_barang extends BaseController {
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $parent_id = $this->input->get('parent_id');
         $parent = $this->satuan_barang_m->find($parent_id);
         $this->load->view('master/satuan_barang/create', array(
@@ -57,13 +64,14 @@ class Satuan_barang extends BaseController {
         ));
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         if ($post['parent_id'] <> 0) {
             $parent = $this->satuan_barang_m->find($post['parent_id']);
             $this->load->library('autonumber');
             $post['kode'] = $this->autonumber->resource($this->satuan_barang_m, 'kode')
-                ->format($parent->kode.'-:2')
+                ->format($parent->kode . '-:2')
                 ->generate();
             $this->form_validation->validate(array(
                 'satuan_barang' => 'required'
@@ -90,7 +98,8 @@ class Satuan_barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->satuan_barang_m->find_or_fail($id);
         $parent = $this->satuan_barang_m->find($model->parent_id);
         $this->load->view('master/satuan_barang/edit', array(
@@ -99,7 +108,8 @@ class Satuan_barang extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'satuan_barang' => 'required'
@@ -119,7 +129,8 @@ class Satuan_barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $result = $this->satuan_barang_m->delete($id);
         if ($result) {
             $response = array(
@@ -135,7 +146,8 @@ class Satuan_barang extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function get_json() {
+    public function get_json()
+    {
         if ($this->input->get()) {
             $this->satuan_barang_m->where($this->input->get());
         }

@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Kas_bank extends BaseController {
+class Kas_bank extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('kas_bank_m');
         $this->load->model('bank_m');
@@ -12,32 +14,37 @@ class Kas_bank extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Kas & Bank";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->kas_bank_m)
-            ->view('kas_bank')
-            ->edit_column('jenis_kas_bank', function($model) {
-                return $this->kas_bank_m->enum('kas_bank', $model->jenis_kas_bank);
-            })
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->view('kas_bank')
+                ->edit_column('jenis_kas_bank', function ($model) {
+                    return $this->kas_bank_m->enum('kas_bank', $model->jenis_kas_bank);
+                })
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('master/kas_bank/index');
+        $this->load->view('master/kas_bank/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->kas_bank_m->view('kas_bank')->find_or_fail($id);
         $this->load->view('master/kas_bank/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('master/kas_bank/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $validation = array(
             'nama' => 'required',
@@ -78,7 +85,8 @@ class Kas_bank extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->kas_bank_m->find_or_fail($id);
         $rs_cabang = $this->kas_bank_cabang_m->where('id_kas_bank', $model->id)->get();
         foreach ($rs_cabang as $r_cabang) {
@@ -89,7 +97,8 @@ class Kas_bank extends BaseController {
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $validation = array(
             'nama' => 'required',
@@ -130,7 +139,8 @@ class Kas_bank extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->kas_bank_cabang_m->where('id_kas_bank', $id)->delete();
         $result = $this->kas_bank_m->delete($id);
         if ($result) {

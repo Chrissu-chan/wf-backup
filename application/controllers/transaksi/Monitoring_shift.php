@@ -1,19 +1,23 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Monitoring_shift extends BaseController {
+class Monitoring_shift extends BaseController
+{
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->model('shift_aktif_m');
-        $this->load->model('barang_stok_m');
-        $this->load->model('cabang_gudang_m');
-        $this->load->model('penjualan_m');
-        $this->load->model('mutasi_kasir_m');
-        $this->load->library('form_validation');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+		$this->load->model('shift_aktif_m');
+		$this->load->model('barang_stok_m');
+		$this->load->model('cabang_gudang_m');
+		$this->load->model('penjualan_m');
+		$this->load->model('mutasi_kasir_m');
+		$this->load->library('form_validation');
+	}
 
-	public function index() {
+	public function index()
+	{
+		$data["title"] = "Monitoring Shift";
 		if ($this->input->is_ajax_request()) {
 			$this->load->library('datatable');
 			if ($tanggal = $this->input->get('tanggal')) {
@@ -22,29 +26,31 @@ class Monitoring_shift extends BaseController {
 			return $this->datatable->resource($this->shift_aktif_m)
 				->view('shift_aktif')
 				->scope('cabang')
-				->edit_column('created_at', function($model) {
+				->edit_column('created_at', function ($model) {
 					return $this->localization->human_datetime($model->created_at);
 				})
-				->edit_column('uang_awal', function($model) {
+				->edit_column('uang_awal', function ($model) {
 					return $this->localization->number($model->uang_awal);
 				})
-				->edit_column('uang_akhir', function($model) {
+				->edit_column('uang_akhir', function ($model) {
 					return $this->localization->number($model->uang_akhir);
 				})
-				->edit_column('active', function($model) {
+				->edit_column('active', function ($model) {
 					return $this->localization->boolean($model->active);
 				})
 				->add_action('{detail}', array(
-					'detail' => function($model) {
+					'detail' => function ($model) {
 						return $this->action->link('view', $this->route->name('transaksi.monitoring_shift.detail', array('id' => $model->id)), 'class="btn btn-info btn-sm"', $this->localization->lang('detail'));
 					}
 				))
 				->generate();
 		}
-		$this->load->view('transaksi/monitoring_shift/index');
+		$this->load->view('transaksi/monitoring_shift/index', $data);
 	}
 
-	public function detail($id) {
+	public function detail($id)
+	{
+		$title = "Monitoring Shift";
 		$model = $this->shift_aktif_m->view('shift_aktif')->find_or_fail($id);
 		$model->total_penjualan = $this->penjualan_m->select_sum('total')
 			->scope('cabang')
@@ -66,10 +72,10 @@ class Monitoring_shift extends BaseController {
 			$this->load->library('datatable');
 			return $this->datatable->resource($this->barang_stok_m)
 				->monitoring_shift($gudang->id_gudang, $id)
-				->edit_column('total_penjualan', function($model) {
+				->edit_column('total_penjualan', function ($model) {
 					return $this->localization->number($model->total_penjualan);
 				})
-				->edit_column('stok_akhir', function($model) {
+				->edit_column('stok_akhir', function ($model) {
 					if ($model->shift_aktif) {
 						$stok_akhir = $model->stok_awal + $model->mutasi;
 					} else {
@@ -85,7 +91,7 @@ class Monitoring_shift extends BaseController {
 				->generate();
 		}
 		$this->load->view('transaksi/monitoring_shift/detail', array(
-			'model' => $model
+			'model' => $model, 'title' => $title
 		));
 	}
 }

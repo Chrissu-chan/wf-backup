@@ -1,9 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Petugas extends BaseController {
+class Petugas extends BaseController
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model('petugas_m');
         $this->load->model('cabang_m');
@@ -12,40 +14,45 @@ class Petugas extends BaseController {
         $this->load->library('form_validation');
     }
 
-    public function index() {
+    public function index()
+    {
+        $data["title"] = "Master Petugas";
         if ($this->input->is_ajax_request()) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->petugas_m)
-            ->view('petugas')
-            ->filter(function($model) {
-                if($cabang = $this->input->get('cabang')) {
-                    $model->where('id_cabang', $cabang);
-                }
-                if($jenis = $this->input->get('jenis')) {
-                    $model->where('id_jenis_petugas', $jenis);
-                }
-            })
-            ->edit_column('jenis_petugas', function($model) {
-                return $model->jenis_petugas;
-            })
-            ->add_action('{view} {edit} {delete}')
-            ->generate();
+                ->view('petugas')
+                ->filter(function ($model) {
+                    if ($cabang = $this->input->get('cabang')) {
+                        $model->where('id_cabang', $cabang);
+                    }
+                    if ($jenis = $this->input->get('jenis')) {
+                        $model->where('id_jenis_petugas', $jenis);
+                    }
+                })
+                ->edit_column('jenis_petugas', function ($model) {
+                    return $model->jenis_petugas;
+                })
+                ->add_action('{view} {edit} {delete}')
+                ->generate();
         }
-        $this->load->view('master/petugas/index');
+        $this->load->view('master/petugas/index', $data);
     }
 
-    public function view($id) {
+    public function view($id)
+    {
         $model = $this->petugas_m->select('petugas.*')->view('petugas')->find_or_fail($id);
         $this->load->view('master/petugas/view', array(
             'model' => $model
         ));
     }
 
-    public function create() {
+    public function create()
+    {
         $this->load->view('master/petugas/create');
     }
 
-    public function store() {
+    public function store()
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'nama' => 'required',
@@ -71,14 +78,16 @@ class Petugas extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $model = $this->petugas_m->view('petugas')->find_or_fail($id);
         $this->load->view('master/petugas/edit', array(
             'model' => $model
         ));
     }
 
-    public function update($id) {
+    public function update($id)
+    {
         $post = $this->input->post();
         $this->form_validation->validate(array(
             'nama' => 'required',
@@ -104,7 +113,8 @@ class Petugas extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $this->petugas_cabang_m->where('id_petugas', $id)->delete();
         $result = $this->petugas_m->delete($id);
         if ($result) {
@@ -121,7 +131,8 @@ class Petugas extends BaseController {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function get_json() {
+    public function get_json()
+    {
         if ($this->input->get()) {
             $this->petugas_m->where('id_cabang', $this->input->get('id_cabang'));
         }
