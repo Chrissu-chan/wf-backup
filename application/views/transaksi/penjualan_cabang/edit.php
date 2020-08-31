@@ -3,7 +3,7 @@
         <?php $this->template->view('transaksi/penjualan_cabang/form') ?>
         <div class="form-group text-right">
 	        <a href="#modal-dialog" class="btn btn-success" data-toggle="modal">{{pembayaran}}</a>
-            <a href="<?= $this->route->name('transaksi.penjualan') ?>" class="btn btn-default">{{cancel}}</a>
+            <a href="<?= $this->route->name('transaksi.penjualan') ?>?jenis_penjualan=cabang" class="btn btn-default">{{cancel}}</a>
         </div>
     <?= $this->form->close() ?>
 <?php $this->template->endsection() ?>
