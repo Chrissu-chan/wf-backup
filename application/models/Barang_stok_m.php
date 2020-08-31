@@ -13,9 +13,10 @@ class Barang_stok_m extends BaseModel {
     );
 
     public function view_barang_stok() {
-        $this->db->select('barang_stok.*, gudang.gudang, barang.kode AS kode_barang, barang.nama AS nama_barang, satuan.satuan')
+        $this->db->select('barang_stok.*, gudang.gudang, barang.kode AS kode_barang, barang.nama AS nama_barang, satuan.satuan, obat.total AS harga_beli')
             ->join('gudang', 'gudang.id = barang_stok.id_gudang')
             ->join('barang', 'barang.id = barang_stok.id_barang')
+	        ->join('obat', 'obat.id_barang = barang.id')
             ->join('satuan', 'satuan.id = barang_stok.id_satuan')
             ->group_by('barang_stok.id_gudang, barang_stok.id_barang');
     }
