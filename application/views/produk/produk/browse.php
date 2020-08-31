@@ -94,34 +94,32 @@
         });
 
         $('#btn-filter').click(function() {
-            var kode, barcode, produk, rak, jenis, kategori, kandungan,filter;
+            array_filter = [];
             if ($('#filter-kode').is(':checked')) {
-                kode = 'kode|';
+                array_filter.push('produk.kode');
             }
             if ($('#filter-barcode').is(':checked')) {
-                barcode = 'barcode|';
+                array_filter.push('produk.barcode');
             }
             if ($('#filter-produk').is(':checked')) {
-                produk = 'produk|';
+                array_filter.push('produk.produk');
             }
             if ($('#filter-rak').is(':checked')) {
-                rak = 'rak|';
+                array_filter.push('rak_gudang.rak');
             }
             if ($('#filter-jenis').is(':checked')) {
-                jenis = 'jenis|';
+                array_filter.push('produk.jenis');
             }
             if ($('#filter-kategori').is(':checked')) {
-                kategori = 'kategori|';
+                array_filter.push('produk.kategori');
             }
             if ($('#filter-kandungan').is(':checked')) {
-                kandungan = 'kandungan|';
+                array_filter.push('produk.kandungan');
             }
             
-            filter = kode.barcode.produk.rak.jenis.kategori.kandungan;
+            filter = array_filter.join("|");
 
-            console.log($filter);
-
-            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#filter-search').val()+'&kode|='+kode+'&barcode|='+barcode+'&produk='+produk+'&rak='+rak+'&jenis='+jenis+'&kategori='+kategori+'&kandungan'+kandungan).load();
+            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#filter-search').val()+'&filter='+filter).load();
         });
     });
 </script>
