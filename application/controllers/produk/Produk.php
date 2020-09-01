@@ -701,14 +701,18 @@ class Produk extends BaseController
             }
 
             $keyword = $this->input->get('keyword');
-            if ($filters = $this->input->get('filter')){
+            if ($filters = $this->input->get('filters')){
                 $filters = explode('|',$filters);
-                foreach($filters as $filter) {
-                    $filter = trim($filter);
-                    $this->db->like($filter, $keyword);
+                $this->db->group_start();
+                foreach($filters as $index => $filter) {
+                    if ($index == 0) {
+                        $this->db->like($filter, $keyword);
+                    } else {
+                        $this->db->or_like($filter, $keyword);
+                    }
                 }
+                $this->db->group_end();
             }
-
             $this->load->library('datatable');
             return $this->datatable->resource($this->produk_harga_m)
                 ->view('produk_harga_browse')

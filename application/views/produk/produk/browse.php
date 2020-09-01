@@ -1,51 +1,31 @@
 <style>
-    label{
+    b{
         margin-right:30px;
     }
     .dataTables_filter{
         display:none!important;
     }
-    .search_filter{
-        padding:5px 5px;
-    }
 </style>
 <div class="form-inline">
-        <input type="text" id="filter-search" class="form-control" style="width:90%;">
-        <input type="button" id="btn-filter" style="margin-top:5px;" value="Search">
+        <input type="text" id="keyword" class="form-control" style="width:90%;">
+        <input type="button" id="btn-filter" class="btn btn-light" value="Search">
 </div>
-    <br>
-    <div class="search_filter">
-        <span>Filter :</span>
-        <label for="kode">
-            <input type="checkbox" name="cek" class="filter" id="filter-kode" value="1">
+    <form class="form-inline text-center">
+            <input type="checkbox" class="form-check" id="kode">
             <b>Kode</b>
-        </label>
-        <label for="barcode">
-            <input type="checkbox" name="cek" class="filter" id="filter-barcode" value="1">
+            <input type="checkbox" class="form-check" id="barcode">
             <b>Barcode</b>
-        </label>
-        <label for="produk">
-            <input type="checkbox" name="cek" class="filter" id="filter-produk" value="1">
+            <input type="checkbox" class="form-check" id="produk">
             <b>Produk</b>
-        </label>
-        <label for="rak">
-            <input type="checkbox" name="cek" class="filter" id="filter-rak" value="1">
+            <input type="checkbox" class="form-check" id="rak">
             <b>Rak</b>
-        </label>
-        <label for="jenis">
-            <input type="checkbox" name="cek" class="filter" id="filter-jenis" value="1">
+            <input type="checkbox" class="form-check" id="jenis">
             <b>Jenis</b>
-        </label>
-        <label for="kategori">
-            <input type="checkbox" name="cek" class="filter" id="filter-kategori" value="1">
+            <input type="checkbox" class="form-check" id="kategori">
             <b>Kategori</b>
-        </label>
-        <label for="kandungan">
-            <input type="checkbox" name="cek" class="filter" id="filter-kandungan" value="1">
+            <input type="checkbox" class="form-check" id="kandungan">
             <b>Kandungan</b>
-        </label>
-        <!-- <p id="test"></p> -->
-    </div>
+    <form>
 <table id="browse-data-table" class="table table-bordered table-condensed ">
     <thead>
         <tr>
@@ -95,31 +75,29 @@
 
         $('#btn-filter').click(function() {
             array_filter = [];
-            if ($('#filter-kode').is(':checked')) {
+            if ($('#kode').is(':checked')) {
                 array_filter.push('produk.kode');
             }
-            if ($('#filter-barcode').is(':checked')) {
+            if ($('#barcode').is(':checked')) {
                 array_filter.push('produk.barcode');
             }
-            if ($('#filter-produk').is(':checked')) {
+            if ($('#produk').is(':checked')) {
                 array_filter.push('produk.produk');
             }
-            if ($('#filter-rak').is(':checked')) {
+            if ($('#rak').is(':checked')) {
                 array_filter.push('rak_gudang.rak');
             }
-            if ($('#filter-jenis').is(':checked')) {
+            if ($('#jenis').is(':checked')) {
                 array_filter.push('produk.jenis');
             }
-            if ($('#filter-kategori').is(':checked')) {
+            if ($('#kategori').is(':checked')) {
                 array_filter.push('produk.kategori');
             }
-            if ($('#filter-kandungan').is(':checked')) {
+            if ($('#kandungan').is(':checked')) {
                 array_filter.push('produk.kandungan');
             }
-            
-            filter = array_filter.join("|");
-
-            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#filter-search').val()+'&filter='+filter).load();
+            filters = array_filter.join("|");
+            browseDataTable.ajax.url('<?= $this->url_generator->current_url() ?>?load=1&keyword='+$('#keyword').val()+'&filters='+filters).load();
         });
     });
 </script>
