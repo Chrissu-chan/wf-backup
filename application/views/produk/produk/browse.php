@@ -10,7 +10,7 @@
         <input type="text" id="keyword" class="form-control" style="width:90%;">
         <input type="button" id="btn-filter" class="btn btn-light" value="Search">
 </div>
-    <form class="form-inline text-center">
+    <div class="form-inline text-center">
             <input type="checkbox" class="form-check" id="kode">
             <b>Kode</b>
             <input type="checkbox" class="form-check" id="barcode">
@@ -25,7 +25,7 @@
             <b>Kategori</b>
             <input type="checkbox" class="form-check" id="kandungan">
             <b>Kandungan</b>
-    <form>
+    <div>
 <table id="browse-data-table" class="table table-bordered table-condensed ">
     <thead>
         <tr>
