@@ -1,5 +1,5 @@
 <style>
-    b{
+    .form-inline label{
         margin-right:30px;
     }
     .dataTables_filter{
@@ -7,24 +7,24 @@
     }
 </style>
 <div class="form-inline">
-        <input type="text" id="keyword" class="form-control" style="width:90%;">
-        <input type="button" id="btn-filter" class="btn btn-light" value="Search">
+    <input type="text" id="keyword" class="form-control" style="width:90%;">
+    <input type="button" id="btn-filter" class="btn btn-light" value="Search">
 </div>
     <div class="form-inline text-center">
-            <input type="checkbox" class="form-check" id="kode">
-            <b>Kode</b>
-            <input type="checkbox" class="form-check" id="barcode">
-            <b>Barcode</b>
-            <input type="checkbox" class="form-check" id="produk">
-            <b>Produk</b>
-            <input type="checkbox" class="form-check" id="rak">
-            <b>Rak</b>
-            <input type="checkbox" class="form-check" id="jenis">
-            <b>Jenis</b>
-            <input type="checkbox" class="form-check" id="kategori">
-            <b>Kategori</b>
-            <input type="checkbox" class="form-check" id="kandungan">
-            <b>Kandungan</b>
+        <input type="checkbox" class="form-check" id="kode">
+            <label for="kode">Kode</label>
+        <input type="checkbox" class="form-check" id="barcode">
+            <label for="barcode">Barcode</label>
+        <input type="checkbox" class="form-check" id="produk">
+            <label for="produk">Produk</label>
+        <input type="checkbox" class="form-check" id="rak">
+            <label for="rak">Rak</label>
+        <input type="checkbox" class="form-check" id="jenis">
+            <label for="jenis">Jenis</label>
+        <input type="checkbox" class="form-check" id="kategori">
+            <label for="kategori">Kategori</label>
+        <input type="checkbox" class="form-check" id="kandungan">
+            <label for="kandungan">Kandungan</label>
     <div>
 <table id="browse-data-table" class="table table-bordered table-condensed ">
     <thead>
