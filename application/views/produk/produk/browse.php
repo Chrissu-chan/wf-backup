@@ -1,31 +1,23 @@
-<style>
-    .form-inline label{
-        margin-right:30px;
-    }
-    .dataTables_filter{
-        display:none!important;
-    }
-</style>
 <div class="form-inline">
     <input type="text" id="keyword" class="form-control" style="width:90%;">
-    <input type="button" id="btn-filter" class="btn btn-light" value="Search">
+    <input type="button" id="btn-filter" class="btn btn-primary" value="Search">
 </div>
-    <div class="form-inline text-center">
-        <input type="checkbox" class="form-check" id="kode">
-            <label for="kode">Kode</label>
-        <input type="checkbox" class="form-check" id="barcode">
-            <label for="barcode">Barcode</label>
-        <input type="checkbox" class="form-check" id="produk">
-            <label for="produk">Produk</label>
-        <input type="checkbox" class="form-check" id="rak">
-            <label for="rak">Rak</label>
-        <input type="checkbox" class="form-check" id="jenis">
-            <label for="jenis">Jenis</label>
-        <input type="checkbox" class="form-check" id="kategori">
-            <label for="kategori">Kategori</label>
-        <input type="checkbox" class="form-check" id="kandungan">
-            <label for="kandungan">Kandungan</label>
-    <div>
+<div class="form-inline m-t-10">
+    <input type="checkbox" class="form-check" id="kode">
+        <label for="kode" class="m-r-20">Kode</label>
+    <input type="checkbox" class="form-check" id="barcode">
+        <label for="barcode" class="m-r-20">Barcode</label>
+    <input type="checkbox" class="form-check" id="produk">
+        <label for="produk" class="m-r-20">Produk</label>
+    <input type="checkbox" class="form-check" id="rak">
+        <label for="rak" class="m-r-20">Rak</label>
+    <input type="checkbox" class="form-check" id="jenis">
+        <label for="jenis" class="m-r-20">Jenis</label>
+    <input type="checkbox" class="form-check" id="kategori">
+        <label for="kategori" class="m-r-20">Kategori</label>
+    <input type="checkbox" class="form-check" id="kandungan">
+        <label for="kandungan" class="m-r-20">Kandungan</label>
+<div>
 <table id="browse-data-table" class="table table-bordered table-condensed ">
     <thead>
         <tr>
