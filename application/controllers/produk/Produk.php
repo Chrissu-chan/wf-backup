@@ -699,6 +699,20 @@ class Produk extends BaseController
                 $jenis = explode('|', $jenis);
                 $this->db->where_in('jenis_produk', $jenis);
             }
+
+            $keyword = $this->input->get('keyword');
+            if ($filters = $this->input->get('filters')){
+                $filters = explode('|',$filters);
+                $this->db->group_start();
+                foreach($filters as $index => $filter) {
+                    if ($index == 0) {
+                        $this->db->like($filter, $keyword);
+                    } else {
+                        $this->db->or_like($filter, $keyword);
+                    }
+                }
+                $this->db->group_end();
+            }
             $this->load->library('datatable');
             return $this->datatable->resource($this->produk_harga_m)
                 ->view('produk_harga_browse')
@@ -710,6 +724,7 @@ class Produk extends BaseController
                 })
                 ->generate();
         }
+
         $tanggal_mutasi = date('Y-m-d');
         if ($this->input->get('tanggal_mutasi')) {
             $tanggal_mutasi = $this->input->get('tanggal_mutasi');
