@@ -130,7 +130,7 @@ class Barang_stok_m extends BaseModel {
             LIMIT 1');
     }
 
-    public function stok_expired($range) {
+    public function stok_expired($range, $ignore = TRUE) {
         $this->db->select("
                 barang_stok.*,
                 expired.expired,
@@ -148,6 +148,13 @@ class Barang_stok_m extends BaseModel {
                 WHERE tipe_mutasi = 'masuk'
                 AND expired >= '".date('Y-m-d')."'
                 AND CASE WHEN '".$range."' != '' THEN expired <= '".date('Y-m-d', strtotime('+'.$range.' day' , strtotime(date('Y-m-d'))))."' ELSE TRUE END
+                AND ".($ignore ? 'NOT EXISTS (
+                    SELECT 1 
+                    FROM barang_ignore_expired 
+                    WHERE barang_ignore_expired.id_gudang = barang_stok_mutasi.id_gudang 
+                    AND barang_ignore_expired.id_barang = barang_stok_mutasi.id_barang 
+                    AND barang_ignore_expired.expired = barang_stok_mutasi.expired
+                )' : TRUE)."
                 GROUP BY id_barang, id_gudang
             ) expired", "expired.id_gudang = barang_stok.id_gudang AND expired.id_barang = barang_stok.id_barang")
             ->join("gudang", "gudang.id = barang_stok.id_gudang")
