@@ -1,4 +1,4 @@
-<?php $this->template->section('content') ?>
+<?php $this->template->section('content') ?>    
     <div class="row">
         <div class="col-md-6">
             <h1 class="page-header">{{pengaturan_rak}}</h1>
@@ -153,9 +153,18 @@
                         html_row += '<td>'+row.kode+'</td>';
                         html_row += '<td>'+row.nama+'</td>';
                         html_row += '</tr>';
-                    })
+                    });
                 }
                 $('#tbl-dari tbody').html(html_row);
+                $('#tbl-dari').DataTable({
+                scrollY:"100vh",
+                scrollCollapse:true,
+                paging:false,
+                processing:true,
+                searchDelay:1000,
+                ordering:false
+                });
+                $.fn.dataTable.ext.errMode = 'none';
             }
         });
     }
@@ -195,9 +204,18 @@
                         html_row += '<td>'+row.kode+'</td>';
                         html_row += '<td>'+row.nama+'</td>';
                         html_row += '</tr>';
-                    })
+                    });
                 }
                 $('#tbl-ke tbody').html(html_row);
+                $('#tbl-ke').DataTable({
+                    scrollY:"100vh",
+                    scrollCollapse:true,
+                    paging:false,
+                    processing:true,
+                    searchDelay:1000,
+                    ordering:false
+                });
+                $.fn.dataTable.ext.errMode = 'none';
             }
         });
     }
