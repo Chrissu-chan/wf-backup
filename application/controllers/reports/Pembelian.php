@@ -104,6 +104,7 @@ class Pembelian extends BaseController {
                 foreach ($worksheet->getColumnDimensions() as $colDim) {
                     $colDim->setAutoSize(true);
                 }
+                $status='nota';
                 break;
             case 'harian':
                 $spreadsheet = IOFactory::load('public/reports/pembelian/harian.xlsx');
@@ -153,6 +154,7 @@ class Pembelian extends BaseController {
                 foreach ($worksheet->getColumnDimensions() as $colDim) {
                     $colDim->setAutoSize(true);
                 }
+                $status='harian';
                 break;
             case 'bulanan':
                 $spreadsheet = IOFactory::load('public/reports/pembelian/bulanan.xlsx');
@@ -202,6 +204,7 @@ class Pembelian extends BaseController {
                 foreach ($worksheet->getColumnDimensions() as $colDim) {
                     $colDim->setAutoSize(true);
                 }
+                $status='bulanan';
                 break;
             default:
                 # code...
@@ -209,7 +212,7 @@ class Pembelian extends BaseController {
         }
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        header('Content-Disposition: attachment; filename="pembelian-'.date('Ymdhis').'.xlsx"');
+        header('Content-Disposition: attachment; filename="beli_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '.xlsx"');
         $writer->save("php://output");
     }
 }

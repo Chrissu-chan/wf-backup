@@ -24,11 +24,12 @@ class Barang_m extends BaseModel {
     }
 
     public function view_barang() {
-        $this->db->select('barang.*, kategori_barang.kategori_barang, jenis_barang.jenis_barang, satuan.satuan, obat.total')
+        $this->db->select('barang.*, kategori_barang.kategori_barang, jenis_barang.jenis_barang, satuan.satuan, obat.total, barang_stok.jumlah AS stok')
             ->join('kategori_barang', 'kategori_barang.id = barang.id_kategori_barang')
             ->join('jenis_barang', 'jenis_barang.id = barang.id_jenis_barang')
             ->join('satuan', 'satuan.id = barang.id_satuan')
-	        ->join('obat', 'obat.id_barang = barang.id');
+            ->join('obat', 'obat.id_barang = barang.id')
+            ->join('barang_stok', 'barang_stok.id_barang = barang.id');
     }
 
     public function scope_not_located() {

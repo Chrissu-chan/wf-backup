@@ -32,7 +32,8 @@ class Penjualan_produk_m extends BaseModel {
 	            pelanggan.nama as pelanggan,
 	            users.name as kasir,
 	            shift_waktu.shift_waktu,
-	            konversi_satuan.konversi')
+                konversi_satuan.konversi,
+                shift_waktu.shift_waktu AS waktu')
             ->join('penjualan', 'penjualan.id = penjualan_produk.id_penjualan')
             ->join('produk', 'produk.id = penjualan_produk.id_produk')
 	        ->join('barang', 'barang.id = produk.id_ref AND produk.jenis = \'barang\'', 'left')

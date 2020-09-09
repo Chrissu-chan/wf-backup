@@ -43,21 +43,24 @@ class Penjualan extends BaseController {
             ),
         );
 
-        if ($post['periode_awal']) {
-            $this->penjualan_produk_m->where('penjualan.tanggal >= ', date('Y-m-d', strtotime($post['periode_awal'])));
-        }
-        if ($post['periode_akhir']) {
-            $this->penjualan_produk_m->where('penjualan.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
-        }
-        if ($post['shift']) {
-            $this->penjualan_produk_m->where('shift_aktif.id_shift_waktu', $post['shift']);
-        }
-        if ($post['kasir']) {
-            $this->penjualan_produk_m->where('penjualan.created_by', $post['kasir']);
-        }
-        if ($post['jenis_produk']) {
-            $this->penjualan_produk_m->where('produk.jenis', $post['jenis_produk']);
-        }
+		if ($post['periode_awal']) {
+			$this->penjualan_produk_m->where('penjualan.tanggal >= ', date('Y-m-d', strtotime($post['periode_awal'])));
+		}
+		if ($post['periode_akhir']) {
+			$this->penjualan_produk_m->where('penjualan.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
+		}
+		if ($post['shift']) {
+			$this->penjualan_produk_m->where('shift_aktif.id_shift_waktu', $post['shift']);
+		}
+		if ($post['shift_waktu']) {
+			$this->penjualan_produk_m->where('shift_waktu.shift_waktu', $post['shift_waktu']);
+		}
+		if ($post['kasir']) {
+			$this->penjualan_produk_m->where('penjualan.created_by', $post['kasir']);
+		}
+		if ($post['jenis_produk']) {
+			$this->penjualan_produk_m->where('produk.jenis', $post['jenis_produk']);
+		}
 
 	    $grand_total = 0;
         switch ($post['rekap']) {
@@ -120,13 +123,14 @@ class Penjualan extends BaseController {
 		            $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
 	            }
 
-	            foreach ($worksheet->getColumnDimensions() as $colDim) {
-                    $colDim->setAutoSize(true);
-                }
-                break;
-            case 'harian':
-                $spreadsheet = IOFactory::load('public/reports/penjualan/harian.xlsx');
-                $worksheet = $spreadsheet->getActiveSheet();
+				foreach ($worksheet->getColumnDimensions() as $colDim) {
+					$colDim->setAutoSize(true);
+				}
+				$status='nota';
+				break;
+			case 'harian':
+				$spreadsheet = IOFactory::load('public/reports/penjualan/harian.xlsx');
+				$worksheet = $spreadsheet->getActiveSheet();
 
                 $rs_penjualan_produk = $this->penjualan_produk_m->view('penjualan_rekap_harian')
                     ->scope('cabang')
@@ -220,13 +224,14 @@ class Penjualan extends BaseController {
 		            $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
 	            }
 
-                foreach ($worksheet->getColumnDimensions() as $colDim) {
-                    $colDim->setAutoSize(true);
-                }
-                break;
-            case 'bulanan':
-                $spreadsheet = IOFactory::load('public/reports/penjualan/bulanan.xlsx');
-                $worksheet = $spreadsheet->getActiveSheet();
+				foreach ($worksheet->getColumnDimensions() as $colDim) {
+					$colDim->setAutoSize(true);
+				}
+				$status='harian';
+				break;
+			case 'bulanan':
+				$spreadsheet = IOFactory::load('public/reports/penjualan/bulanan.xlsx');
+				$worksheet = $spreadsheet->getActiveSheet();
 
                 $rs_penjualan_produk = $this->penjualan_produk_m->view('penjualan_rekap_bulanan')
                     ->scope('cabang')
@@ -320,17 +325,18 @@ class Penjualan extends BaseController {
 		            $spreadsheet->getActiveSheet()->getStyle($cols[$i].$row)->applyFromArray($style);
 	            }
 
-                foreach ($worksheet->getColumnDimensions() as $colDim) {
-                    $colDim->setAutoSize(true);
-                }
-                break;
-            default:
-                # code...
-                break;
-        }
+				foreach ($worksheet->getColumnDimensions() as $colDim) {
+					$colDim->setAutoSize(true);
+				}
+				$status='bulanan';
+				break;
+			default:
+				# code...
+				break;
+		}
 
-        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        header('Content-Disposition: attachment; filename="penjualan-'.date('Ymdhis').'.xlsx"');
-        $writer->save("php://output");
-    }
+		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		header('Content-Disposition: attachment; filename="jual_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '_'. $post['shift_waktu']. '.xlsx"');
+		$writer->save("php://output");
+	}
 }
