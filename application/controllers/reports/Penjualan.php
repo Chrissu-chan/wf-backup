@@ -52,7 +52,7 @@ class Penjualan extends BaseController {
 		if ($post['shift']) {
 			$this->penjualan_produk_m->where('shift_aktif.id_shift_waktu', $post['shift']);
 		}
-		if ($post['shift_waktu']) {
+		if ($post['select_shift']) {
 			$this->penjualan_produk_m->where('shift_waktu.shift_waktu', $post['shift_waktu']);
 		}
 		if ($post['kasir']) {
@@ -336,7 +336,7 @@ class Penjualan extends BaseController {
 		}
 
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-		header('Content-Disposition: attachment; filename="jual_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '_'. $post['shift_waktu']. '.xlsx"');
+		header('Content-Disposition: attachment; filename="jual_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '_'. $post['select_shift']. '.xlsx"');
 		$writer->save("php://output");
 	}
 }

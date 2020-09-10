@@ -29,7 +29,7 @@
                     <div class="form-group">
                         <label>{{shift}}</label>
                         <?= $this->form->select('shift', lists($this->shift_waktu_m->scope('kasir')->get(), 'id', 'shift_waktu', true), null, 'class="form-control" id="shift"') ?>
-                        <input type="hidden" name="shift_waktu" id="shift_waktu">
+                        <input type="hidden" name="select_shift" id="select_shift">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <button type="submit" onclick="test()" class="btn btn-primary">{{cetak}}</button>
+                <button type="submit" onclick="getvalue()" class="btn btn-primary">{{cetak}}</button>
             </div>
         </div>
     </div>
@@ -53,11 +53,11 @@
 
 <?php $this->template->section('page_script') ?>
 <script>
-    function test() {
+    function getvalue() {
         var shift = document.getElementById('shift');
-        var waktu = shift.options[shift.selectedIndex].text;
-        let hidden = document.querySelector('#shift_waktu');
-            hidden.value = waktu;
+        var shift_select = shift.options[shift.selectedIndex].text;
+        let shift_value = document.querySelector('#select_shift');
+            shift_value.value = shift_select;
     }
     $(function(){
         $('#periode_awal').inputmask('99-99-9999');

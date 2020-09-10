@@ -48,8 +48,11 @@ class Pembelian extends BaseController {
         if ($post['periode_akhir']) {
             $this->pembelian_barang_m->where('pembelian.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
         }
-         if ($post['supplier']) {
+        if ($post['supplier']) {
             $this->pembelian_barang_m->where('pembelian.id_supplier', $post['supplier']);
+        }
+        if ($post['select_supplier']) {
+            $this->pembelian_barang_m->where('supplier.supplier', $post['select_supplier']);
         }
         if ($post['user']) {
             $this->pembelian_barang_m->where('pembelian.created_by', $post['user']);
@@ -212,7 +215,7 @@ class Pembelian extends BaseController {
         }
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        header('Content-Disposition: attachment; filename="beli_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '.xlsx"');
+        header('Content-Disposition: attachment; filename="beli_'. $status. '_'. $post['periode_awal']. '__'. $post['periode_akhir']. '_'. $post['select_supplier']. '.xlsx"');
         $writer->save("php://output");
     }
 }

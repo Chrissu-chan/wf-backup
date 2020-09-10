@@ -28,7 +28,8 @@
                     </div>
                     <div class="form-group">
                         <label>{{supplier}}</label>
-                        <?= $this->form->select('supplier', lists($this->supplier_cabang_m->view('supplier')->scope('cabang_aktif')->get(), 'id', 'supplier', true), null, 'class="form-control"') ?>
+                        <?= $this->form->select('supplier', lists($this->supplier_cabang_m->view('supplier')->scope('cabang_aktif')->get(), 'id', 'supplier', true), null, 'class="form-control" id="supplier"') ?>
+                        <input type="hidden" name="select_supplier" id="select_supplier">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -39,7 +40,7 @@
                 </div>
             </div>
             <div class="form-group text-right">
-                <button type="submit" class="btn btn-primary">{{cetak}}</button>
+                <button type="submit" onclick="getvalue()" class="btn btn-primary">{{cetak}}</button>
             </div>
         </div>
     </div>
@@ -48,6 +49,12 @@
 
 <?php $this->template->section('page_script') ?>
 <script>
+    function getvalue() {
+        var supplier = document.getElementById('supplier');
+        var supplier_select = supplier.options[supplier.selectedIndex].text;
+        let supplier_value = document.querySelector('#select_supplier');
+            supplier_value.value = supplier_select;
+    }
 </script>
 <?php $this->template->endsection() ?>
 
