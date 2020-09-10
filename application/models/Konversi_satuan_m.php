@@ -23,4 +23,8 @@ class Konversi_satuan_m extends BaseModel {
             return 1;
         }
     }
+    
+    public function scope_konversi() {
+    	$this->db->where('konversi != ', 1);
+    }
 }
