@@ -1,7 +1,7 @@
 <div id="frm-message"></div>
 <div class="form-group">
     <label>{{kode}}</label>
-	<?= $this->form->text('kode', $data, 'id="kode" class="form-control" readonly '.$this->form->disabled(array('edit'))) ?>
+	<?= $this->form->text('kode', (isset($data) ? $data : ''), 'id="kode" class="form-control" readonly '.$this->form->disabled(array('edit'))) ?>
 </div>
 <div class="form-group">
     <label>{{barcode}}</label>
