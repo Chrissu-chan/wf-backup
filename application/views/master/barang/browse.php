@@ -5,7 +5,6 @@
             <th>{{barcode}}</th>
             <th>{{nama}}</th>
             <th>{{satuan}}</th>
-            <th width="1">{{stok}}</th>
         </tr>
     </thead>
 </table>
@@ -22,8 +21,7 @@
                 {data: 'kode', name: 'barang.kode'},
                 {data: 'barcode', name: 'barang.barcode'},
                 {data: 'nama', name: 'barang.nama'},
-                {data: 'satuan', name: 'satuan.satuan'},
-                {data: 'stok', searchable: false, class: 'text-center nowrap'}
+                {data: 'satuan', name: 'satuan.satuan'}
             ],
             select: true,
             rowCallback: function(row, data) {
