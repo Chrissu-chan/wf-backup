@@ -234,18 +234,20 @@ class Produk extends BaseController
         }
         $this->form_validation->validate($validate);
         $this->transaction->start();
-        if (!isset($post['produk_cabang'])) {
-            $post['produk_cabang'][] = 0;
-        }
+                    
         $result = $this->produk_m->insert($post);
         $rs_produk_cabang = array();
-        foreach ($post['produk_cabang'] as $id_cabang) {
-            $rs_produk_cabang[] = array(
-                'id_produk' => $result->id,
-                'id_cabang' => $id_cabang
-            );
+        if (isset($post['produk_cabang'])) {
+            foreach ($post['produk_cabang'] as $id_cabang) {
+                $rs_produk_cabang[] = array(
+                    'id_produk' => $result->id,
+                    'id_cabang' => $id_cabang
+                );
+            }
         }
-        $this->produk_cabang_m->insert_batch($rs_produk_cabang);
+        if (count($rs_produk_cabang) > 0) {
+            $this->produk_cabang_m->insert_batch($rs_produk_cabang);
+        }
         $post['ppn_persen'] = 0;
         switch ($post['jenis']) {
             case 'barang':
@@ -537,18 +539,19 @@ class Produk extends BaseController
         $this->transaction->start();
         $this->produk_m->update($id, $post);
         $post['ppn_persen'] = 0;
-        $this->produk_cabang_m->where('id_produk', $id)->delete();
-        if (!isset($post['produk_cabang'])) {
-            $post['produk_cabang'][] = 0;
-        }
+        $this->produk_cabang_m->where('id_produk', $id)->delete();        
         $rs_produk_cabang = array();
-        foreach ($post['produk_cabang'] as $id_cabang) {
-            $rs_produk_cabang[] = array(
-                'id_produk' => $id,
-                'id_cabang' => $id_cabang
-            );
+        if (isset($post['produk_cabang'])) {
+            foreach ($post['produk_cabang'] as $id_cabang) {
+                $rs_produk_cabang[] = array(
+                    'id_produk' => $id,
+                    'id_cabang' => $id_cabang
+                );
+            }
+        }        
+        if (count($rs_produk_cabang) > 0) {
+            $this->produk_cabang_m->insert_batch($rs_produk_cabang);
         }
-        $this->produk_cabang_m->insert_batch($rs_produk_cabang);
         $result_produk_harga = array();
         foreach ($this->produk_harga_m->scope('general')->where('id_produk', $id)->get() as $produk_harga) {
             $result_produk_harga[$produk_harga->id_satuan][$produk_harga->jumlah] = $produk_harga;
