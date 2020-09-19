@@ -23,39 +23,44 @@
 		        <table width="100%" class="table table-bordered table-condensed">
 			        <tbody>
 			            <tr>
-				            <th colspan="2" class="text-center">{{rekap_transaksi}}</th>
+				            <th colspan="3" class="text-center">{{rekap_transaksi}}</th>
 			            </tr>
 				        <tr>
-					        <td>{{uang_awal}}</td>
+					        <td colspan="2">{{uang_awal}}</td>
 					        <td width="200" class="text-right"><?= $this->localization->number($model->uang_awal) ?></td>
 				        </tr>
 				        <tr>
-					        <td>{{penjualan}}</td>
-					        <td class="text-right"><?= $this->localization->number($model->total_penjualan) ?></td>
+					        <td rowspan="2">{{penjualan}}</td>
+							<td width="200">{{kas}}</td>
+					        <td class="text-right"><?= $this->localization->number($model->total_penjualan_kas) ?></td>
 				        </tr>
+						<tr>
+							<td width="200">{{bank}}</td>
+							<td class="text-right danger"><?= $this->localization->number($model->total_penjualan_bank) ?></td>
+						</tr>
 				        <tr>
-					        <td>{{uang_masuk}}</td>
+					        <td colspan="2">{{uang_masuk}}</td>
 					        <td class="text-right"><?= $this->localization->number($model->total_pemasukan) ?></td>
 				        </tr>
 				        <tr>
-					        <td>{{uang_keluar}}</td>
+					        <td colspan="2">{{uang_keluar}}</td>
 					        <td class="text-right"><?= $this->localization->number($model->total_pengeluaran) ?></td>
 				        </tr>
 				        <tr>
-					        <th>{{total}}</th>
-					        <th class="text-right">
-						        <?php $total = $model->uang_awal + $model->total_penjualan + $model->total_pemasukan + $model->total_pengeluaran ?>
+					        <th colspan="2">{{total}}</th>
+					        <th class="text-right success">
+						        <?php $total = $model->uang_awal + $model->total_penjualan_kas + $model->total_pemasukan - $model->total_pengeluaran ?>
 						        <?= $this->localization->number($total) ?>
 					        </th>
 				        </tr>
 			            <?php if (!$model->active) { ?>
 					        <tr>
-						        <td>{{uang_akhir}}</td>
-						        <td class="text-right"><?= $this->localization->number($model->uang_akhir) ?></td>
+						        <th colspan="2">{{uang_akhir}}</th>
+						        <th class="text-right"><?= $this->localization->number($model->uang_akhir) ?></th>
 					        </tr>
 					        <tr>
-						        <th>{{selisih}}</th>
-						        <th class="text-right">
+						        <th colspan="2">{{selisih}}</th>
+						        <th class="text-right warning">
 							        <?php $selisih = $model->uang_akhir - $total ?>
 							        <?= $this->localization->number($selisih) ?>
 						        </th>

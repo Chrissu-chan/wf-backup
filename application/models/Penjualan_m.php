@@ -45,6 +45,14 @@ class Penjualan_m extends BaseModel {
 		$this->db->where('penjualan.batal', 0);
 	}
 
+    public function scope_kas() {
+        $this->db->where('kas_bank.jenis_kas_bank', 'kas');
+    }
+
+    public function scope_bank() {
+        $this->db->where('kas_bank.jenis_kas_bank', 'bank');
+    }
+
     public function enum_metode_pembayaran() {
         return array(
             'tunai' => 'Tunai',

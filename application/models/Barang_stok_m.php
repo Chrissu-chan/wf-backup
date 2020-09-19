@@ -55,7 +55,7 @@ class Barang_stok_m extends BaseModel {
 					barang_stok_mutasi.tipe_mutasi,
 					barang_stok_mutasi.jenis_mutasi,
 					barang_stok_mutasi.jumlah,
-					barang_stok_mutasi.total
+					penjualan_produk.total
 				FROM
 					barang_stok_mutasi
 				JOIN penjualan_produk ON penjualan_produk.id = barang_stok_mutasi.id_ref

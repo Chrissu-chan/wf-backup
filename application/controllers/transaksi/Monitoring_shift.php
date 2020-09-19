@@ -52,8 +52,16 @@ class Monitoring_shift extends BaseController
 	{
 		$title = "Monitoring Shift";
 		$model = $this->shift_aktif_m->view('shift_aktif')->find_or_fail($id);
-		$model->total_penjualan = $this->penjualan_m->select_sum('total')
-			->scope('cabang')
+		$model->total_penjualan_kas = $this->penjualan_m->select_sum('total')
+			->join('kas_bank', 'kas_bank.id = penjualan.id_kas_bank')
+			->scope('cabang_aktif')
+			->scope('kas')
+			->where('id_shift_aktif', $id)
+			->first()->total;
+		$model->total_penjualan_bank = $this->penjualan_m->select_sum('total')
+			->join('kas_bank', 'kas_bank.id = penjualan.id_kas_bank')
+			->scope('cabang_aktif')
+			->scope('bank')
 			->where('id_shift_aktif', $id)
 			->first()->total;
 		$model->total_pemasukan = $this->mutasi_kasir_m->select_sum('nominal')
