@@ -197,6 +197,8 @@ class Piutang extends BaseController
     public function find_json($id)
     {
         $result = $this->piutang_m->find_or_fail($id);
+	    $result->tanggal_piutang = date('d-m-Y', strtotime($result->tanggal_piutang));
+	    $result->tanggal_jatuh_tempo = date('d-m-Y', strtotime($result->tanggal_jatuh_tempo));
         $response = array(
             'success' => true,
             'data' => $result

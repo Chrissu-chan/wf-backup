@@ -30,7 +30,7 @@
                     <label>{{tanggal}}</label>
                     <div class="input-group input-group">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <?= $this->form->date('tanggal', date('d-m-Y'), 'id="tanggal" class="form-control"') ?>
+                        <?= $this->form->date('tanggal', date('d-m-Y'), 'id="tanggal" class="form-control" data-input-type="dateinput"') ?>
                     </div>
                 </div>
             </div>
@@ -84,7 +84,7 @@
 		            </td>
 		            <td><?= $this->form->number('form_add_barang_potongan', null, 'id="barang-potongan-0" class="form-control input-sm text-right" onkeyup="barang_set_total(0)" data-input-type="number-format"', "") ?></td>
 		            <td><?= $this->form->number('form_add_barang_total', null, 'id="barang-total-0" class="form-control input-sm text-right" onkeyup="barang_set_harga(0)" data-input-type="number-format"', "") ?></td>
-		            <td><?= $this->form->date('form_add_barang_expired', date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 year')), 'id="barang-expired-0" class="form-control input-sm" data-input-type="datepicker"') ?></td>
+		            <td><?= $this->form->date('form_add_barang_expired', date('Y-m-d', strtotime(date('Y-m-d') . ' + 1 year')), 'id="barang-expired-0" class="form-control input-sm" data-input-type="dateinput"') ?></td>
 		            <td><?= $this->form->text('form_add_barang_batch_number', NULL, 'id="barang-batch_number-0" class="form-control input-sm"') ?></td>
 		            <td><button type="button" class="btn btn-primary btn-sm" onclick="barang_add()"><i class="fa fa-plus"></i></button></td>
 	            </tr>
@@ -117,7 +117,7 @@
 	                        </td>
 	                        <td><?= $this->form->number('pembelian_barang['.$key.'][potongan]', null, 'id="barang-potongan-'.$key.'" class="form-control input-sm text-right" onkeyup="barang_set_total('.$key.')" data-input-type="number-format"', "") ?></td>
                             <td><?= $this->form->number('pembelian_barang['.$key.'][total]', null, 'id="barang-total-'.$key.'" class="form-control input-sm text-right" onkeyup="barang_set_harga(0)" data-input-type="number-format"', "") ?></td>
-	                        <td><?= $this->form->date('pembelian_barang['.$key.'][expired]', null, 'id="barang-expired-'.$key.'" class="form-control" data-input-type="datepicker"') ?></td>
+	                        <td><?= $this->form->date('pembelian_barang['.$key.'][expired]', null, 'id="barang-expired-'.$key.'" class="form-control" data-input-type="dateinput"') ?></td>
 	                        <td><?= $this->form->text('pembelian_barang['.$key.'][batch_number]', null, 'id="barang-batch_number-'.$key.'" class="form-control"') ?></td>
                             <td><button type="button" class="btn btn-danger btn-sm" onclick="barang_remove(<?= $key ?>)"><i class="fa fa-trash"></i></button></td>
                         </tr>
@@ -219,7 +219,7 @@
 								<label>{{jatuh_tempo}}</label>
 								<div class="input-group input-group">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-									<?= $this->form->date('jatuh_tempo', null, 'id="jatuh_tempo" class="form-control" data-input-type="datepicker"') ?>
+									<?= $this->form->date('jatuh_tempo', null, 'id="jatuh_tempo" class="form-control" data-input-type="dateinput"') ?>
 								</div>
 							</div>
 							<div class="form-group">

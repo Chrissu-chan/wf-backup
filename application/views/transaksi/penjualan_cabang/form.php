@@ -250,7 +250,7 @@
 								<label>{{jatuh_tempo}}</label>
 								<div class="input-group input-group">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-									<?= $this->form->date('jatuh_tempo', null, 'id="jatuh_tempo" class="form-control" data-input-type="datepicker"') ?>
+									<?= $this->form->date('jatuh_tempo', null, 'id="jatuh_tempo" class="form-control" data-input-type="dateinput"') ?>
 								</div>
 							</div>
 							<div class="form-group">

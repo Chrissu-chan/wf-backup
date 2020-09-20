@@ -14,11 +14,11 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label>{{mulai_tanggal}}</label>
-                        <?= $this->form->date('periode_awal', date('Y-m-01'), 'class="form-control" id="periode_awal"') ?>
+                        <?= $this->form->date('periode_awal', date('Y-m-01'), 'class="form-control" id="periode_awal" data-input-type="dateinput"') ?>
                     </div>
                     <div class="form-group">
                         <label>{{sampai_tanggal}}</label>
-                        <?= $this->form->date('periode_akhir', date('Y-m-d'), 'class="form-control" id="periode_akhir"') ?>
+                        <?= $this->form->date('periode_akhir', date('Y-m-d'), 'class="form-control" id="periode_akhir" data-input-type="dateinput"') ?>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -44,15 +44,6 @@
         </div>
     </div>
     <?= $this->form->close() ?>
-<?php $this->template->endsection() ?>
-
-<?php $this->template->section('page_script') ?>
-<script>
-    $(function(){
-        $('#periode_awal').inputmask('99-99-9999');
-        $('#periode_akhir').inputmask('99-99-9999');
-    });
-</script>
 <?php $this->template->endsection() ?>
 
 <?php $this->template->view('layouts/main') ?>

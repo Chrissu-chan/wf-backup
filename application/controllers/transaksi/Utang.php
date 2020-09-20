@@ -199,6 +199,8 @@ class Utang extends BaseController
     public function find_json($id)
     {
         $result = $this->utang_m->find_or_fail($id);
+        $result->tanggal_utang = date('d-m-Y', strtotime($result->tanggal_utang));
+        $result->tanggal_jatuh_tempo = date('d-m-Y', strtotime($result->tanggal_jatuh_tempo));
         $response = array(
             'success' => true,
             'data' => $result

@@ -1,6 +1,5 @@
 <script>
     $(function () {
-        $('#tanggal').inputmask('99-99-9999');
 	    document.title = 'Pembelian Total : 0';
         
         $(window).keydown(function(event){
@@ -282,7 +281,7 @@
 		        html_row += '</td>';
                 html_row += '<td><input type="text" name="pembelian_barang['+no+'][potongan]" value="'+potongan+'" id="barang-potongan-'+no+'" class="form-control input-sm text-right" onkeyup="barang_set_total('+no+')" data-input-type="number-format"></td>';
                 html_row += '<td><input type="text" name="pembelian_barang['+no+'][total]" value="'+total+'" id="barang-total-'+no+'" class="form-control input-sm text-right" onkeyup="barang_set_harga('+no+')" data-input-type="number-format"></td>';
-                html_row += '<td><input type="text" name="pembelian_barang['+no+'][expired]" value="'+expired+'" id="barang-expired-'+no+'" class="form-control input-sm" data-input-type="datepicker"></td>';
+                html_row += '<td><input type="text" name="pembelian_barang['+no+'][expired]" value="'+expired+'" id="barang-expired-'+no+'" class="form-control input-sm" data-input-type="dateinput"></td>';
                 html_row += '<td><input type="text" name="pembelian_barang['+no+'][batch_number]" value="'+batch_number+'" id="barang-batch_number-'+no+'" class="form-control input-sm"></td>';
                 html_row += '<td><button type="button" class="btn btn-danger btn-sm" onclick="barang_remove('+no+')"><i class="fa fa-trash"></i></button></td>';
 

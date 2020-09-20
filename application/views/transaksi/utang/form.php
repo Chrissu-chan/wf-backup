@@ -19,14 +19,14 @@
 <div class="form-group">
     <label>{{tanggal_utang}}</label>
     <div class="input-group">
-        <?= $this->form->text('tanggal_utang', date('d-m-Y'), 'id="tanggal_utang" class="form-control" data-input-type="datepicker"') ?>
+        <?= $this->form->date('tanggal_utang', date('d-m-Y'), 'id="tanggal_utang" class="form-control" data-input-type="dateinput"') ?>
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
     </div>
 </div>
 <div class="form-group">
     <label>{{tanggal_jatuh_tempo}}</label>
     <div class="input-group">
-        <?= $this->form->text('tanggal_jatuh_tempo', date('d-m-Y'), 'id="tanggal_jatuh_tempo" class="form-control" data-input-type="datepicker"') ?>
+        <?= $this->form->date('tanggal_jatuh_tempo', date('d-m-Y'), 'id="tanggal_jatuh_tempo" class="form-control" data-input-type="dateinput"') ?>
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
     </div>
 </div>
@@ -54,11 +54,6 @@
 </div>
 
 <script>
-    $(function () {
-        $('#tanggal_utang').inputmask('99-99-9999');
-        $('#tanggal_jatuh_tempo').inputmask('99-99-9999');
-    });
-    
     function choose_file() {
         $('#file_path').click();
     }

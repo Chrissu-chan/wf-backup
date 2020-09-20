@@ -16,8 +16,6 @@
             ]
         });
         
-        $('#tanggal_mulai').inputmask('99-99-9999');
-        $('#tanggal_selesai').inputmask('99-99-9999');
         $('#select_all').click(function(){
             var rows = dataTable.rows().nodes();
             $('input[type="checkbox"]:not(:disabled)', rows).prop('checked', this.checked);

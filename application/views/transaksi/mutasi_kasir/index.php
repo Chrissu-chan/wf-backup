@@ -11,9 +11,9 @@
                     <label>{{periode}}</label>
                     <div class="input-group input-group-sm">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <?= $this->form->date('filter_tanggal_awal', date('01-m-Y'), 'id="filter-tanggal_awal" class="form-control"') ?>
+                        <?= $this->form->date('filter_tanggal_awal', date('01-m-Y'), 'id="filter-tanggal_awal" class="form-control" data-input-type="dateinput"') ?>
                         <span class="input-group-addon">-</i></span>
-                        <?= $this->form->date('filter_tanggal_akhir', date('d-m-Y'), 'id="filter-tanggal_akhir" class="form-control"') ?>
+                        <?= $this->form->date('filter_tanggal_akhir', date('d-m-Y'), 'id="filter-tanggal_akhir" class="form-control" data-input-type="dateinput"') ?>
                     </div>
                 </div>
                 <div class="form-group">
@@ -79,9 +79,7 @@
             ],
             order : [[0, 'DESC']]
         });
-
-        $('#filter-tanggal_awal').inputmask('99-99-9999');
-        $('#filter-tanggal_akhir').inputmask('99-99-9999');
+        
         $('#filter-tipe').change(function() {
             var html = '';
             if ($(this).val() == 'pemasukan') {

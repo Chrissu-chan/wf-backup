@@ -7,7 +7,6 @@
 	<?php } ?>
 
     $(function () {
-        $('#tanggal').inputmask('99-99-9999');
 	    document.title = 'Penjualan Total : 0';
 
         $(window).keydown(function(event){

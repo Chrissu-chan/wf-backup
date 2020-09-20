@@ -46,7 +46,7 @@
                 <div class="col-sm-6">
                     <div class="form-group">
                         <label>{{tanggal_lahir}}</label>
-                        <?= $this->form->date('tanggal_lahir', date('Y-m-d'), 'id="tanggal_lahir" class="form-control" data-input-type="datepicker"') ?>
+                        <?= $this->form->date('tanggal_lahir', date('Y-m-d'), 'id="tanggal_lahir" class="form-control" data-input-type="dateinput"') ?>
                     </div>
                 </div>
             </div>

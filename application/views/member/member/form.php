@@ -46,14 +46,14 @@
     <label>{{tanggal_daftar}}</label>
     <div class="input-group input-group-sm">
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-        <?= $this->form->date('tanggal_daftar', date('d-m-Y'), 'id="tanggal_daftar" class="form-control" data-input-type="datepicker"') ?>
+        <?= $this->form->date('tanggal_daftar', date('d-m-Y'), 'id="tanggal_daftar" class="form-control" data-input-type="dateinput"') ?>
     </div>
 </div>
 <div class="form-group">
     <label>{{tanggal_expired}}</label>
     <div class="input-group input-group-sm">
         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-        <?= $this->form->date('tanggal_expired', date('d-m-Y'), 'id="tanggal_expired" class="form-control" data-input-type="datepicker"') ?>
+        <?= $this->form->date('tanggal_expired', date('d-m-Y'), 'id="tanggal_expired" class="form-control" data-input-type="dateinput"') ?>
     </div>
 </div>
 

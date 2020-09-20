@@ -71,7 +71,7 @@
 				        <div class="form-group">
 				            <label>{{tanggal_utang}}</label>
 				            <div class="input-group">
-				                <?= $this->form->text('tanggal_utang', null, 'id="tanggal_utang" class="form-control"') ?>
+				                <?= $this->form->date('tanggal_utang', null, 'id="tanggal_utang" class="form-control" readonly') ?>
 				                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				            </div>
 				        </div>
@@ -80,7 +80,7 @@
 				        <div class="form-group">
 				            <label>{{tanggal_jatuh_tempo}}</label>
 				            <div class="input-group">
-				                <?= $this->form->text('tanggal_jatuh_tempo', null, 'id="tanggal_jatuh_tempo" class="form-control"') ?>
+				                <?= $this->form->date('tanggal_jatuh_tempo', null, 'id="tanggal_jatuh_tempo" class="form-control" readonly') ?>
 				                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
 				            </div>
 				        </div>
@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label>{{tanggal_bayar}}</label>
                             <div class="input-group">
-                                <?= $this->form->date('tanggal_bayar', date('d-m-Y'), 'id="tanggal_bayar" class="form-control"') ?>
+                                <?= $this->form->date('tanggal_bayar', date('d-m-Y'), 'id="tanggal_bayar" class="form-control" data-input-type="dateinput"') ?>
                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
@@ -163,9 +163,6 @@
 <?php $this->template->section('page_script') ?>
 <script>
     $(function() {
-		$('#tanggal_utang').inputmask('99-99-9999');
-		$('#tanggal_jatuh_tempo').inputmask('99-99-9999');
-		$('#tanggal_bayar').inputmask('99-99-9999');
 		$('#frm-create').buildForm();
 		find_utang();
     });
@@ -174,19 +171,30 @@
 
     function find_utang() {
         var id = $('#id_utang').val();
-        $.ajax({
-            url: '<?= $this->route->name('transaksi.utang.find_json') ?>/'+id,
-            success: function(response) {
-                $('#jumlah_utang').val(response.data.jumlah_utang);
-                $('#telah_bayar').val(response.data.jumlah_bayar);
-                $('#sisa_utang').val(response.data.sisa_utang);
-                $('#sisa_utang_hide').val(response.data.sisa_utang);
-                $('#nama').val(response.data.nama);
-                $('#no_ref').val(response.data.no_ref);
-                $('#tanggal_utang').val(response.data.tanggal_utang);
-                $('#tanggal_jatuh_tempo').val(response.data.tanggal_jatuh_tempo);
-            }
-        });
+        if (id) {
+	        $.ajax({
+		        url: '<?= $this->route->name('transaksi.utang.find_json') ?>/'+id,
+		        success: function(response) {
+			        $('#jumlah_utang').val(response.data.jumlah_utang);
+			        $('#telah_bayar').val(response.data.jumlah_bayar);
+			        $('#sisa_utang').val(response.data.sisa_utang);
+			        $('#sisa_utang_hide').val(response.data.sisa_utang);
+			        $('#nama').val(response.data.nama);
+			        $('#no_ref').val(response.data.no_ref);
+			        $('#tanggal_utang').val(response.data.tanggal_utang);
+			        $('#tanggal_jatuh_tempo').val(response.data.tanggal_jatuh_tempo);
+		        }
+	        });
+        } else {
+	        $('#jumlah_utang').val('');
+	        $('#telah_bayar').val('');
+	        $('#sisa_utang').val('');
+	        $('#sisa_utang_hide').val('');
+	        $('#nama').val('');
+	        $('#no_ref').val('');
+	        $('#tanggal_utang').val('');
+	        $('#tanggal_jatuh_tempo').val('');
+        }
     }
 
     function choose_file() {

@@ -11,7 +11,7 @@
 			        <label>{{tanggal}}</label>
 			        <div class="input-group input-group-sm">
 				        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-				        <?= $this->form->date('filter_tanggal', date('d-m-Y'), 'id="filter-tanggal" class="form-control"') ?>
+				        <?= $this->form->date('filter_tanggal', date('d-m-Y'), 'id="filter-tanggal" class="form-control" data-input-type="dateinput"') ?>
 			        </div>
 		        </div>
 		        <div class="form-group">
@@ -62,7 +62,6 @@
 	        order: [[0, 'DESC']]
         });
         
-        $('#filter-tanggal').inputmask('99-99-9999');       
         $('#btn-filter').click(function() {
 		    dataTable.ajax.url('<?= $this->url_generator->current_url() ?>?tanggal=' + $('#filter-tanggal').val()).load();
 	    });

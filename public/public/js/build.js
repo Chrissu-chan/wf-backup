@@ -47,7 +47,6 @@ $.fn.buildForm = function() {
                 });
             }
         });
-
         $('[data-input-type="number-format"]', elem).each(function(key, elem) {
             var thousand_separator = lang['thousand_separator'];
             if ($(elem).data('thousand-separator') != undefined) {
@@ -90,12 +89,18 @@ $.fn.buildForm = function() {
                 enableOnReadonly : false
             });
         });
-
         $('[data-input-type="timepicker"]', elem).each(function(key, elem) {
             $(elem).timepicker({
                 showMeridian: false
             });
         });
+	    $('[data-input-type="dateinput"]', elem).each(function(key, elem) {
+		    $(elem).inputmask('datetime', {
+			    inputFormat: lang['datepicker_format'],
+			    outputFormat: lang['datepicker_format'],
+			    inputEventOnly: true
+		    });
+	    });
     });
 }
 

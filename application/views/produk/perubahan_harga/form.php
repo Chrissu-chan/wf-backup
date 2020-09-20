@@ -25,7 +25,7 @@
             <label>{{tanggal_mulai}}</label>
             <div class="input-group input-group">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                <?= $this->form->date('tanggal_mulai', date('d-m-Y'), 'id="tanggal_mulai" class="form-control"') ?>
+                <?= $this->form->date('tanggal_mulai', date('d-m-Y'), 'id="tanggal_mulai" class="form-control" data-input-type="dateinput"') ?>
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
             <label>{{tanggal_selesai}}</label>
             <div class="input-group input-group">
                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                <?= $this->form->date('tanggal_selesai', null, 'id="tanggal_selesai" class="form-control"') ?>
+                <?= $this->form->date('tanggal_selesai', null, 'id="tanggal_selesai" class="form-control" data-input-type="dateinput"') ?>
             </div>
         </div>
     </div>

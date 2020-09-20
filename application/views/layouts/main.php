@@ -149,7 +149,7 @@ $CI->load->model('shift_aktif_m');
     <script src="<?= base_url('public/plugins/jquery.growl/js/jquery.growl.js') ?>"></script>
     <script src="<?= base_url('public/plugins/chart-js/Chart2.js') ?>"></script>
     <script src="<?= base_url('public/plugins/jquery-number/jquery.number.min.js') ?>"></script>
-    <script src="<?= base_url('public/plugins/input-mask/jquery.inputmask.js') ?>"></script>
+    <script src="<?= base_url('public/plugins/inputmask/dist/jquery.inputmask.js') ?>"></script>
     <?php $CI->template->render('script') ?>
     <script src="<?= base_url('public/js/apps.min.js') ?>"></script>
     <script src="<?= base_url('public/js/build.js') ?>"></script>
