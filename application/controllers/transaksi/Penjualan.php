@@ -22,6 +22,7 @@ class Penjualan extends BaseController
 		$this->load->model('fifo_m');
 		$this->load->model('shift_aktif_m');
 		$this->load->model('cabang_gudang_m');
+		$this->load->model('users_m');
 		$this->load->library('autonumber');
 		$this->load->library('form_validation');
 	}
@@ -754,5 +755,33 @@ class Penjualan extends BaseController
 		$this->load->view('transaksi/penjualan/nota', array(
 			'model' => $model
 		));
+	}
+
+	public function check_permission_diskon() {
+		$post = $this->input->post();
+        $application = $this->config->item('application_id');
+        $module = 'Transaksi';
+        $controller = 'transaksi/Penjualan.php';
+        $action = 'diskon';
+        $user = $this->users_m->view('user_role_permissions')
+            ->where('application_modules.application_id', $application)
+            ->where('modules.module', $module)
+            ->where('module_features.class', $controller)
+            ->where('module_feature_actions.action', $action)
+            ->where('username', $post['username'])
+            ->where('password', $this->users_m->set_password($post['password']))
+            ->first();
+		if ($user) {
+			$response = array(
+				'success' => true,
+				'message' => NULL
+			);
+		} else {
+			$response = array(
+				'success' => false,
+				'message' => $this->localization->lang('error_permission_message', array('name' => $this->localization->lang('penjualan')))
+			);
+		}
+		$this->output->set_content_type('application/json')->set_output(json_encode($response));
 	}
 }

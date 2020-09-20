@@ -157,26 +157,4 @@ class Shift_aktif extends BaseController
             $this->redirect->with('error_message', $this->localization->lang('error_close_shift'))->back();
         }
     }
-
-    public function check()
-    {
-        $post = $this->input->post();
-        $result = $this->shift_aktif_m->where('password', md5($post['password']))
-            ->view('shift_aktif')
-            ->scope('cabang')
-            ->scope('aktif')
-            ->first();
-        if ($result) {
-            $response = array(
-                'success' => true,
-                'message' => null
-            );
-        } else {
-            $response = array(
-                'success' => false,
-                'message' => $this->localization->lang('password_is_incorrect')
-            );
-        }
-        $this->output->set_content_type('application/json')->set_output(json_encode($response));
-    }
 }

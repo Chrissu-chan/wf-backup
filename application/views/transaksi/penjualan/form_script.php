@@ -424,6 +424,12 @@
     function edit_harga(elem, id) {
         if ($(elem).is('[readonly]')) {
             var html = '<div class="form-group">';
+            html += '<label>{{username}}</label>';
+            html += '<input type="text" name="username" id="username" class="form-control">';
+            html += '</div>';
+            html += '<div class="form-group">';
+            html += '<div class="form-group">';
+            html += '<label>{{password}}</label>';
             html += '<input type="password" name="password" id="password" class="form-control">';
             html += '</div>';
             html += '<div class="form-group">';
@@ -432,7 +438,7 @@
 
             bootbox.dialog({
                 size: 'small',
-                title: '{{password}}',
+                title: '<i class="fa fa-lock"></i>',
                 message: html
             });
         }
@@ -440,9 +446,9 @@
 
     function cek_password(id) {
         $.ajax({
-            url: '<?= $this->route->name('transaksi.shift_aktif.check') ?>',
+            url: '<?= $this->route->name('transaksi.penjualan.check_permission_diskon') ?>',
             type: 'post',
-            data: 'password='+$('#password').val(),
+            data: 'username='+$('#username').val()+'&password='+$('#password').val(),
             success: function (response) {
                 if (response.success) {
                     $('#produk-harga-'+id).prop('readonly', false);
