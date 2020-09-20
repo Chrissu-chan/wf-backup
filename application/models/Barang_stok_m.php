@@ -287,6 +287,11 @@ class Barang_stok_m extends BaseModel {
         return $this;
     }
 
+    public function view_stock_opname_barang() {
+        $this->db->select('barang_stok.*')
+            ->join('stock_opname_barang', 'stock_opname_barang.id_barang = barang_stok.id_barang AND stock_opname_barang.id_cabang = \''.$this->session->userdata('cabang')->id.'\'');
+    }
+
     public function set_index_awal($value) {
         return $this->localization->number_value($value);
     }

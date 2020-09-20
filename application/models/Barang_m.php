@@ -30,6 +30,13 @@ class Barang_m extends BaseModel {
             ->join('satuan', 'satuan.id = barang.id_satuan')
 	        ->join('obat', 'obat.id_barang = barang.id');
     }
+    
+    public function view_barang_stock_opname() {
+	    $this->db->select('barang.*, satuan.satuan, obat.id AS id_obat, stock_opname_barang.id AS stock_opname_barang')
+		    ->join('obat', 'obat.id_barang = barang.id')
+            ->join('satuan', 'satuan.id = barang.id_satuan')
+		    ->join('stock_opname_barang', 'stock_opname_barang.id_barang = barang.id AND stock_opname_barang.id_cabang = \''.$this->session->userdata('cabang')->id.'\'', 'left');
+    }
 
     public function scope_not_located() {
         $this->db->where('id_rak_gudang', 0);

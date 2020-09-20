@@ -50,7 +50,9 @@ class Stock_opname extends BaseController {
 		}
 		$title = "Stock Opname";
 		$post = $this->input->post();
-		$barang_stok = $this->barang_stok_m->where('id_gudang', $post['id_gudang'])->get();
+		$barang_stok = $this->barang_stok_m->view('stock_opname_barang')
+			->where('barang_stok.id_gudang', $post['id_gudang'])
+			->get();
 		if ($barang_stok) {
 			$post['waktu_mulai'] = date('Y-m-d H:i:s');
 			$post['opened_by'] = $this->auth->username;
