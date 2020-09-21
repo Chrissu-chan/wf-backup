@@ -33,6 +33,12 @@ class Pembelian extends BaseController
 
         $cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
+        $file_name = array();
+
+        $file_name[] = 'beli';
+
+        $file_name[] = $post['rekap'];
+
         $style = array(
             'borders' => array(
                 'bottom' => array(
@@ -49,15 +55,21 @@ class Pembelian extends BaseController
 
         if ($post['periode_awal']) {
             $this->pembelian_barang_m->where('pembelian.tanggal >= ', date('Y-m-d', strtotime($post['periode_awal'])));
+            $file_name[] = $post['periode_awal'];
         }
         if ($post['periode_akhir']) {
             $this->pembelian_barang_m->where('pembelian.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
+            $file_name[] = $post['periode_akhir'];
         }
         if ($post['supplier']) {
             $this->pembelian_barang_m->where('pembelian.id_supplier', $post['supplier']);
         }
+        
+        $file_name[] = $post['supplier_desc'];
+
         if ($post['user']) {
             $this->pembelian_barang_m->where('pembelian.created_by', $post['user']);
+            $file_name[] = $post['user'];
         }
 
         switch ($post['rekap']) {
@@ -214,7 +226,7 @@ class Pembelian extends BaseController
         }
 
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-        header('Content-Disposition: attachment; filename="pembelian-' . date('Ymdhis') . '.xlsx"');
+        header('Content-Disposition: attachment; filename="'.implode('_', $file_name).'.xlsx"');
         $writer->save("php://output");
     }
 }

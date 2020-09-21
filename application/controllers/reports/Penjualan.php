@@ -34,6 +34,12 @@ class Penjualan extends BaseController
 
 		$cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
 
+		$file_name = array();
+
+		$file_name[] = 'jual';
+
+		$file_name[] = $post['rekap'];
+
 		$style = array(
 			'borders' => array(
 				'bottom' => array(
@@ -50,18 +56,25 @@ class Penjualan extends BaseController
 
 		if ($post['periode_awal']) {
 			$this->penjualan_produk_m->where('penjualan.tanggal >= ', date('Y-m-d', strtotime($post['periode_awal'])));
+			$file_name[] = $post['periode_awal'];
 		}
 		if ($post['periode_akhir']) {
 			$this->penjualan_produk_m->where('penjualan.tanggal <= ', date('Y-m-d', strtotime($post['periode_akhir'])));
+			$file_name[] = $post['periode_akhir'];
 		}
 		if ($post['shift']) {
 			$this->penjualan_produk_m->where('shift_aktif.id_shift_waktu', $post['shift']);
 		}
+
+		$file_name[] = $post['shift_desc'];
+
 		if ($post['kasir']) {
 			$this->penjualan_produk_m->where('penjualan.created_by', $post['kasir']);
+			$file_name[] = $post['kasir'];
 		}
 		if ($post['jenis_produk']) {
 			$this->penjualan_produk_m->where('produk.jenis', $post['jenis_produk']);
+			$file_name[] = $post['jenis_produk'];
 		}
 
 		$grand_total = 0;
@@ -335,7 +348,7 @@ class Penjualan extends BaseController
 		}
 
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-		header('Content-Disposition: attachment; filename="penjualan-' . date('Ymdhis') . '.xlsx"');
+		header('Content-Disposition: attachment; filename="'.implode('_', $file_name). '.xlsx"');
 		$writer->save("php://output");
 	}
 }

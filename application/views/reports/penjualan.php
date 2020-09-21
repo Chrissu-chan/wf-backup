@@ -28,7 +28,8 @@
                     </div>
                     <div class="form-group">
                         <label>{{shift}}</label>
-                        <?= $this->form->select('shift', lists($this->shift_waktu_m->scope('kasir')->get(), 'id', 'shift_waktu', true), null, 'class="form-control"') ?>
+                        <?= $this->form->select('shift', lists($this->shift_waktu_m->scope('kasir')->get(), 'id', 'shift_waktu', true), null, 'class="form-control" id="shift"') ?>
+                        <input type="hidden" name="shift_desc" id="shift_desc" value="all_shift">
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -48,6 +49,16 @@
         </div>
     </div>
     <?= $this->form->close() ?>
+<?php $this->template->endsection() ?>
+
+<?php $this->template->section('page_script') ?>
+<script>
+    $('#shift').change(function() {
+        if ($('#shift').val()) {
+            $('#shift_desc').val($('#shift option:selected').text());
+        }
+    })
+</script>
 <?php $this->template->endsection() ?>
 
 <?php $this->template->view('layouts/main') ?>

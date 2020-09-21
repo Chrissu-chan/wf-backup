@@ -28,7 +28,8 @@
                     </div>
                     <div class="form-group">
                         <label>{{supplier}}</label>
-                        <?= $this->form->select('supplier', lists($this->supplier_cabang_m->view('supplier')->scope('cabang_aktif')->get(), 'id', 'supplier', true), null, 'class="form-control"') ?>
+                        <?= $this->form->select('supplier', lists($this->supplier_cabang_m->view('supplier')->scope('cabang_aktif')->get(), 'id', 'supplier', true), null, 'class="form-control" id="supplier"') ?>
+                        <input type="hidden" name="supplier_desc" id="supplier_desc" value="all_supplier"> 
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -44,6 +45,16 @@
         </div>
     </div>
     <?= $this->form->close() ?>
+<?php $this->template->endsection() ?>
+
+<?php $this->template->section('page_script') ?>
+<script>
+    $('#supplier').change(function() {
+        if ($('#supplier').val()) {
+            $('#supplier_desc').val($('#supplier option:selected').text());
+        }
+    })
+</script>
 <?php $this->template->endsection() ?>
 
 <?php $this->template->view('layouts/main') ?>
