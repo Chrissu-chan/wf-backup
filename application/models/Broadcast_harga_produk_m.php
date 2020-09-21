@@ -10,11 +10,17 @@ class Broadcast_harga_produk_m extends BaseModel {
 	protected $timestamps = true;
 
 	public function view_broadcast_harga_produk() {
-		$this->db->select('broadcast_harga_produk.*, produk.kode, produk.produk, satuan.satuan')
-			->join('cabang', 'cabang.id = broadcast_harga_produk.id_cabang OR broadcast_harga_produk.id_cabang = 0')
+		$this->db->select('broadcast_harga_produk.*, produk.kode, produk.produk, satuan.satuan, cabang.nama AS nama_cabang')
+			->join('cabang', 'cabang.id = broadcast_harga_produk.id_cabang', 'left')
 			->join('produk', 'produk.id = broadcast_harga_produk.id_produk')
 			->join('satuan', 'satuan.id = broadcast_harga_produk.id_satuan', 'left')
 			->where('broadcast_harga_produk.harga_awal != broadcast_harga_produk.harga_akhir');
+	}
+
+	public function scope_cabang_aktif() {
+		$this->db->group_start();
+		$this->db->where('id_cabang', 0) -> or_where('id_cabang', $this->session->userdata('cabang')->id);
+		$this->db->group_end();
 	}
 
 	public function set_jumlah($value) {

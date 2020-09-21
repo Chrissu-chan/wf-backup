@@ -42,8 +42,8 @@ class Dashboard extends BaseController {
 		}
 
 	    $broadcast_harga_produk = $this->broadcast_harga_produk_m->view('broadcast_harga_produk')
-		    ->order_by('tanggal', 'DESC')
-		    ->limit(20)
+			->scope('cabang_aktif')
+			->order_by('created_at', 'DESC')
 		    ->get();
 	    $margin_laba = $this->produk_harga_m->view('margin_laba')
 		    ->get();

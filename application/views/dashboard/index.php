@@ -29,6 +29,7 @@
 					<thead>
 						<tr>
 							<th width="150">{{tanggal}}</th>
+							<th width="150">{{nama_cabang}}</th>
 							<th width="150">{{kode}}</th>
 							<th>{{produk}}</th>
 							<th width="100">{{satuan}}</th>
@@ -41,8 +42,9 @@
 					<tbody>
 						<?php if ($broadcast_harga_produk) { ?>
 							<?php foreach ($broadcast_harga_produk as $perubahan_harga) { ?>
-								<tr>
+								<tr height="45">
 									<td><?= $this->localization->human_date($perubahan_harga->tanggal) ?></td>
+									<td><?= ($perubahan_harga->id_cabang == 0 ? 'General' : $perubahan_harga->nama_cabang) ?></td>
 									<td><?= $perubahan_harga->kode ?></td>
 									<td><?= $perubahan_harga->produk ?></td>
 									<td><?= $perubahan_harga->satuan ?></td>

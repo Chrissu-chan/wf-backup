@@ -91,6 +91,7 @@ class Pengaturan_harga extends BaseController
                             ->where('id_satuan', $r_satuan_konversi->id)
                             ->order_by('urutan', 'ASC')
                             ->get();
+                        $model->harga_satuan[$r_satuan_konversi->id] = null;
                         if ($rs_harga_satuan) {
                             foreach ($rs_harga_satuan as $r_harga_satuan) {
                                 $r_harga_satuan->konversi = $r_satuan_konversi->konversi;
