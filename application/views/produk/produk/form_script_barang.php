@@ -66,7 +66,8 @@
                 html_harga_satuan += '<thead><tr>';
                 html_harga_satuan += '<th width="150" class="text-center">{{urutan}}</th>';
                 html_harga_satuan += '<th width="150" class="text-center">{{jumlah}}</th>';
-                html_harga_satuan += '<th width="150" class="text-center">{{margin}}%</th>';
+                html_harga_satuan += '<th width="150" class="text-center">{{margin_bawah}}%</th>';
+				html_harga_satuan += '<th width="150" class="text-center">{{margin_atas}}%</th>';
                 html_harga_satuan += '<th width="150" class="text-center">{{laba}}%</th>';
                 html_harga_satuan += '<th class="text-center">{{harga}}</th>';
                 html_harga_satuan += '<th width="1"></th>';
@@ -81,6 +82,7 @@
                 html_harga_satuan += '</td>';
                 html_harga_satuan += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][jumlah]" value="1" id="harga_satuan_utama-jumlah-'+no_satuan_utama+'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0" readonly></td>';
                 html_harga_satuan += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][margin_persen]" id="harga_satuan_utama-margin_persen-'+no_satuan_utama+'" onkeyup="set_harga_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
+				html_harga_satuan += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][margin_persen_atas]" id="harga_satuan_utama-margin_persen_atas-'+no_satuan_utama+'" onkeyup="set_harga_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
                 html_harga_satuan += '<td id="harga_satuan_utama-laba_persen-'+no_satuan_utama+'" class="text-center"></td>';
                 html_harga_satuan += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][harga]" id="harga_satuan_utama-harga-'+no_satuan_utama+'" onkeyup="set_laba_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
                 html_harga_satuan += '<td></td>';
@@ -93,6 +95,7 @@
                 html_harga_satuan += '</td>';
                 html_harga_satuan += '<td><input type="text" name="form_add_harga_satuan_utama_jumlah" id="harga_satuan_utama-jumlah-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"></td>';
                 html_harga_satuan += '<td><input type="text" name="form_add_harga_satuan_utama_margin_persen" id="harga_satuan_utama-margin_persen-0" onkeyup="set_harga_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"></td>';
+				html_harga_satuan += '<td><input type="text" name="form_add_harga_satuan_utama_margin_persen_atas" id="harga_satuan_utama-margin_persen_atas-0" onkeyup="set_harga_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"></td>';
                 html_harga_satuan += '<td id="harga_satuan_utama-laba_persen-0" class="text-center"></td>';
                 html_harga_satuan += '<td><input type="text" name="form_add_harga_satuan_utama_harga" id="harga_satuan_utama-harga-0" onkeyup="set_laba_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"></td>';
                 html_harga_satuan += '<td><button type="button" class="btn btn-primary btn-sm" onclick="harga_satuan_utama_add()"><i class="fa fa-plus"></i></button></td>';
@@ -111,7 +114,8 @@
                     html_harga_satuan += '<thead><tr>';
                     html_harga_satuan += '<th width="150" class="text-center">{{urutan}}</th>';
                     html_harga_satuan += '<th width="150" class="text-center">{{jumlah}}</th>';
-                    html_harga_satuan += '<th width="150" class="text-center">{{margin}}%</th>';
+                    html_harga_satuan += '<th width="150" class="text-center">{{margin_bawah}}%</th>';
+					html_harga_satuan += '<th width="150" class="text-center">{{margin_atas}}%</th>';
                     html_harga_satuan += '<th width="150" class="text-center">{{laba}}%</th>';
                     html_harga_satuan += '<th class="text-center">{{harga}}</th>';
                     html_harga_satuan += '<th width="1"></th>';
@@ -154,6 +158,7 @@
 	    var urutan = $('#harga_satuan_utama-urutan-0').val();
 	    var jumlah = $('#harga_satuan_utama-jumlah-0').val();
 	    var margin_persen = $('#harga_satuan_utama-margin_persen-0').val();
+		var margin_persen_atas = $('#harga_satuan_utama-margin_persen_atas-0').val();
 	    var laba_persen = $('#harga_satuan_utama-laba_persen-0').html();
 	    var harga = $('#harga_satuan_utama-harga-0').val();
 
@@ -179,6 +184,7 @@
 		    html_row += '</td>';
 		    html_row += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][jumlah]" value="'+jumlah+'" id="harga_satuan_utama-jumlah-'+no_satuan_utama+'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"></td>';
 		    html_row += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][margin_persen]" value="'+margin_persen+'" id="harga_satuan_utama-margin_persen-'+no_satuan_utama+'" onkeyup="set_harga_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
+			html_row += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][margin_persen_atas]" value="'+margin_persen_atas+'" id="harga_satuan_utama-margin_persen_atas-'+no_satuan_utama+'" onkeyup="set_harga_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
 		    html_row += '<td id="harga_satuan_utama-laba_persen-'+no_satuan_utama+'" class="text-center">'+laba_persen+'</td>';
 		    html_row += '<td><input type="text" name="harga_satuan_utama['+no_satuan_utama+'][harga]" value="'+harga+'" id="harga_satuan_utama-harga-'+no_satuan_utama+'" onkeyup="set_laba_utama('+no_satuan_utama+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
 		    html_row += '<td><button type="button" class="btn btn-danger btn-sm" onclick="harga_satuan_utama_remove('+no_satuan_utama+')"><i class="fa fa-trash"></i></button></td>';
@@ -189,6 +195,7 @@
 		    $('#harga_satuan_utama-urutan-0').val('');
 		    $('#harga_satuan_utama-jumlah-0').val('');
 		    $('#harga_satuan_utama-margin_persen-0').val('');
+			$('#harga_satuan_utama-margin_persen_atas-0').val('');
 		    $('#harga_satuan_utama-laba_persen-0').html('');
 		    $('#harga_satuan_utama-harga-0').val('');
 	    } else {
@@ -230,6 +237,7 @@
 	    var urutan = $('#harga_satuan-urutan-'+id+'-0').val();
 	    var jumlah = $('#harga_satuan-jumlah-'+id+'-0').val();
 	    var margin_persen = $('#harga_satuan-margin_persen-'+id+'-0').val();
+		var margin_persen_atas = $('#harga_satuan-margin_persen_atas-'+id+'-0').val();
 	    var laba_persen = $('#harga_satuan-laba_persen-'+id+'-0').html();
 	    var harga = $('#harga_satuan-harga-'+id+'-0').val();
 
@@ -256,6 +264,7 @@
 		    html_row += '</td>';
 		    html_row += '<td><input type="text" name="harga_satuan['+id+']['+no_satuan+'][jumlah]" value="'+jumlah+'" id="harga_satuan-jumlah-'+id+'-'+no_satuan+'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"></td>';
 		    html_row += '<td><input type="text" name="harga_satuan['+id+']['+no_satuan+'][margin_persen]" value="'+margin_persen+'" id="harga_satuan-margin_persen-'+id+'-'+no_satuan+'" onkeyup="set_harga_satuan('+id+', '+no_satuan+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
+			html_row += '<td><input type="text" name="harga_satuan['+id+']['+no_satuan+'][margin_persen_atas]" value="'+margin_persen_atas+'" id="harga_satuan-margin_persen_atas-'+id+'-'+no_satuan+'" onkeyup="set_harga_satuan('+id+', '+no_satuan+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
 		    html_row += '<td id="harga_satuan-laba_persen-'+id+'-'+no_satuan+'" class="text-center">'+laba_persen+'</td>';
 		    html_row += '<td><input type="text" name="harga_satuan['+id+']['+no_satuan+'][harga]" value="'+harga+'" id="harga_satuan-harga-'+id+'-'+no_satuan+'" onkeyup="set_laba_satuan('+id+', '+no_satuan+')" class="form-control input-sm text-right" data-input-type="number-format"></td>';
 		    html_row += '<td><button type="button" class="btn btn-danger btn-sm" onclick="harga_satuan_remove('+id+', '+no_satuan+')"><i class="fa fa-trash"></i></button></td>';
@@ -266,6 +275,7 @@
 		    $('#harga_satuan-urutan-'+id+'-0').val('');
 		    $('#harga_satuan-jumlah-'+id+'-0').val('');
 		    $('#harga_satuan-margin_persen-'+id+'-0').val('');
+			$('#harga_satuan-margin_persen_atas-'+id+'-0').val('');
 		    $('#harga_satuan-laba_persen-'+id+'-0').html('');
 		    $('#harga_satuan-harga-'+id+'-0').val('');
 	    } else {

@@ -433,7 +433,8 @@ class Obat extends BaseController {
             $total = trim($worksheet[$i]['AG']);
             $produk = trim($worksheet[$i]['AH']);
             $margin_persen = trim($worksheet[$i]['AI']);
-            $harga = trim($worksheet[$i]['AJ']);
+            $margin_persen_atas = trim($worksheet[$i]['AJ']);
+            $harga = trim($worksheet[$i]['AK']);
 
             $data = array(
                 'kode' => $kode,
@@ -561,6 +562,7 @@ class Obat extends BaseController {
                         'id_satuan' => $r_satuan->id,
                         'jumlah' => 1,
                         'margin_persen' => $margin_persen,
+                        'margin_persen_atas' => $margin_persen_atas,
                         'harga' => $harga,
                         'urutan' => 1,
                         'utama' => 1
@@ -597,6 +599,7 @@ class Obat extends BaseController {
                         'id_satuan' => $r_satuan->id,
                         'jumlah' => 1,
                         'margin_persen' => $margin_persen,
+                        'margin_persen_atas' => $margin_persen_atas,
                         'harga' => $harga,
                         'urutan' => 1,
                         'utama' => 1
@@ -605,7 +608,7 @@ class Obat extends BaseController {
             }
 
             $konversi_satuan = array('J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
-            $produk_harga = array('J' => array('AK', 'AL'), 'M' => array('AM', 'AN'), 'P' => array('AO', 'AP'), 'S' => array('AQ', 'AR'));
+            $produk_harga = array('J' => array('AL', 'AM', 'AN'), 'M' => array('AO', 'AP', 'AQ'), 'P' => array('AR', 'AS', 'AT'), 'S' => array('AU', 'AV', 'AW'));
 
             for ($j = 0; $j < 12; $j++) {
                 $id_satuan = trim($worksheet[$i][$konversi_satuan[$j]]);
@@ -651,7 +654,8 @@ class Obat extends BaseController {
                 }
 
                 $margin_persen = trim($worksheet[$i][$produk_harga[$konversi_satuan[$j]][0]]);
-                $harga = trim($worksheet[$i][$produk_harga[$konversi_satuan[$j]][1]]);
+                $margin_persen_atas = trim($worksheet[$i][$produk_harga[$konversi_satuan[$j]][1]]);
+                $harga = trim($worksheet[$i][$produk_harga[$konversi_satuan[$j]][2]]);
                 if ($produk && $satuan && $harga > 0) {
                     $r_produk_harga = $this->produk_harga_m->where('id_produk', $r_produk->id)
                         ->where('id_satuan', $r_satuan_konversi->id)
@@ -665,6 +669,7 @@ class Obat extends BaseController {
                             'id_satuan' => $r_satuan_konversi->id,
                             'jumlah' => 1,
                             'margin_persen' => $margin_persen,
+                            'margin_persen_atas' => $margin_persen_atas,
                             'harga' => $harga,
                             'urutan' => 1,
                             'utama' => 0
@@ -802,7 +807,7 @@ class Obat extends BaseController {
         );
 
         $konversi_satuan = array('J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U');
-        $produk_harga = array('J' => array('AK', 'AL'), 'M' => array('AM', 'AN'), 'P' => array('AO', 'AP'), 'S' => array('AQ', 'AR'));
+        $produk_harga = array('J' => array('AL', 'AM', 'AN'), 'M' => array('AO', 'AP', 'AQ'), 'P' => array('AR', 'AS', 'AT'), 'S' => array('AU', 'AV', 'AW'));
 
         $rs_barang = $this->barang_obat_m->view('obat_export')->get();
         $arr_id_satuan = array();
@@ -848,12 +853,17 @@ class Obat extends BaseController {
 
             if ($barang->produk) {
                 $worksheet->getCell('AI' . $row)->setValue($barang->margin_persen);
-                $worksheet->getCell('AJ' . $row)->setValue($barang->harga);
+                $worksheet->getCell('AJ' . $row)->setValue($barang->margin_persen_atas);
+                $worksheet->getCell('AK' . $row)->setValue($barang->harga);
             }
 
             $j = 0;
+            $i = 0;
             if ($rs_konversi_satuan) {
                 foreach ($rs_konversi_satuan as $r_konversi_satuan) {
+                    if ($i > 3) {
+                        break;
+                    }
                     $worksheet->getCell($konversi_satuan[$j] . $row)->setValue($r_konversi_satuan->id_satuan_asal);
                     $worksheet->getCell($konversi_satuan[$j + 1] . $row)->setValue($r_konversi_satuan->satuan_asal);
                     $worksheet->getCell($konversi_satuan[$j + 2] . $row)->setValue($r_konversi_satuan->konversi);
@@ -862,11 +872,12 @@ class Obat extends BaseController {
                         $r_produk_harga = isset($arr_produk_harga[$barang->id_produk][$r_konversi_satuan->id_satuan_asal]) ? $arr_produk_harga[$barang->id_produk][$r_konversi_satuan->id_satuan_asal] : null;
                         if ($r_produk_harga) {
                             $worksheet->getCell($produk_harga[$konversi_satuan[$j]][0] . $row)->setValue($r_produk_harga->margin_persen);
-                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][1] . $row)->setValue($r_produk_harga->harga);
+                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][1] . $row)->setValue($r_produk_harga->margin_persen_atas);
+                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][2] . $row)->setValue($r_produk_harga->harga);
                         }
                     }
-
                     $j += 3;
+                    $i++;
                 }
             }
 

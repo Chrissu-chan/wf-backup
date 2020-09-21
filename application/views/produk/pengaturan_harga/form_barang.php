@@ -83,7 +83,8 @@
                         <tr>
                             <th width="150" class="text-center">{{urutan}}</th>
                             <th width="150" class="text-center">{{jumlah}}</th>
-                            <th width="150" class="text-center">{{margin}}%</th>
+                            <th width="150" class="text-center">{{margin_bawah}}%</th>                            
+                            <th width="150" class="text-center">{{margin_atas}}%</th>                            
                             <th width="150" class="text-center">{{laba}}%</th>
                             <th class="text-right">{{harga}}</th>
                             <th width="1"></th>
@@ -100,6 +101,7 @@
                                 </td>
                                 <td><?= $this->form->number('harga_satuan_utama['.$key.'][jumlah]', null, 'id="harga_satuan_utama-jumlah-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0" '.(($harga_satuan_utama['utama']) == 1 ? 'readonly' : '').'', "") ?></td>
                                 <td><?= $this->form->number('harga_satuan_utama['.$key.'][margin_persen]', null, 'id="harga_satuan_utama-margin_persen-'.$key.'" onkeyup="set_harga_utama('.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                <td><?= $this->form->number('harga_satuan_utama['.$key.'][margin_persen_atas]', null, 'id="harga_satuan_utama-margin_persen_atas-'.$key.'" onkeyup="set_harga_utama('.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                            <td id="harga_satuan_utama-laba_persen-<?= $key ?>" class="text-center">
 		                            <?php
 			                            $harga_beli_terakhir = $this->localization->number_value($this->form->data('harga_beli_terakhir'));
@@ -120,6 +122,7 @@
                             </td>
                             <td><?= $this->form->number('form_add_harga_satuan_utama_jumlah', null, 'id="harga_satuan_utama-jumlah-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
                             <td><?= $this->form->number('form_add_harga_satuan_utama_margin_persen', null, 'id="harga_satuan_utama-margin_persen-0" onkeyup="set_harga_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                            <td><?= $this->form->number('form_add_harga_satuan_utama_margin_persen_atas', null, 'id="harga_satuan_utama-margin_persen_atas-0" onkeyup="set_harga_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                        <td id="harga_satuan_utama-laba_persen-0" class="text-center"></td>
                             <td><?= $this->form->number('form_add_harga_satuan_utama_harga', null, 'id="harga_satuan_utama-harga-0" onkeyup="set_laba_utama(0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
                             <td><button type="button" class="btn btn-primary btn-sm" onclick="harga_satuan_utama_add()"><i class="fa fa-plus"></i></button></td>
@@ -141,7 +144,8 @@
                         <tr>
                             <th width="150" class="text-center">{{urutan}}</th>
                             <th width="150" class="text-center">{{jumlah}}</th>
-                            <th width="150" class="text-center">{{margin}}%</th>
+                            <th width="150" class="text-center">{{margin_bawah}}%</th>
+                            <th width="150" class="text-center">{{margin_atas}}%</th>
                             <th width="150" class="text-center">{{laba}}%</th>
                             <th class="text-right">{{harga}}</th>
                             <th width="1"></th>
@@ -160,6 +164,7 @@
                                         </td>
                                         <td><?= $this->form->number('harga_satuan['.$satuan_konversi['id'].']['.$key.'][jumlah]', null, 'id="harga_satuan-jumlah-'.$satuan_konversi['id'].'-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
                                         <td><?= $this->form->number('harga_satuan['.$satuan_konversi['id'].']['.$key.'][margin_persen]', null, 'id="harga_satuan-margin_persen-'.$satuan_konversi['id'].'-'.$key.'" onkeyup="set_harga_satuan('.$satuan_konversi['id'].', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                        <td><?= $this->form->number('harga_satuan['.$satuan_konversi['id'].']['.$key.'][margin_persen_atas]', null, 'id="harga_satuan-margin_persen_atas-'.$satuan_konversi['id'].'-'.$key.'" onkeyup="set_harga_satuan('.$satuan_konversi['id'].', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                                    <td id="harga_satuan-laba_persen-<?= $satuan_konversi['id'] ?>-<?= $key ?>" class="text-center">
 		                                    <?php
 			                                    $harga_beli_terakhir = $this->localization->number_value($this->form->data('harga_beli_terakhir'));
@@ -182,6 +187,7 @@
                                     </td>
                                     <td><?= $this->form->number('form_add_harga_satuan_jumlah_'.$satuan_konversi['id'], null, 'id="harga_satuan-jumlah-'.$satuan_konversi['id'].'-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
                                     <td><?= $this->form->number('form_add_harga_satuan_margin_persen_'.$satuan_konversi['id'], null, 'id="harga_satuan-margin_persen-'.$satuan_konversi['id'].'-0" onkeyup="set_harga_satuan('.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                    <td><?= $this->form->number('form_add_harga_satuan_margin_persen_atas_'.$satuan_konversi['id'], null, 'id="harga_satuan-margin_persen_atas-'.$satuan_konversi['id'].'-0" onkeyup="set_harga_satuan('.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                                <td id="harga_satuan-laba_persen-<?= $satuan_konversi['id'] ?>-0" class="text-center"></td>
                                     <td><?= $this->form->number('form_add_harga_satuan_harga_'.$satuan_konversi['id'], null, 'id="harga_satuan-harga-'.$satuan_konversi['id'].'-0" onkeyup="set_laba_satuan('.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
                                     <td><button type="button" class="btn btn-primary btn-sm" onclick="harga_satuan_add(<?= $satuan_konversi['id'] ?>)"><i class="fa fa-plus"></i></button></td>
@@ -234,6 +240,7 @@
                                 <th width="150" class="text-center">{{urutan}}</th>
                                 <th width="150" class="text-center">{{jumlah}}</th>
                                 <th width="150" class="text-center">{{margin}}%</th>
+                                <th width="150" class="text-center">{{margin_atas}}%</th>
                                 <th width="150" class="text-center">{{laba}}%</th>
                                 <th class="text-right">{{harga}}</th>
                                 <th width="1"></th>
@@ -251,6 +258,7 @@
 	                                        </td>
 	                                        <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][jumlah]', null, 'id="cabang-harga_satuan_utama-jumlah-'.$id_cabang.'-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0" '.(($cabang_harga_satuan_utama['utama']) == 1 ? 'readonly' : '').'', "") ?></td>
 	                                        <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][margin_persen]', null, 'id="cabang-harga_satuan_utama-margin_persen-'.$id_cabang.'-'.$key.'" onkeyup="set_cabang_harga_utama('.$id_cabang.', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                            <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][margin_persen_atas]', null, 'id="cabang-harga_satuan_utama-margin_persen_atas-'.$id_cabang.'-'.$key.'" onkeyup="set_cabang_harga_utama('.$id_cabang.', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 		                                    <td id="cabang-harga_satuan_utama-laba_persen-<?= $id_cabang ?>-<?= $key ?>" class="text-center">
 			                                    <?php
 				                                    $harga_beli_terakhir = $this->localization->number_value($this->form->data('cabang_hpp')[$id_cabang]['harga_beli_terakhir']);
@@ -274,6 +282,7 @@
 			                            </td>
 			                            <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][jumlah]', 1, 'id="cabang-harga_satuan_utama-jumlah-'.$id_cabang.'-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0" readonly', "") ?></td>
 			                            <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][margin_persen]', null, 'id="cabang-harga_satuan_utama-margin_persen-'.$id_cabang.'-'.$key.'" onkeyup="set_cabang_harga_utama('.$id_cabang.', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                        <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][margin_persen_atas]', null, 'id="cabang-harga_satuan_utama-margin_persen_atas-'.$id_cabang.'-'.$key.'" onkeyup="set_cabang_harga_utama('.$id_cabang.', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 			                            <td id="cabang-harga_satuan_utama-laba_persen-<?= $id_cabang ?>-<?= $key ?>" class="text-center"></td>
 			                            <td><?= $this->form->number('cabang_harga_satuan_utama['.$id_cabang.']['.$key.'][harga]', null, 'id="cabang-harga_satuan_utama-harga-'.$id_cabang.'-'.$key.'" onkeyup="set_cabang_laba_utama('.$id_cabang.', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 			                            <td><?= (isset($cabang_harga_satuan_utama['utama']) == 1 ? '<button type="button" class="btn btn-danger btn-sm" onclick="cabang_harga_satuan_utama_remove('.$id_cabang.','.$key.')"><i class="fa fa-trash"></i></button>' : '') ?></td>
@@ -287,6 +296,7 @@
 		                            </td>
 		                            <td><?= $this->form->number('form_add_cabang_harga_satuan_utama_jumlah_'.$id_cabang, null, 'id="cabang-harga_satuan_utama-jumlah-'.$id_cabang.'-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
 		                            <td><?= $this->form->number('form_add_cabang_harga_satuan_utama_margin_persen_'.$id_cabang, null, 'id="cabang-harga_satuan_utama-margin_persen-'.$id_cabang.'-0" onkeyup="set_cabang_harga_utama('.$id_cabang.', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                    <td><?= $this->form->number('form_add_cabang_harga_satuan_utama_margin_persen_atas_'.$id_cabang, null, 'id="cabang-harga_satuan_utama-margin_persen_atas-'.$id_cabang.'-0" onkeyup="set_cabang_harga_utama('.$id_cabang.', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 		                            <td id="cabang-harga_satuan_utama-laba_persen-<?= $id_cabang ?>-0" class="text-center"></td>
 		                            <td><?= $this->form->number('form_add_cabang_harga_satuan_utama_harga_'.$id_cabang, null, 'id="cabang-harga_satuan_utama-harga-'.$id_cabang.'-0" onkeyup="set_cabang_laba_utama('.$id_cabang.', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 		                            <td><button type="button" class="btn btn-primary btn-sm" onclick="cabang_harga_satuan_utama_add(<?= $id_cabang ?>)"><i class="fa fa-plus"></i></button></td>
@@ -307,7 +317,8 @@
                                     <tr>
                                         <th width="150" class="text-center">{{urutan}}</th>
                                         <th width="150" class="text-center">{{jumlah}}</th>
-                                        <th width="150" class="text-center">{{margin}}%</th>
+                                        <th width="150" class="text-center">{{margin_bawah}}%</th>
+                                        <th width="150" class="text-center">{{margin_atas}}%</th>
                                         <th width="150" class="text-center">{{laba}}%</th>
                                         <th class="text-right">{{harga}}</th>
                                         <th width="1"></th>
@@ -326,6 +337,7 @@
                                                 </td>
                                                 <td><?= $this->form->number('cabang_harga_satuan['.$id_cabang.']['.$satuan_konversi['id'].']['.$key.'][jumlah]', null, 'id="cabang-harga_satuan-jumlah-'.$id_cabang.'-'.$satuan_konversi['id'].'-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
                                                 <td><?= $this->form->number('cabang_harga_satuan['.$id_cabang.']['.$satuan_konversi['id'].']['.$key.'][margin_persen]', null, 'id="cabang-harga_satuan-margin_persen-'.$id_cabang.'-'.$satuan_konversi['id'].'-'.$key.'" onkeyup="set_cabang_harga_satuan('.$id_cabang.', '.$satuan_konversi['id'].', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                                <td><?= $this->form->number('cabang_harga_satuan['.$id_cabang.']['.$satuan_konversi['id'].']['.$key.'][margin_persen_atas]', null, 'id="cabang-harga_satuan-margin_persen_atas-'.$id_cabang.'-'.$satuan_konversi['id'].'-'.$key.'" onkeyup="set_cabang_harga_satuan('.$id_cabang.', '.$satuan_konversi['id'].', '.$key.')" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                                            <td id="cabang-harga_satuan-laba_persen-<?= $id_cabang ?>-<?= $satuan_konversi['id'] ?>-<?= $key ?>" class="text-center">
 		                                            <?php
 			                                            $harga_beli_terakhir = $this->localization->number_value($this->form->data('cabang_hpp')[$id_cabang]['harga_beli_terakhir']);
@@ -348,6 +360,7 @@
                                             </td>
                                             <td><?= $this->form->number('form_add_cabang_harga_satuan_jumlah_'.$id_cabang.'_'.$satuan_konversi['id'], null, 'id="cabang-harga_satuan-jumlah-'.$id_cabang.'-'.$satuan_konversi['id'].'-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-precision="0"', "") ?></td>
                                             <td><?= $this->form->number('form_add_cabang_harga_satuan_margin_persen_'.$id_cabang.'_'.$satuan_konversi['id'], null, 'id="cabang-harga_satuan-margin_persen-'.$id_cabang.'-'.$satuan_konversi['id'].'-0" onkeyup="set_cabang_harga_satuan('.$id_cabang.', '.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
+                                            <td><?= $this->form->number('form_add_cabang_harga_satuan_margin_persen_atas_'.$id_cabang.'_'.$satuan_konversi['id'], null, 'id="cabang-harga_satuan-margin_persen_atas-'.$id_cabang.'-'.$satuan_konversi['id'].'-0" onkeyup="set_cabang_harga_satuan('.$id_cabang.', '.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
 	                                        <td id="cabang-harga_satuan-laba_persen-<?= $id_cabang ?>-<?= $satuan_konversi['id'] ?>-0" class="text-center"></td>
                                             <td><?= $this->form->number('form_add_cabang_harga_satuan_harga_'.$id_cabang.'_'.$satuan_konversi['id'], null, 'id="cabang-harga_satuan-harga-'.$id_cabang.'-'.$satuan_konversi['id'].'-0" onkeyup="set_cabang_laba_satuan('.$id_cabang.', '.$satuan_konversi['id'].', 0)" class="form-control input-sm text-right" data-input-type="number-format"', "") ?></td>
                                             <td><button type="button" class="btn btn-primary btn-sm" onclick="cabang_harga_satuan_add(<?= $id_cabang ?>,<?= $satuan_konversi['id'] ?>)"><i class="fa fa-plus"></i></button></td>
