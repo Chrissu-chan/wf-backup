@@ -264,7 +264,7 @@ class Barang extends BaseController
         if ($this->input->get('load')) {
             $this->load->library('datatable');
             return $this->datatable->resource($this->barang_m)
-                ->view('barang')
+                ->view('barang_stok')
                 ->generate();
         }
         $this->load->view('master/barang/browse');
