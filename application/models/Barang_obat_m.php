@@ -33,7 +33,7 @@ class Barang_obat_m extends Barang_m {
                 barang.*, obat.id_jenis_obat, obat.kandungan_obat, obat.dosis, obat.hpp, obat.diskon_persen, obat.hna, obat.ppn_persen, obat.total, kategori_barang.kategori_barang, jenis_barang.jenis_barang, satuan.grup, satuan.satuan, satuan_beli.satuan AS satuan_beli, jenis_obat.jenis_obat,
                 barang_kategori_obat.kategori_obat, barang_fungsi_obat.fungsi_obat,
                 obat.dosis, barang.minus, obat.hpp, obat.diskon_persen, obat.hna, obat.ppn_persen, obat.total,
-                produk.id AS id_produk, produk.produk, produk.ppn_persen AS produk_ppn_persen, produk.laba_persen AS produk_laba_persen, produk_harga.margin_persen, produk_harga.margin_persen_atas, produk_harga.harga
+                produk.id AS id_produk, produk.produk, produk.ppn_persen AS produk_ppn_persen, produk.laba_persen AS produk_laba_persen, produk_harga.margin_persen, produk_harga.harga
             ')
 			->join('obat', 'obat.id_barang = barang.id')
 			->join('kategori_barang', 'kategori_barang.id = barang.id_kategori_barang', 'left')

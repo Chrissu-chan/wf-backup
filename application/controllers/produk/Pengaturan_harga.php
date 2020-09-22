@@ -547,7 +547,7 @@ class Pengaturan_harga extends BaseController
         $success_count = 0;
         $config['upload_path'] = './' . $this->config->item('import_upload_path');
         $config['allowed_types'] = $this->config->item('import_allowed_file_types');
-        $config['max_size'] = $this->config->item('document_max_size');        
+        $config['max_size'] = $this->config->item('document_max_size');
         $this->load->library('upload', $config);
         if (!$this->upload->has('file')) {
             $this->redirect->with('error_message', $this->localization->lang('upload_required'))->back();
@@ -566,7 +566,7 @@ class Pengaturan_harga extends BaseController
         $worksheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
 
         $satuan = array('F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O');
-        $produk_harga = array('F' => array('P', 'Q', 'R'), 'H' => array('S', 'T', 'U'), 'J' => array('V', 'W', 'X'), 'L' => array('Y', 'Z', 'AA'), 'N' => array('AB', 'AC', 'AD'));
+        $produk_harga = array('F' => array('P', 'Q'), 'H' => array('R', 'S'), 'J' => array('T', 'U'), 'L' => array('V', 'W'), 'N' => array('X', 'Y'));
 
         $format = array(
             'A' => 'No',
@@ -616,7 +616,7 @@ class Pengaturan_harga extends BaseController
                 if (strtolower($cabang) == 'all') {
                     $id_cabang = 0;
                 } else {
-                    $cabang = $this->cabang_m->where('LOWER(nama)', strtolower($cabang))->first();                    
+                    $cabang = $this->cabang_m->where('LOWER(nama)', strtolower($cabang))->first();
                     if ($cabang) {
                         $id_cabang = $cabang->id;
                     } else {
@@ -628,8 +628,7 @@ class Pengaturan_harga extends BaseController
                 for ($j = 0; $j < 10; $j++) {
                     $id_satuan = trim($worksheet[$i][$satuan[$j]]);
                     $margin_persen = trim($worksheet[$i][$produk_harga[$satuan[$j]][0]]);
-                    $margin_persen_atas = trim($worksheet[$i][$produk_harga[$satuan[$j]][1]]);
-                    $harga = trim($worksheet[$i][$produk_harga[$satuan[$j]][2]]);
+                    $harga = trim($worksheet[$i][$produk_harga[$satuan[$j]][1]]);
                     if (!$id_satuan) {
                         $id_satuan = 0;
                     }
@@ -644,7 +643,6 @@ class Pengaturan_harga extends BaseController
                         if ($rs_produk_harga) {
                             $this->produk_harga_m->update($rs_produk_harga->id, array(
                                 'margin_persen' => $margin_persen,
-                                'margin_persen_atas' => $margin_persen_atas,
                                 'harga' => $harga
                             ));
                         } else {
@@ -654,7 +652,6 @@ class Pengaturan_harga extends BaseController
                                 'id_satuan' => $id_satuan,
                                 'jumlah' => 1,
                                 'margin_persen' => $margin_persen,
-                                'margin_persen_atas' => $margin_persen_atas,
                                 'harga' => $harga,
                                 'urutan' => 1
                             ));
@@ -689,15 +686,13 @@ class Pengaturan_harga extends BaseController
 
     public function export()
     {
-        ini_set('memory_limit', '512M');
-        
         $cabang = $this->cabang_gudang_m->view('cabang_gudang')->scope('aktif_cabang')->first_or_fail();
         $spreadsheet = IOFactory::load('public/produk/pengaturan_harga/import_pengaturan_harga.xlsx');
         $worksheet = $spreadsheet->getActiveSheet();
 
         $cols = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
         $konversi_satuan = array('H', 'I', 'J', 'K', 'L', 'M', 'N', 'O');
-        $produk_harga = array('H' => array('S', 'T', 'U'), 'J' => array('V', 'W', 'X'), 'L' => array('Y', 'Z', 'AA'), 'N' => array('AB', 'AC', 'AD'));
+        $produk_harga = array('H' => array('R', 'S'), 'J' => array('T', 'U'), 'L' => array('V', 'W'), 'N' => array('X', 'Y'));
 
         $style = array(
             'borders' => array(
@@ -714,36 +709,12 @@ class Pengaturan_harga extends BaseController
         );
 
         $rs_produk = $this->produk_harga_m->view('produk_harga')->get();
-        $arr_id_produk = array();
-        $arr_barang_id_satuan = array();
-        $arr_id_cabang = array();
-        foreach ($rs_produk as $produk) {
-            $arr_id_produk[$produk->id_produk] = $produk->id_produk;
-            $arr_barang_id_satuan[$produk->barang_id_satuan] = $produk->barang_id_satuan;
-            $arr_id_cabang[$produk->id_cabang] = $produk->id_cabang;
-        }
-        $rs_produk_harga = $this->produk_harga_m->where('id_cabang IN (\'' . implode('\',\'', $arr_id_cabang) . '\')', null, false)
-                ->where('id_produk IN (\'' . implode('\',\'', $arr_id_produk) . '\')', null, false)
-                ->where('jumlah', 1)
-                ->where('urutan', 1)
-                ->get();
-        $arr_produk_harga = array();
-        foreach ($rs_produk_harga as $_produk_harga) {
-            $arr_produk_harga[$_produk_harga->id_cabang][$_produk_harga->id_produk][] = $_produk_harga;
-        }        
-        $rs_konversi_satuan = $this->konversi_satuan_m->view('konversi_satuan')            
-            ->where('id_satuan_tujuan IN (\'' . implode('\',\'', $arr_barang_id_satuan) . '\')', null, false)
-            ->get();
-        $arr_konversi_satuan = array();
-        foreach ($rs_konversi_satuan as $r_konversi_satuan) {
-            $arr_konversi_satuan[$r_konversi_satuan->id_satuan_tujuan][] = $r_konversi_satuan;
-        }        
         $row = 7;
         $no = 1;
         $worksheet->getCell('A1')->setValue('Data Harga');
         $worksheet->getCell('A2')->setValue($cabang->nama);
         $worksheet->getCell('A3')->setValue(date('d-m-Y'));
-        foreach ($rs_produk as $key => $produk) {            
+        foreach ($rs_produk as $key => $produk) {
             $worksheet->getCell('A' . $row)->setValue($no);
             $worksheet->getCell('B' . $row)->setValue($produk->kode);
             $worksheet->getCell('C' . $row)->setValue($produk->barcode);
@@ -754,12 +725,15 @@ class Pengaturan_harga extends BaseController
                 $worksheet->getCell('E' . $row)->setValue('All');
             }
             $record_produk_harga = array();
-            $rs_produk_harga = isset($arr_produk_harga[$produk->id_cabang][$produk->id_produk]) ? $arr_produk_harga[$produk->id_cabang][$produk->id_produk] : null;
+            $rs_produk_harga = $this->produk_harga_m->where('id_cabang', $produk->id_cabang)
+                ->where('id_produk', $produk->id_produk)
+                ->where('jumlah', 1)
+                ->where('urutan', 1)
+                ->get();
             if ($rs_produk_harga) {
-                foreach ($rs_produk_harga as $r_produk_harga) {                             
+                foreach ($rs_produk_harga as $r_produk_harga) {
                     $record_produk_harga[$r_produk_harga->id_satuan][0] = $r_produk_harga->margin_persen;
-                    $record_produk_harga[$r_produk_harga->id_satuan][1] = $r_produk_harga->margin_persen_atas;
-                    $record_produk_harga[$r_produk_harga->id_satuan][2] = $r_produk_harga->harga;
+                    $record_produk_harga[$r_produk_harga->id_satuan][1] = $r_produk_harga->harga;
                 }
             }
             if ($produk->barang_id_satuan) {
@@ -767,38 +741,36 @@ class Pengaturan_harga extends BaseController
                 $worksheet->getCell('G' . $row)->setValue($produk->barang_satuan);
                 if (isset($record_produk_harga[$produk->barang_id_satuan])) {
                     $margin_persen = $record_produk_harga[$produk->barang_id_satuan][0];
-                    $margin_persen_atas = $record_produk_harga[$produk->barang_id_satuan][1];
-                    $harga = $record_produk_harga[$produk->barang_id_satuan][2];
+                    $harga = $record_produk_harga[$produk->barang_id_satuan][1];
                     $worksheet->getCell('P' . $row)->setValue($margin_persen);
-                    $worksheet->getCell('Q' . $row)->setValue($margin_persen_atas);
-                    $worksheet->getCell('R' . $row)->setValue($harga);
+                    $worksheet->getCell('Q' . $row)->setValue($harga);
                 }
-                
-                $j = 0;                
-                $rs_konversi_satuan = isset($arr_konversi_satuan[$produk->barang_id_satuan]) ? $arr_konversi_satuan[$produk->barang_id_satuan] : null;
-                if ($rs_konversi_satuan) {                    
-                    foreach ($rs_konversi_satuan as $r_konversi_satuan) {                                              
+                $rs_konversi_satuan = $this->konversi_satuan_m->view('konversi_satuan')
+                    ->where('id_satuan_tujuan', $produk->barang_id_satuan)
+                    ->get();
+                $j = 0;
+                if ($rs_konversi_satuan) {
+                    foreach ($rs_konversi_satuan as $r_konversi_satuan) {
                         $worksheet->getCell($konversi_satuan[$j] . $row)->setValue($r_konversi_satuan->id_satuan_asal);
                         $worksheet->getCell($konversi_satuan[$j + 1] . $row)->setValue($r_konversi_satuan->satuan_asal);
                         if (isset($record_produk_harga[$r_konversi_satuan->id_satuan_asal])) {
                             $margin_persen = $record_produk_harga[$r_konversi_satuan->id_satuan_asal][0];
-                            $margin_persen_atas = $record_produk_harga[$r_konversi_satuan->id_satuan_asal][1];
-                            $harga = $record_produk_harga[$r_konversi_satuan->id_satuan_asal][2];
+                            $harga = $record_produk_harga[$r_konversi_satuan->id_satuan_asal][1];
                             $worksheet->getCell($produk_harga[$konversi_satuan[$j]][0] . $row)->setValue($margin_persen);
-                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][1] . $row)->setValue($margin_persen_atas);
-                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][2] . $row)->setValue($harga);
+                            $worksheet->getCell($produk_harga[$konversi_satuan[$j]][1] . $row)->setValue($harga);
                         }
                         $j += 2;
                     }
                 }
             } else {
                 $margin_persen = $record_produk_harga[0][0];
-                $margin_persen_atas = $record_produk_harga[0][1];
-                $harga = $record_produk_harga[0][2];
+                $harga = $record_produk_harga[0][1];
                 $worksheet->getCell('P' . $row)->setValue($margin_persen);
-                $worksheet->getCell('Q' . $row)->setValue($margin_persen_atas);
-                $worksheet->getCell('R' . $row)->setValue($harga);
-            }        
+                $worksheet->getCell('Q' . $row)->setValue($harga);
+            }
+            for ($i = 0; $i < 25; $i++) {
+                $spreadsheet->getActiveSheet()->getStyle($cols[$i] . $row)->applyFromArray($style);
+            }
             $no++;
             $row++;
         }

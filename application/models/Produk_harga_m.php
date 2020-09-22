@@ -5,7 +5,7 @@ class Produk_harga_m extends BaseModel {
 
     protected $table = 'produk_harga';
     protected $primary_key = 'id';
-    protected $fillable = array('id_cabang','id_produk','id_satuan','jumlah','margin_persen', 'margin_persen_atas','laba_persen','harga','ppn_persen','ppn','urutan','utama');
+    protected $fillable = array('id_cabang','id_produk','id_satuan','jumlah','margin_persen','laba_persen','harga','ppn_persen','ppn','urutan','utama');
 
 	public function view_margin_laba() {
 		$this->db->select('
