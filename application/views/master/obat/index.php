@@ -66,6 +66,11 @@
 
 <?php $this->template->section('page_script') ?>
 <script>
+    <?php if ($this->input->get('edit')) { ?>
+        <?php if ($this->barang_obat_m->find($this->input->get('edit'))) { ?>
+            edit(<?= $this->input->get('edit') ?>);
+        <?php } ?>
+    <?php } ?>
     var dataTable;
     $(function() {
         dataTable = $('#data-table').DataTable({

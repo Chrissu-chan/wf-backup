@@ -10,6 +10,7 @@ class Pengaturan_harga extends BaseController
     {
         parent::__construct();
         $this->load->model('barang_m');
+        $this->load->model('barang_obat_m');
         $this->load->model('obat_m');
         $this->load->model('produk_m');
         $this->load->model('produk_cabang_m');
@@ -37,11 +38,15 @@ class Pengaturan_harga extends BaseController
                 ->edit_column('jenis', function ($model) {
                     return $this->produk_m->enum('jenis', $model->jenis);
                 })
-                ->add_action('{edit}', array(
-                    'edit' => function ($model) {
+                ->add_action('{edit} {obat}', array(
+                    'edit' => function($model) {
                         return $this->action->link('edit', $this->route->name('produk.pengaturan_harga.edit', array('id' => $model->id)), 'class="btn btn-primary btn-sm"', $this->localization->lang('pengaturan_harga'));
+                    },
+                    'obat' => function($model){
+                        return $this->action->link('obat', $this->route->name('master.obat', array('edit' => $model->id)), 'class="btn btn-info btn-sm" target="_blank"', $this->localization->lang('obat'));
                     }
-                ))
+                )
+                )
                 ->generate();
         }
         $this->load->view('produk/pengaturan_harga/index', $data);

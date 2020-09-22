@@ -45,7 +45,14 @@ class Obat extends BaseController {
                         $model->where('barang.id_jenis_barang', $jenis);
                     }
                 })
-                ->add_action('{view} {edit} {delete}')
+                ->add_action('{view} {edit} {delete} {pengaturan_harga}',array(
+                    'pengaturan_harga' => function($model){
+                        if($model->id_produk){
+                            return $this->action->link('pengaturan_harga', $this->route->name('produk.pengaturan_harga.edit', array('id'=>$model->id)),'class="btn btn-primary btn-sm" target="_blank"',$this->localization->lang('pengaturan_harga'));
+                        }
+                        return '';
+                    }
+                ))
                 ->generate();
         }
         $this->load->view('master/obat/index', $data);
@@ -61,9 +68,9 @@ class Obat extends BaseController {
     public function create() {
 	    $getKode = $this->db->select_max('kode')->get('barang')->row();
 	    $result['data'] = $getKode;
-	    $result['data'] = (int)$result['data']->kode;
-	    $result['data']++;
-	    $this->load->view('master/obat/create', $result);
+        $result['data'] = (int)$result['data']->kode;
+        $result['data']++;
+        $this->load->view('master/obat/create', $result);
     }
 
     public function store() {
