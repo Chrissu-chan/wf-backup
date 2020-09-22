@@ -38,6 +38,10 @@
         <td><?= $model->jenis_obat ?></td>
     </tr>
     <tr>
+        <td class="field">{{nama_produsen}}</td>
+        <td><?= $model->nama_produsen ?></td>
+    </tr>
+    <tr>
         <td class="field">{{kategori_obat}}</td>
         <td><?= $model->kategori_obat ?></td>
     </tr>

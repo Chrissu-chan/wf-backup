@@ -5,7 +5,7 @@ class Obat_m extends BaseModel {
 
     protected $table = 'obat';
     protected $primary_key = 'id';
-    protected $fillable = array('id_barang', 'id_jenis_obat', 'kandungan_obat', 'dosis', 'hpp', 'diskon_persen', 'hna', 'ppn_persen', 'total');
+    protected $fillable = array('id_barang', 'id_jenis_obat', 'kandungan_obat', 'dosis', 'hpp', 'diskon_persen', 'hna', 'ppn_persen', 'total', 'id_produsen');
 
     public function set_dosis($value) {
         return $this->localization->number_value($value);

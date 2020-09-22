@@ -1,7 +1,7 @@
 <div id="frm-message"></div>
 <div class="form-group">
     <label>{{kode}}</label>
-	<?= $this->form->text('kode', (isset($data) ? $data : ''), 'id="kode" class="form-control" readonly '.$this->form->disabled(array('edit'))) ?>
+    <?= $this->form->text('kode', (isset($data) ? $data : ''), 'id="kode" class="form-control" readonly '.$this->form->disabled(array('edit'))) ?>
 </div>
 <div class="form-group">
     <label>{{barcode}}</label>
@@ -38,7 +38,7 @@
                             <?= $this->form->text('satuan_barang['.$key.'][satuan]', NULL, 'id="satuan_barang-satuan-'.$key.'" class="form-control input-sm"') ?>
                         </td>
                         <td><?= $this->form->text('satuan_barang['.$key.'][konversi]', NULL, 'id="satuan_barang-konversi-'.$key.'" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-decimal-separator="false" data-precision="0" '.($key == 0 ? 'readonly' : ''), "") ?></td>
-                        <td><?= $this->form->checkbox('satuan_barang['.$key.'][satuan_beli]', 1, FALSE, 'id="satuan_barang-satuan_beli-'.$key.'" class="form-control"') ?></td>
+                        <td><?= $this->form->checkbox('satuan_barang['.$key.'][satuan_beli]', 1, FALSE, 'class="form-control input-sm" id="satuan_barang-satuan_beli-'.$key.'"') ?></td>
                         <td>
                             <?php if ($key != 0) { ?>
                                 <button type="button" class="btn btn-danger btn-sm" onclick="satuan_barang_remove(<?= $key ?>)"><i class="fa fa-trash"></i></button>
@@ -53,7 +53,7 @@
                         <?= $this->form->text('satuan_barang[0][satuan]', NULL, 'id="satuan_barang-satuan-0" class="form-control input-sm"') ?>
                     </td>
                     <td><?= $this->form->text('satuan_barang[0][konversi]', 1, 'id="satuan_barang-konversi-0" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-decimal-separator="false" data-precision="0" readonly', "") ?></td>
-                    <td><?= $this->form->checkbox('satuan_barang[0][satuan_beli]', 1, FALSE, 'id="satuan_barang-satuan_beli-0" class="form-control"') ?></td>
+                    <td><?= $this->form->checkbox('satuan_barang[0][satuan_beli]', 1, FALSE, 'class="form-control input-sm" id="satuan_barang-satuan_beli-0"') ?></td>
                     <td></td>
                 </tr>
             <?php } ?>
@@ -62,7 +62,7 @@
             <tr id="form-add-satuan_barang">
                 <td><?= $this->form->text('form_add_satuan_barang_satuan', NULL, 'id="form-add-satuan_barang-satuan" class="form-control input-sm"') ?></td>
                 <td><?= $this->form->text('form_add_satuan_barang_konversi', NULL, 'id="form-add-satuan_barang-konversi" class="form-control input-sm text-center" data-input-type="number-format" data-thousand-separator="false" data-decimal-separator="false" data-precision="0"', "") ?></td>
-                <td><?= $this->form->checkbox('form_add_satuan_barang_satuan_beli', 1, FALSE, 'id="form-add-satuan_barang-satuan_beli" class="form-control"') ?></td>
+                <td><?= $this->form->checkbox('form_add_satuan_barang_satuan_beli', 1, FALSE, 'class="form-control input-sm" id="form-add-satuan_barang-satuan_beli" ') ?></td>
                 <td><button type="button" class="btn btn-primary btn-sm" onclick="satuan_barang_add()"><i class="fa fa-plus"></i></button></td>
             </tr>
         </tfoot>
@@ -71,6 +71,10 @@
 <div class="form-group">
     <label>{{jenis_obat}}</label>
     <?= $this->form->select('id_jenis_obat', lists($this->jenis_obat_m->get(), 'id', 'jenis_obat', TRUE), null, 'id="id_jenis_obat" class="form-control"') ?>
+</div>
+<div class="form-group">
+    <label>{{produsen}}</label>
+    <?= $this->form->select('id_produsen', lists($this->produsen_m->get(), 'id', 'nama_produsen', TRUE), null, 'id="id_produsen" class="form-control"') ?>
 </div>
 <div class="form-group">
     <label>{{kategori_obat}}</label>

@@ -54,6 +54,7 @@
                         <th>{{kategori_obat}}</th>
                         <th>{{fungsi_obat}}</th>
                         <th>{{kandungan_obat}}</th>
+                        <th>{{produsen}}</th>
                         <th>{{minus}}</th>
                         <td></td>
                     </tr>
@@ -85,6 +86,7 @@
                 {data: 'kategori_obat', name: 'barang.kategori_obat', searchable: false, orderable: false},
                 {data: 'fungsi_obat', name: 'fungsi_obat', searchable: false, orderable: false},
                 {data: 'kandungan_obat', name: 'obat.kandungan_obat'},
+                {data: 'nama_produsen', name: 'produsen.nama_produsen'},
                 {data: 'minus', name: 'barang.minus', class: 'text-center'},
                 {data: '_action', searchable: false, orderable: false, class: 'text-right'}
             ]

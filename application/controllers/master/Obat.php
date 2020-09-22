@@ -24,6 +24,7 @@ class Obat extends BaseController {
         $this->load->model('produk_cabang_m');
         $this->load->model('produk_harga_m');
         $this->load->model('broadcast_harga_produk_m');
+        $this->load->model('produsen_m');
         $this->load->library('form_validation');
     }
 
